@@ -135,8 +135,8 @@ export function LoginScreen({ navigation }: any) {
         contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 40, paddingBottom: insets.bottom + 20 }]}
         keyboardShouldPersistTaps="handled"
       >
-        <Animated.View style={[styles.logoSection, { opacity: fadeAnim }]}>
-          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48, fontWeight: '700' }]}>{appName}</Text>
+        <Animated.View style={[styles.logoSection, { opacity: fadeAnim, paddingVertical: 10 }]}>
+          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48, fontWeight: '700', lineHeight: 60 }]}>{appName}</Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 12 }]}>أفضل المنتجات الطازجة</Text>
         </Animated.View>
 

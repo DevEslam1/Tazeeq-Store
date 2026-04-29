@@ -77,8 +77,8 @@ export function RegisterScreen({ navigation }: any) {
         contentContainerStyle={[styles.content, { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }]}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.logoSection}>
-          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48 }]}>{appName}</Text>
+        <View style={[styles.logoSection, { paddingVertical: 10 }]}>
+          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48, fontWeight: '700', lineHeight: 60 }]}>{appName}</Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 12 }]}>أنشئ حسابك الآن</Text>
         </View>
 
