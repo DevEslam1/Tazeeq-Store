@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as ReduxProvider } from 'react-redux';
 import { useFonts, BeVietnamPro_400Regular, BeVietnamPro_700Bold } from '@expo-google-fonts/be-vietnam-pro';
@@ -28,7 +28,12 @@ export default function App() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return null;
+    return (
+      <View style={{ flex: 1, backgroundColor: '#064E3B', justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontFamily: 'Cairo_700Bold', fontSize: 36, color: 'white' }}>طازج</Text>
+        <Text style={{ fontFamily: 'BeVietnamPro_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>Tazeeq</Text>
+      </View>
+    );
   }
 
   return (
@@ -36,7 +41,7 @@ export default function App() {
       <AppThemeProvider>
         <SafeAreaProvider>
           <AppNavigator />
-          <StatusBar style="auto" />
+          <StatusBar />
         </SafeAreaProvider>
       </AppThemeProvider>
     </ReduxProvider>

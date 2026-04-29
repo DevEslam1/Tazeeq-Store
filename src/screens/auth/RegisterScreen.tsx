@@ -31,7 +31,7 @@ export function RegisterScreen({ navigation }: any) {
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]} contentContainerStyle={styles.content}>
+    <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]} contentContainerStyle={[styles.content, { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }]}>
       <View style={styles.logoSection}>
         <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>{appName}</Text>
         <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>أنشئ حسابك الآن</Text>

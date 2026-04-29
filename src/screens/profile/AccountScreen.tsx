@@ -49,7 +49,7 @@ export function AccountScreen({ navigation }: any) {
           {menuItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
               <GlassCard style={{ padding: 16 }}>
-                <View style={[styles.menuContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                <View style={[styles.menuContent, { flexDirection: 'row' }]}>
                   <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
                     <MaterialCommunityIcons name={item.icon as any} size={24} color="white" />
                   </View>
@@ -72,7 +72,7 @@ export function AccountScreen({ navigation }: any) {
         <GlassCard style={{ marginHorizontal: 24, padding: 16 }}>
           <TouchableOpacity 
             onPress={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
-            style={[styles.menuContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+            style={[styles.menuContent, { flexDirection: 'row' }]}
           >
             <View style={[styles.iconContainer, { backgroundColor: theme.colors.secondaryContainer }]}>
               <MaterialCommunityIcons name="translate" size={24} color="white" />

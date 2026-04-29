@@ -32,7 +32,7 @@ export function LoginScreen({ navigation }: any) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background, paddingTop: insets.top + 40, paddingBottom: insets.bottom + 20 }]}>
       <View style={styles.logoSection}>
         <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>{appName}</Text>
         <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>أفضل المنتجات الطازجة</Text>
