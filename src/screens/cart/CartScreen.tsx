@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Animated, Platform } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';

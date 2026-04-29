@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState, useEffect, type PropsWithChildren } from 'react';
 import { I18nManager } from 'react-native';
-import { darkTheme, lightTheme, type AppTheme } from './index';
+import { darkTheme, lightTheme, type AppTheme } from './themes';
 
 type ThemeMode = 'light' | 'dark';
 type Locale = 'ar' | 'en';

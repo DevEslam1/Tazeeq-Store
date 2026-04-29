@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { ProductCard } from '../../components/commerce/ProductCard';
 import { products } from '../../data/products';
@@ -72,3 +72,4 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
 });
+

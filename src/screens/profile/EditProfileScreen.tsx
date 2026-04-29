@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   content: { padding: 20, paddingBottom: 100 },
   avatarSection: { alignItems: 'center', marginBottom: 24 },
   avatar: { width: 100, height: 100, borderRadius: 50, alignItems: 'center', justifyContent: 'center' },
-  cameraButton: { position: 'absolute', bottom: 0, right: '50%', backgroundColor: '#10b981', width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  cameraButton: { position: 'absolute', bottom: 0, right: '50%', width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   form: { padding: 20 },
   inputGroup: { marginBottom: 16 },
   input: { height: 56, borderRadius: 12, paddingHorizontal: 16, fontSize: 16 },

@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from 'expo-blur';
 
 export function BottomTabBar({ state, descriptors, navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, mode } = useAppTheme();
   const { t } = useTranslation();
 
   // RTL is handled by I18nManager.forceRTL(true) — use plain 'row'.
@@ -14,9 +14,16 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
   return (
     <View style={styles.container}>
       <BlurView
-        intensity={Platform.OS === 'android' ? 0 : 65}
-        tint="light"
-        style={styles.tabBarInner}
+        intensity={Platform.OS === 'android' ? 0 : 75}
+        tint={mode === 'dark' ? 'dark' : 'light'}
+        style={[
+          styles.tabBarInner,
+          {
+            backgroundColor: theme.colors.surface + (Platform.OS === 'android' ? 'F0' : '90'),
+            borderColor: theme.colors.border,
+            shadowColor: theme.colors.primary,
+          }
+        ]}
       >
         <View style={styles.tabContent}>
           {state.routes.map((route: any, index: number) => {
@@ -90,14 +97,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 40,
     overflow: 'hidden',
-    backgroundColor: Platform.OS === 'android' ? 'rgba(244, 251, 244, 0.93)' : 'rgba(244, 251, 244, 0.72)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.75)',
-    borderTopColor: 'rgba(255, 255, 255, 0.95)',
-    shadowColor: '#0F6E56',
-    shadowOpacity: 0.14,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    shadowOffset: { width: 0, height: 4 },
     elevation: 8,
   },
   tabContent: {
@@ -126,3 +129,4 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+

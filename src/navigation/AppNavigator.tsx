@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
-import { useAppTheme } from '../theme/ThemeProvider';
+import { useAppTheme } from '../theme';
 import { MobileTabNavigator } from './MobileTabNavigator';
 import { CheckoutStack } from './CheckoutStack';
 import { OrderStack } from './OrderStack';
@@ -33,12 +33,16 @@ function TabletNavigator() {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+import { StatusBar } from 'expo-status-bar';
+
 export function AppNavigator() {
   const { isTablet } = useDeviceType();
+  const { theme, mode } = useAppTheme();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return (
     <NavigationContainer>
+      <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
       <Stack.Navigator 
         screenOptions={{ headerShown: false }}
         initialRouteName={isLoggedIn ? 'Main' : 'Auth'}

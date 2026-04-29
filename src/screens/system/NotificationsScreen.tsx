@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -70,9 +70,9 @@ export function NotificationsScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>التنبيهات</Text>
+        <Text style={[theme.typography.sectionTitle, { color: theme.colors.onPrimary }]}>التنبيهات</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -88,7 +88,7 @@ export function NotificationsScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, paddingTop: 48 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { padding: 8 },
   list: { padding: 16, paddingBottom: 100 },
   notificationCard: { 

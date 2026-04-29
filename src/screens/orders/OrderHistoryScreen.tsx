@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
@@ -162,3 +162,4 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
 });
+

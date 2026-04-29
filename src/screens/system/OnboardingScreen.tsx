@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, useWindowDimensions, ViewToken } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

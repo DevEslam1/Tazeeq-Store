@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, StyleProp, ViewStyle } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 
 interface PriceTagProps {
@@ -51,3 +51,4 @@ const styles = StyleSheet.create({
     marginStart: 4,
   },
 });
+

@@ -14,12 +14,13 @@ export type ShopStackParamList = {
 };
 
 export type ProfileStackParamList = {
-  Account: undefined;
+  ProfileMain: undefined;
   EditProfile: undefined;
   AddressList: undefined;
   AddAddress: undefined;
   Wishlist: undefined;
   Notifications: undefined;
+  Settings: undefined;
 };
 
 export type AuthStackParamList = {

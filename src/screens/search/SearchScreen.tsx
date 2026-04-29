@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProductCard } from '../../components/commerce/ProductCard';
@@ -57,7 +57,14 @@ export function SearchScreen({ navigation }: any) {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.searchBarContainer, { paddingTop: insets.top + 10 }]}>
-        <View style={[styles.searchBar, { backgroundColor: theme.colors.surface }]}>
+        <View style={[
+          styles.searchBar, 
+          { 
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+            borderWidth: 1 
+          }
+        ]}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <MaterialCommunityIcons name="arrow-left" size={24} color={theme.colors.outline} />
           </TouchableOpacity>

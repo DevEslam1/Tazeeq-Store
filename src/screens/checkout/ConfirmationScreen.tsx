@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
@@ -81,7 +81,7 @@ export function ConfirmationScreen({ navigation }: any) {
           )}
         </View>
 
-        <View style={styles.totalRow}>
+        <View style={[styles.totalRow, { borderTopColor: theme.colors.outlineVariant }]}>
           <Text style={theme.typography.bodyMain}>الإجمالي</Text>
           <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{activeOrder?.total?.toFixed(2) || '0'} ر.س</Text>
         </View>
@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     marginBottom: 20,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.outlineVariant,
   },
   actions: {
     gap: 16,
@@ -177,3 +176,4 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+

@@ -7,7 +7,7 @@ import { Cairo_400Regular, Cairo_700Bold } from '@expo-google-fonts/cairo';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { store } from './src/store';
-import { AppThemeProvider } from './src/theme/ThemeProvider';
+import { AppThemeProvider } from './src/theme';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import './src/i18n';
 

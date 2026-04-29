@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { ProductCard } from '../../components/commerce/ProductCard';
 import { products } from '../../data/products';
@@ -54,14 +54,18 @@ export function ProductListScreen({ route, navigation }: any) {
             key={filter}
             style={[
               styles.filterPill,
-              { backgroundColor: activeFilter === filter ? theme.colors.primary : 'white' },
+              { 
+                backgroundColor: activeFilter === filter ? theme.colors.primary : theme.colors.surface,
+                borderColor: activeFilter === filter ? theme.colors.primary : theme.colors.border,
+                borderWidth: 1
+              },
             ]}
             onPress={() => setActiveFilter(filter)}
           >
             <Text
               style={[
                 styles.filterText,
-                { color: activeFilter === filter ? 'white' : theme.colors.onSurface },
+                { color: activeFilter === filter ? theme.colors.onPrimary : theme.colors.onSurface },
               ]}
             >
               {filter}
@@ -113,8 +117,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     marginRight: 8,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
   },
   filterText: {
     fontSize: 14,
@@ -125,3 +127,4 @@ const styles = StyleSheet.create({
     paddingBottom: 110,
   },
 });
+

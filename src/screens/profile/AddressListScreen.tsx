@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
@@ -53,9 +53,9 @@ export function AddressListScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>عناويني</Text>
+        <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>عناويني</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -66,7 +66,7 @@ export function AddressListScreen({ navigation }: any) {
         contentContainerStyle={styles.list}
       />
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopColor: theme.colors.border, borderTopWidth: 1 }]}>
         <AppButton
           title="إضافة عنوان جديد"
           onPress={() => navigation.navigate('AddAddress')}
@@ -78,7 +78,7 @@ export function AddressListScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, paddingTop: 16 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { padding: 8 },
   list: { padding: 16, paddingBottom: 100 },
   addressCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, padding: 16 },
@@ -86,5 +86,5 @@ const styles = StyleSheet.create({
   content: { flex: 1 },
   row: { flexDirection: 'row', alignItems: 'center' },
   checkIcon: { marginStart: 8 },
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: 'white' },
+  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20 },
 });

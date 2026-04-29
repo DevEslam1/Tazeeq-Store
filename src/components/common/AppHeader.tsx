@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { BlurView } from 'expo-blur';
@@ -10,7 +10,7 @@ import { useCart } from '../../hooks/useCart';
 import { useRTL } from '../../hooks/useRTL';
 
 export function AppHeader() {
-  const { theme, locale } = useAppTheme();
+  const { theme, mode, locale } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
@@ -21,7 +21,18 @@ export function AppHeader() {
 
   return (
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
-      <BlurView intensity={Platform.OS === 'android' ? 0 : 60} tint="light" style={[styles.blurContainer, { borderRadius: theme.radius.card }]}>
+      <BlurView 
+        intensity={Platform.OS === 'android' ? 0 : 70} 
+        tint={mode === 'dark' ? 'dark' : 'light'} 
+        style={[
+          styles.blurContainer, 
+          { 
+            borderRadius: theme.radius.card,
+            backgroundColor: theme.colors.surface + (Platform.OS === 'android' ? 'F0' : '90'),
+            borderColor: theme.colors.border,
+          }
+        ]}
+      >
         <View style={[styles.topRow, { flexDirection: flexRow }]}>
           <TouchableOpacity style={[styles.actionButton, { borderRadius: theme.radius.headerButton }]} accessibilityLabel="القائمة">
             <MaterialCommunityIcons name="menu" size={24} color={theme.colors.primary} />
@@ -89,11 +100,7 @@ const styles = StyleSheet.create({
   },
   blurContainer: {
     overflow: 'hidden',
-    backgroundColor: Platform.OS === 'android' ? 'rgba(244, 251, 244, 0.92)' : 'rgba(244, 251, 244, 0.75)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.7)',
-    borderTopColor: 'rgba(255, 255, 255, 0.95)',
-    shadowColor: '#0F6E56',
     shadowOpacity: 0.10,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 4 },

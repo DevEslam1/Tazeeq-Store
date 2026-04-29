@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../../components/common/AppHeader';
 import { CategoryCard } from '../../components/commerce/CategoryCard';
@@ -79,3 +79,4 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
+

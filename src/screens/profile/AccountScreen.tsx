@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
@@ -21,6 +21,7 @@ export function AccountScreen({ navigation }: any) {
     { icon: 'heart-outline', title: 'المفضلة', subtitle: 'منتجاتك المفضلة', onPress: () => navigation.navigate('Wishlist') },
     { icon: 'credit-card-outline', title: 'طرق الدفع', subtitle: 'البطاقات والمحافظ', onPress: () => Alert.alert('قريباً', 'ستتوفر هذه الميزة قريباً') },
     { icon: 'bell-outline', title: 'التنبيهات', subtitle: 'إعدادات الإشعارات', onPress: () => navigation.navigate('Notifications') },
+    { icon: 'cog-outline', title: 'الإعدادات', subtitle: 'اللغة، المظهر، والمزيد', onPress: () => navigation.navigate('Settings') },
   ];
 
   const handleLogout = () => {
@@ -36,12 +37,12 @@ export function AccountScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 20 }]}>
         <View style={styles.header}>
-          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary }]}>
+          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary, borderColor: theme.colors.border }]}>
             <MaterialCommunityIcons name="account" size={48} color={theme.colors.onPrimary} />
           </View>
-          <Text style={[theme.typography.h1, { marginTop: 16 }]}>زائر</Text>
+          <Text style={[theme.typography.h1, { marginTop: 16, color: theme.colors.onSurface }]}>زائر</Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>سجل دخولك للحصول على ميزات أكثر</Text>
         </View>
 
@@ -68,24 +69,7 @@ export function AccountScreen({ navigation }: any) {
           ))}
         </View>
 
-        <Text style={[theme.typography.h2, { marginHorizontal: 24, marginBottom: 16 }]}>الإعدادات</Text>
-        <GlassCard style={{ marginHorizontal: 24, padding: 16 }}>
-          <TouchableOpacity 
-            onPress={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
-            style={[styles.menuContent, { flexDirection: 'row' }]}
-          >
-            <View style={[styles.iconContainer, { backgroundColor: theme.colors.secondaryContainer }]}>
-              <MaterialCommunityIcons name="translate" size={24} color={theme.colors.onSecondaryContainer} />
-            </View>
-            <View style={[styles.menuText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>اللغة</Text>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
-                {locale === 'ar' ? 'العربية' : 'English'}
-              </Text>
-            </View>
-            <MaterialCommunityIcons name="swap-horizontal" size={24} color={theme.colors.primary} />
-          </TouchableOpacity>
-        </GlassCard>
+
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>تسجيل الخروج</Text>
@@ -115,7 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 4,
-    borderColor: 'white',
   },
   avatar: {
     width: 100,
@@ -150,3 +133,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+

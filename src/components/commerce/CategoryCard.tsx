@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { Category } from '../../types/app';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -61,3 +61,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+

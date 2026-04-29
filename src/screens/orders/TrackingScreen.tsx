@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function TrackingScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
@@ -19,8 +19,22 @@ export function TrackingScreen({ navigation }: any) {
           source={{ uri: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop' }} 
           style={styles.map} 
         />
-        <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, { backgroundColor: 'white' }]}>
-          <MaterialCommunityIcons name="arrow-right" size={28} color={theme.colors.primary} />
+        <TouchableOpacity 
+          onPress={() => navigation.goBack()} 
+          style={[
+            styles.backButton, 
+            { 
+              backgroundColor: theme.colors.surface,
+              top: insets.top + 16,
+              [isRTL ? 'right' : 'left']: 20
+            }
+          ]}
+        >
+          <MaterialCommunityIcons 
+            name={isRTL ? 'arrow-left' : 'arrow-right'} 
+            size={28} 
+            color={theme.colors.primary} 
+          />
         </TouchableOpacity>
 
         <View style={styles.etaContainer}>
@@ -31,7 +45,7 @@ export function TrackingScreen({ navigation }: any) {
         </View>
       </View>
 
-      <View style={styles.content}>
+      <View style={[styles.content, { backgroundColor: theme.colors.surface }]}>
         <View style={[styles.stepper, { flexDirection: 'row' }]}>
           {[1, 2, 3, 4].map((step) => (
             <React.Fragment key={step}>
@@ -55,11 +69,11 @@ export function TrackingScreen({ navigation }: any) {
               <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>مندوب توصيل • ٤.٩ ★</Text>
             </View>
             <View style={styles.driverActions}>
-              <TouchableOpacity style={[styles.actionIcon, { backgroundColor: theme.colors.primaryContainer }]}>
-                <MaterialCommunityIcons name="phone" size={24} color="white" />
+              <TouchableOpacity style={[styles.actionIcon, { backgroundColor: theme.colors.primary }]}>
+                <MaterialCommunityIcons name="phone" size={24} color={theme.colors.onPrimary} />
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.actionIcon, { backgroundColor: theme.colors.secondaryContainer }]}>
-                <MaterialCommunityIcons name="message-text" size={24} color="white" />
+              <TouchableOpacity style={[styles.actionIcon, { backgroundColor: theme.colors.secondary }]}>
+                <MaterialCommunityIcons name="message-text" size={24} color={theme.colors.onSecondary} />
               </TouchableOpacity>
             </View>
           </View>
@@ -82,8 +96,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 16,
-    left: 20,
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -154,3 +166,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 
 interface BadgeProps {
   type: 'organic' | 'prime' | 'premium' | 'tazeeq';
@@ -48,3 +48,4 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
 });
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
 import { Badge } from '../common/Badge';
 import { PriceTag } from '../common/PriceTag';
@@ -188,3 +188,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+

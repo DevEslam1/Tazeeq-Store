@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle, StyleProp, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 
 interface GlassCardProps {
   children: React.ReactNode;
@@ -69,3 +69,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+

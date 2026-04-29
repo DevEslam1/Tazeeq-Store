@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../../components/common/AppHeader';
 import { CategoryCard } from '../../components/commerce/CategoryCard';
@@ -17,9 +17,12 @@ function formatTime(seconds: number): string {
   return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export function HomeScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [timeLeft, setTimeLeft] = useState(2 * 3600 + 15 * 60 + 30);
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export function HomeScreen({ navigation }: any) {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 140 }]}>
         {/* Categories Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -127,7 +130,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 120,
-    paddingTop: 160,
   },
   section: {
     marginTop: 32,
@@ -196,3 +198,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 });
+

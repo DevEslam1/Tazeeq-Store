@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme/ThemeProvider';
+import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -42,19 +42,19 @@ export function ProductDetailScreen({ route, navigation }: any) {
               { 
                 top: insets.top + 10,
                 [isRTL ? 'right' : 'left']: 20,
-                backgroundColor: 'rgba(255,255,255,0.2)' 
+                backgroundColor: theme.colors.surface + '80' 
               }
             ]}
           >
             <MaterialCommunityIcons 
               name={isRTL ? 'arrow-right' : 'arrow-left'} 
               size={28} 
-              color="white" 
+              color={theme.colors.onSurface} 
             />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.content}>
+        <View style={[styles.content, { backgroundColor: theme.colors.surface }]}>
           <View style={styles.headerRow}>
             <View style={{ flex: 1 }}>
               <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface }]}>
@@ -99,11 +99,11 @@ export function ProductDetailScreen({ route, navigation }: any) {
           <View style={styles.quantityRow}>
             <Text style={[theme.typography.sectionTitle]}>{t('common.quantity')}</Text>
             <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
-              <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { borderRadius: theme.radius.sm }]}>
+              <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
                 <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
               <Text style={[theme.typography.itemName, { marginHorizontal: 16, color: theme.colors.primary }]}>{quantity}</Text>
-              <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={[styles.stepperButton, { borderRadius: theme.radius.sm }]}>
+              <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
                 <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
             </View>
@@ -111,7 +111,14 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 20) + (isTablet ? 0 : 90) }]}>
+      <View style={[
+        styles.footer, 
+        { 
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.outlineVariant,
+          paddingBottom: Math.max(insets.bottom, 20) + (isTablet ? 0 : 90) 
+        }
+      ]}>
         <View style={{ flex: 1 }}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}
@@ -156,7 +163,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 24,
-    backgroundColor: 'white',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
     marginTop: -32,
@@ -196,15 +202,12 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
   },
 });
+
