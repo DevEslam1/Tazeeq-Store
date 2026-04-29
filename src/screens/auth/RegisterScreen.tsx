@@ -11,6 +11,10 @@ import { login } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useRTL } from '../../hooks/useRTL';
 
+import { auth, db } from '../../services/firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+
 export function RegisterScreen({ navigation }: any) {
   const { theme, locale } = useAppTheme();
   const { flexRow, textAlign, isRTL } = useRTL();
@@ -33,7 +37,7 @@ export function RegisterScreen({ navigation }: any) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // Validation
     if (!name.trim()) {
       Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'الرجاء إدخال الاسم' : 'Please enter your name');
@@ -61,11 +65,34 @@ export function RegisterScreen({ navigation }: any) {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(login({ id: Date.now().toString(), name, email }));
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Update profile with name
+      await updateProfile(user, { displayName: name });
+      
+      // Save extra info to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        phone: `+966${phone}`,
+        createdAt: new Date().toISOString()
+      });
+
+      dispatch(login({ id: user.uid, name, email }));
       navigation.replace('Main');
-    }, 1500);
+    } catch (error: any) {
+      let message = isRTL ? 'حدث خطأ أثناء إنشاء الحساب' : 'An error occurred during registration';
+      if (error.code === 'auth/email-already-in-use') {
+        message = isRTL ? 'هذا البريد الإلكتروني مستخدم بالفعل' : 'This email is already in use';
+      } else if (error.code === 'auth/weak-password') {
+        message = isRTL ? 'كلمة المرور ضعيفة جداً' : 'Password is too weak';
+      }
+      Alert.alert(isRTL ? 'فشل التسجيل' : 'Registration Failed', message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

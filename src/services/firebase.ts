@@ -2,18 +2,23 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Replace with your actual Firebase config
+// Firebase configuration from USER
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCXnsxvseaywL16t_TDs274FBCgmAf1guo",
+  authDomain: "tazeeq-e842e.firebaseapp.com",
+  databaseURL: "https://tazeeq-e842e-default-rtdb.firebaseio.com",
+  projectId: "tazeeq-e842e",
+  storageBucket: "tazeeq-e842e.firebasestorage.app",
+  messagingSenderId: "419195139011",
+  appId: "1:419195139011:web:4ca09efa8977899c5f0376",
+  measurementId: "G-PNDZKGKHXY"
 };
 
-const isConfigured = firebaseConfig.apiKey !== "YOUR_API_KEY";
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-const app = isConfigured ? initializeApp(firebaseConfig) : null;
-export const auth = isConfigured && app ? getAuth(app) : null;
-export const db = isConfigured && app ? getFirestore(app) : null;
+// Export services for use in the app
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+export default app;

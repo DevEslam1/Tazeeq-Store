@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useRTL } from '../../hooks/useRTL';
+import { auth } from '../../services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 type LoginMethod = 'phone' | 'email';
 
@@ -57,7 +59,7 @@ export function LoginScreen({ navigation }: any) {
     }
   };
 
-  const handleEmailLogin = () => {
+  const handleEmailLogin = async () => {
     if (!validateEmail(email)) {
       Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'البريد الإلكتروني غير صحيح' : 'Invalid email address');
       return;
@@ -66,12 +68,26 @@ export function LoginScreen({ navigation }: any) {
       Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'كلمة المرور يجب أن تكون 6 أحرف على الأقل' : 'Password must be at least 6 characters');
       return;
     }
+    
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      dispatch(login({ id: '1', name: 'User', email }));
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      dispatch(login({ 
+        id: user.uid, 
+        name: user.displayName || 'User', 
+        email: user.email || email 
+      }));
       navigation.replace('Main');
-    }, 1000);
+    } catch (error: any) {
+      let message = isRTL ? 'حدث خطأ أثناء تسجيل الدخول' : 'An error occurred during login';
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        message = isRTL ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password';
+      }
+      Alert.alert(isRTL ? 'فشل الدخول' : 'Login Failed', message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGuest = () => {
