@@ -4,6 +4,7 @@ import { Product } from "../types/app";
 
 export const fetchProductsFromFirebase = async (categoryId?: string): Promise<Product[]> => {
   try {
+    if (!db) return [];
     const productsRef = collection(db, "products");
     let q = query(productsRef);
     

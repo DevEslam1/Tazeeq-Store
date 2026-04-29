@@ -5,8 +5,8 @@ export function useRTL() {
 
   return {
     isRTL,
-    direction: isRTL ? 'rtl' : 'ltr',
-    flexRow: isRTL ? 'row-reverse' : 'row',
-    textAlign: isRTL ? 'right' : 'left',
+    // React Native's I18nManager handles 'row' automatically, so we shouldn't reverse it manually
+    flexRow: 'row' as 'row' | 'row-reverse',
+    textAlign: (isRTL ? 'right' : 'left') as 'left' | 'right',
   };
 }

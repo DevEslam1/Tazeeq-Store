@@ -4,6 +4,7 @@ import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Notification {
   id: string;
@@ -26,6 +27,7 @@ const mockNotifications: Notification[] = [
 export function NotificationsScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const getIconColor = (type: string) => {
     switch (type) {
@@ -57,7 +59,7 @@ export function NotificationsScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>

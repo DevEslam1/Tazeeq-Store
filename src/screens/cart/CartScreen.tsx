@@ -8,10 +8,12 @@ import { PriceTag } from '../../components/common/PriceTag';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
 import { useCart } from '../../hooks/useCart';
+import { useRTL } from '../../hooks/useRTL';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function CartScreen({ navigation }: any) {
   const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { items, total, removeFromCart, updateQty } = useCart();
@@ -28,9 +30,9 @@ export function CartScreen({ navigation }: any) {
   if (items.length === 0) {
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+        <View style={[styles.header, { flexDirection: flexRow, paddingTop: insets.top + 10 }]}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
+            <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
           </TouchableOpacity>
           <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
             {t('cart.title')}
@@ -52,9 +54,9 @@ export function CartScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+      <View style={[styles.header, { flexDirection: flexRow, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('cart.title')}

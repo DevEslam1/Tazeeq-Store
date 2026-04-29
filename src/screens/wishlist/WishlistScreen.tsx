@@ -7,10 +7,15 @@ import { ProductCard } from '../../components/commerce/ProductCard';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useCart } from '../../hooks/useCart';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useRTL } from '../../hooks/useRTL';
 
 export function WishlistScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const { getWishlistProducts, toggle } = useWishlist();
   const { addToCart } = useCart();
   
@@ -18,7 +23,7 @@ export function WishlistScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>

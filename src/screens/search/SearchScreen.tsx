@@ -37,8 +37,11 @@ export function SearchScreen({ navigation }: any) {
   const handleSearch = (text: string) => {
     setInputValue(text);
     dispatch(setQuery(text));
-    if (text.length > 0 && !recentSearches.includes(text)) {
-      dispatch(addRecentSearch(text));
+  };
+
+  const handleSubmitSearch = () => {
+    if (inputValue.length > 0 && !recentSearches.includes(inputValue)) {
+      dispatch(addRecentSearch(inputValue));
     }
   };
 
@@ -64,6 +67,7 @@ export function SearchScreen({ navigation }: any) {
             placeholderTextColor={theme.colors.outline}
             value={inputValue}
             onChangeText={handleSearch}
+            onSubmitEditing={handleSubmitSearch}
             autoFocus
           />
           {inputValue.length > 0 && (

@@ -1,10 +1,9 @@
-import React, { useRef } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useRef, useMemo, useCallback } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, useWindowDimensions, ViewToken } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
-
-const { width } = Dimensions.get('window');
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Slide {
   icon: string;
@@ -13,27 +12,33 @@ interface Slide {
   color: string;
 }
 
-const slides: Slide[] = [
-  { icon: 'leaf', title: 'أهلاً بك في تساج', subtitle: 'أفضل المنتجات الطازجة بين يديك', color: '#10b981' },
-  { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: '#f59e0b' },
-  { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: '#10b981' },
-];
-
 export function OnboardingScreen({ navigation }: any) {
   const { theme, locale } = useAppTheme();
+  const { width } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
   const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
-  const slides: Slide[] = [
+  const slides: Slide[] = useMemo(() => [
     { icon: 'leaf', title: `أهلاً بك في ${appName}`, subtitle: 'أفضل المنتجات الطازجة بين يديك', color: '#10b981' },
     { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: '#f59e0b' },
     { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: '#10b981' },
-  ];
+  ], [appName]);
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50,
+  }).current;
+
+  const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    if (viewableItems.length > 0 && viewableItems[0].index !== null) {
+      setCurrentIndex(viewableItems[0].index);
+    }
+  }, []);
 
   const renderSlide = ({ item }: { item: Slide }) => (
-    <View style={styles.slide}>
+    <View style={[styles.slide, { width }]}>
       <View style={[styles.iconContainer, { backgroundColor: item.color + '20' }]}>
         <MaterialCommunityIcons name={item.icon as any} size={80} color={item.color} />
       </View>
@@ -48,12 +53,17 @@ export function OnboardingScreen({ navigation }: any) {
 
   const handleNext = () => {
     if (currentIndex < slides.length - 1) {
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
-      setCurrentIndex(currentIndex + 1);
+      flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
     } else {
       navigation.replace('Login');
     }
   };
+
+  const getItemLayout = (_: any, index: number) => ({
+    length: width,
+    offset: width * index,
+    index,
+  });
 
   const renderDots = () => (
     <View style={styles.dotsContainer}>
@@ -70,7 +80,7 @@ export function OnboardingScreen({ navigation }: any) {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <FlatList
         ref={flatListRef}
         data={slides}
@@ -79,10 +89,13 @@ export function OnboardingScreen({ navigation }: any) {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={(e) => {
-          const index = Math.round(e.nativeEvent.contentOffset.x / width);
-          setCurrentIndex(index);
+        getItemLayout={getItemLayout}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
+        onScrollToIndexFailed={(info) => {
+          flatListRef.current?.scrollToOffset({ offset: info.averageItemLength * info.index, animated: true });
         }}
+        removeClippedSubviews={false}
       />
       
       <View style={styles.footer}>
@@ -106,7 +119,7 @@ export function OnboardingScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  slide: { width, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, paddingTop: 80 },
+  slide: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, paddingTop: 80 },
   iconContainer: { width: 160, height: 160, borderRadius: 80, alignItems: 'center', justifyContent: 'center' },
   footer: { paddingHorizontal: 24, paddingBottom: 40, alignItems: 'center' },
   dotsContainer: { flexDirection: 'row', marginBottom: 32 },

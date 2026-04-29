@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
+import { StyleSheet, View, ViewStyle, StyleProp, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useAppTheme } from '../../theme/ThemeProvider';
 
@@ -12,14 +12,24 @@ interface GlassCardProps {
 
 export function GlassCard({ children, style, intensity = 25, transparent = false }: GlassCardProps) {
   const { theme } = useAppTheme();
-  const bgOpacity = transparent ? 0.08 : 0.85;
+  const bgOpacity = transparent ? 0.05 : 0.65;
+  const bgColor = theme.mode === 'light' 
+    ? `rgba(255, 255, 255, ${bgOpacity})` 
+    : `rgba(20, 20, 20, ${bgOpacity})`;
 
   return (
-    <View style={[styles.container, theme.elevation.card, style]}>
+    <View style={[styles.container, Platform.OS !== 'android' && theme.elevation.card, style]}>
       <BlurView 
         intensity={intensity} 
         tint={theme.mode === 'light' ? 'light' : 'dark'}
-        style={[styles.blur, { borderRadius: theme.radius.xl, backgroundColor: `rgba(255, 255, 255, ${bgOpacity})` }]}
+        style={[
+          styles.blur, 
+          { 
+            borderRadius: theme.radius.xl, 
+            backgroundColor: bgColor,
+            borderColor: theme.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)'
+          }
+        ]}
       >
         {children}
       </BlurView>
@@ -32,10 +42,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   blur: {
-    flex: 1,
-    padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
   },
 });

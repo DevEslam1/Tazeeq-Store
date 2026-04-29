@@ -8,8 +8,11 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../../hooks/useCart';
 
+import { useRTL } from '../../hooks/useRTL';
+
 export function AppHeader() {
   const { theme, locale } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
@@ -21,7 +24,7 @@ export function AppHeader() {
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
       <BlurView intensity={40} tint="light" style={styles.blurContainer}>
         {/* Top row: Menu (start) — Logo (center) — Actions (end) */}
-        <View style={styles.topRow}>
+        <View style={[styles.topRow, { flexDirection: flexRow }]}>
           <TouchableOpacity style={styles.actionButton} accessibilityLabel="القائمة">
             <MaterialCommunityIcons name="menu" size={24} color={theme.colors.primary} />
           </TouchableOpacity>

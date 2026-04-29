@@ -12,6 +12,8 @@ const firebaseConfig = {
   appId: "YOUR_APP_ID"
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const isConfigured = firebaseConfig.apiKey !== "YOUR_API_KEY";
+
+const app = isConfigured ? initializeApp(firebaseConfig) : null;
+export const auth = isConfigured && app ? getAuth(app) : null;
+export const db = isConfigured && app ? getFirestore(app) : null;

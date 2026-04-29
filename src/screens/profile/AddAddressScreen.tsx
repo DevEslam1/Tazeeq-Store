@@ -10,15 +10,18 @@ import { addAddress } from '../../store/slices/addressSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useRTL } from '../../hooks/useRTL';
+
 const addressTypes = ['المنزل', 'العمل', 'أخرى'];
 const cities = ['الرياض', 'جدة', 'الدمام', 'الخبر', 'مكة', 'المدينة'];
 
 export function AddAddressScreen({ navigation }: any) {
   const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const insets = useSafeAreaInsets();
-  
+
   const [type, setType] = useState('المنزل');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -43,9 +46,9 @@ export function AddAddressScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: 'white' }]}>إضافة عنوان جديد</Text>
         <View style={{ width: 44 }} />
@@ -98,13 +101,13 @@ export function AddAddressScreen({ navigation }: any) {
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>المدينة</Text>
             <View style={[styles.picker, { backgroundColor: theme.colors.surfaceContainerLow }]}>
-              {cities.map((city) => (
+              {cities.map((c) => (
                 <TouchableOpacity
-                  key={city}
-                  style={[styles.cityOption, city === city && { backgroundColor: theme.colors.primary + '20' }]}
-                  onPress={() => setCity(city)}
+                  key={c}
+                  style={[styles.cityOption, c === city && { backgroundColor: theme.colors.primary + '20' }]}
+                  onPress={() => setCity(c)}
                 >
-                  <Text style={[theme.typography.bodySecondary, { color: city === city ? theme.colors.primary : theme.colors.onSurface }]}>{city}</Text>
+                  <Text style={[theme.typography.bodySecondary, { color: c === city ? theme.colors.primary : theme.colors.onSurface }]}>{c}</Text>
                 </TouchableOpacity>
               ))}
             </View>

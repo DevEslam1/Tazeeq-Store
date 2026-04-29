@@ -6,10 +6,12 @@ import { ProductCard } from '../../components/commerce/ProductCard';
 import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppHeader } from '../../components/common/AppHeader';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function OrganicScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const organicProducts = products.filter(p => p.badges?.includes('organic'));
 
@@ -17,7 +19,7 @@ export function OrganicScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
       
-      <View style={styles.banner}>
+      <View style={[styles.banner, { marginTop: insets.top + 130, marginHorizontal: 20 }]}>
         <Image 
           source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop' }} 
           style={styles.bannerImage} 
@@ -33,7 +35,7 @@ export function OrganicScreen({ navigation }: any) {
         renderItem={({ item }) => (
           <ProductCard 
             product={item} 
-            onPress={() => navigation.getParent()?.navigate('Checkout', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
+            onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -67,6 +69,6 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 8,
-    paddingBottom: 100,
+    paddingBottom: 120,
   },
 });

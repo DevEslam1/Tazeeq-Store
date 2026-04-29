@@ -10,8 +10,11 @@ import { selectAllAddresses, selectAddress } from '../../store/slices/addressSli
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useRTL } from '../../hooks/useRTL';
+
 export function DeliveryScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
@@ -20,9 +23,9 @@ export function DeliveryScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
+      <View style={[styles.header, { flexDirection: flexRow, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('delivery.title') || 'معلومات التوصيل'}

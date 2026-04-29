@@ -54,10 +54,7 @@ export function OrderHistoryScreen({ navigation }: any) {
     navigation.navigate('Checkout', { screen: 'Cart' });
   };
 
-  const displayOrders = orders.length > 0 ? orders : [
-    { id: 'TZ-98241', date: new Date().toISOString(), status: 'Delivered', total: 85, items: 5 },
-    { id: 'TZ-98120', date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), status: 'Delivered', total: 120.50, items: 8 },
-  ];
+  const displayOrders = orders;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>

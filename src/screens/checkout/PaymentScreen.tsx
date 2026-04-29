@@ -14,8 +14,11 @@ import { AppDispatch } from '../../store';
 import { products } from '../../data/products';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useRTL } from '../../hooks/useRTL';
+
 export function PaymentScreen({ navigation }: any) {
   const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +29,7 @@ export function PaymentScreen({ navigation }: any) {
   const paymentMethods = [
     { id: 'card', title: 'بطاقة ائتمان', icon: 'credit-card-outline' },
     { id: 'apple', title: 'Apple Pay', icon: 'apple' },
-    { id: 'wallet', title: 'محفظة تساج', icon: 'wallet-outline' },
+    { id: 'wallet', title: 'محفظة طازج', icon: 'wallet-outline' },
   ];
 
   const handleConfirm = () => {
@@ -60,9 +63,9 @@ export function PaymentScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
+      <View style={[styles.header, { flexDirection: flexRow, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('payment.title') || 'طريقة الدفع'}

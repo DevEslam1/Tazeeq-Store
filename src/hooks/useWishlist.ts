@@ -1,11 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { 
-  selectIsWishlisted, 
   selectWishlistItems,
   toggleWishlistItem, 
   clearWishlist 
 } from '../store/slices/wishlistSlice';
-import { RootState, AppDispatch } from '../store';
+import { AppDispatch } from '../store';
 import { products } from '../data/products';
 
 export function useWishlist() {
@@ -13,7 +12,7 @@ export function useWishlist() {
   const wishlistItems = useSelector(selectWishlistItems);
 
   const isWishlisted = (productId: string) => 
-    useSelector((state: RootState) => selectIsWishlisted(state, productId));
+    wishlistItems.includes(productId);
 
   const toggle = (productId: string) => {
     dispatch(toggleWishlistItem(productId));

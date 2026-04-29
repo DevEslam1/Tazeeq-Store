@@ -7,10 +7,15 @@ import { GlassCard } from '../../components/common/GlassCard';
 import { AppButton } from '../../components/common/AppButton';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/slices/authSlice';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { useRTL } from '../../hooks/useRTL';
 
 export function EditProfileScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const user = useSelector(selectUser);
   
   const [name, setName] = useState(user?.name || 'Eslam Ahmed');
@@ -23,7 +28,7 @@ export function EditProfileScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>

@@ -210,3 +210,7 @@ export const products: Product[] = [
     badges: [],
   },
 ];
+
+export const productsMap: Record<string, Product> = Object.fromEntries(
+  products.map(p => [p.id, p])
+);

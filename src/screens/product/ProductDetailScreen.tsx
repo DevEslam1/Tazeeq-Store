@@ -9,10 +9,17 @@ import { PriceTag } from '../../components/common/PriceTag';
 import { AppButton } from '../../components/common/AppButton';
 import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRTL } from '../../hooks/useRTL';
+
+import { useDeviceType } from '../../hooks/useDeviceType';
 
 export function ProductDetailScreen({ route, navigation }: any) {
   const { productId } = route.params;
   const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
+  const { isTablet } = useDeviceType();
+  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
@@ -28,8 +35,22 @@ export function ProductDetailScreen({ route, navigation }: any) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: product.image }} style={styles.image} />
-          <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
-            <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
+          <TouchableOpacity 
+            onPress={() => navigation.goBack()} 
+            style={[
+              styles.backButton, 
+              { 
+                top: insets.top + 10,
+                [isRTL ? 'right' : 'left']: 20,
+                backgroundColor: 'rgba(255,255,255,0.2)' 
+              }
+            ]}
+          >
+            <MaterialCommunityIcons 
+              name={isRTL ? 'arrow-right' : 'arrow-left'} 
+              size={28} 
+              color="white" 
+            />
           </TouchableOpacity>
         </View>
 
@@ -90,7 +111,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 20) + (isTablet ? 0 : 90) }]}>
         <View style={{ flex: 1 }}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}

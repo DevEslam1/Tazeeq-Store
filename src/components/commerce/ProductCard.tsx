@@ -14,7 +14,7 @@ interface ProductCardProps {
   onPress: () => void;
 }
 
-export function ProductCard({ product, onPress }: ProductCardProps) {
+export const ProductCard = React.memo(function ProductCard({ product, onPress }: ProductCardProps) {
   const { theme } = useAppTheme();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const { addToCart, getItem, removeFromCart, updateQty } = useCart();
@@ -112,7 +112,7 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
       </GlassCard>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

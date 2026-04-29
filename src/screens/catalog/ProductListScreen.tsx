@@ -7,11 +7,14 @@ import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useRTL } from '../../hooks/useRTL';
+
 const filterOptions = ['الكل', 'الأكثر مبيعاً', 'الأقل سعراً', 'الأعلى سعراً'];
 
 export function ProductListScreen({ route, navigation }: any) {
   const { categoryId, categoryName } = route.params;
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = useState('الكل');
@@ -28,9 +31,9 @@ export function ProductListScreen({ route, navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10, backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { flexDirection: flexRow, paddingTop: insets.top + 10, backgroundColor: theme.colors.primary }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: 'white', flex: 1, textAlign: 'center' }]}>
           {categoryName}
@@ -119,5 +122,6 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 8,
+    paddingBottom: 110,
   },
 });
