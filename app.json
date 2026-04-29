@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "shop-desing-plan",
-    "slug": "shop-desing-plan",
+    "name": "Tazeeq",
+    "slug": "Tazeeq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#10b981"
     },
     "ios": {
       "supportsTablet": true
@@ -17,16 +17,14 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#10b981"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.eslamm2500.shopdesingplan"
+      "package": "com.Tazeeq.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"]
   }
 }

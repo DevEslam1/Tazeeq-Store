@@ -1,21 +1,60 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useCart } from '../../hooks/useCart';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectSelectedAddress } from '../../store/slices/addressSlice';
+import { placeOrder } from '../../store/slices/orderSlice';
+import { clearCart } from '../../store/slices/cartSlice';
+import { AppDispatch } from '../../store';
+import { products } from '../../data/products';
 
 export function PaymentScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
   const [selectedMethod, setSelectedMethod] = useState('card');
+  const { items, total } = useCart();
+  const address = useSelector(selectSelectedAddress);
 
   const paymentMethods = [
     { id: 'card', title: 'بطاقة ائتمان', icon: 'credit-card-outline' },
     { id: 'apple', title: 'Apple Pay', icon: 'apple' },
-    { id: 'wallet', title: 'محفظة تزيق', icon: 'wallet-outline' },
+    { id: 'wallet', title: 'محفظة تساج', icon: 'wallet-outline' },
   ];
+
+  const handleConfirm = () => {
+    const orderItems = items.map(item => {
+      const product = products.find(p => p.id === item.productId);
+      return {
+        productId: item.productId,
+        quantity: item.quantity,
+        name: product?.name || '',
+        price: product?.price || 0,
+        image: product?.image || '',
+      };
+    });
+
+    const newOrder = {
+      id: `ORD-${Date.now()}`,
+      status: 'Placed' as const,
+      total: total,
+      date: new Date().toISOString(),
+      items: items.reduce((sum, item) => sum + item.quantity, 0),
+      cartItems: items,
+      address: address,
+      paymentMethod: selectedMethod,
+      estimatedDelivery: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    };
+
+    dispatch(placeOrder(newOrder));
+    dispatch(clearCart());
+    navigation.replace('Confirmation');
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -65,7 +104,7 @@ export function PaymentScreen({ navigation }: any) {
               <View style={styles.inputGroup}>
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>اسم صاحب البطاقة</Text>
                 <TextInput 
-                  placeholder="ESLAM AHMED"
+                  placeholder="أحمد محمد"
                   style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
                 />
               </View>
@@ -105,7 +144,7 @@ export function PaymentScreen({ navigation }: any) {
           <GlassCard style={styles.summaryCard}>
             <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
               <Text style={theme.typography.bodyMain}>إجمالي الطلب</Text>
-              <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>85.00 ر.س</Text>
+              <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{total.toFixed(2)} ر.س</Text>
             </View>
           </GlassCard>
         </View>
@@ -121,7 +160,7 @@ export function PaymentScreen({ navigation }: any) {
       <View style={styles.footer}>
         <AppButton 
           title={t('payment.confirm') || 'تأكيد الطلب والدفع'} 
-          onPress={() => navigation.navigate('Confirmation')} 
+          onPress={handleConfirm} 
         />
       </View>
     </View>

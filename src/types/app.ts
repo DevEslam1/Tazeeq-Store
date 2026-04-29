@@ -41,6 +41,11 @@ export type Order = {
   total: number;
   date: string;
   items: number;
+  cartItems?: CartItem[];
+  address?: Address;
+  paymentMethod?: string;
+  deliverySlot?: DeliverySlot;
+  estimatedDelivery?: string;
 };
 
 export type User = {

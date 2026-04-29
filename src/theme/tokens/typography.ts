@@ -11,6 +11,12 @@ export const typography = {
     fontWeight: '700' as const,
     textAlign: 'right' as const,
   },
+  h3: {
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: '600' as const,
+    textAlign: 'right' as const,
+  },
   bodyMain: {
     fontSize: 16,
     lineHeight: 24,
@@ -35,6 +41,12 @@ export const typography = {
     fontWeight: '600' as const,
     letterSpacing: 0.05,
     textTransform: 'uppercase' as const,
+    textAlign: 'right' as const,
+  },
+  label: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '400' as const,
     textAlign: 'right' as const,
   },
 };

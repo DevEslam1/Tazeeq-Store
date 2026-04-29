@@ -1,14 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSelector } from 'react-redux';
+import { selectActiveOrder } from '../../store/slices/orderSlice';
+import { products } from '../../data/products';
 
 export function ConfirmationScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const activeOrder = useSelector(selectActiveOrder);
+
+  const orderItems = activeOrder?.cartItems?.map(item => {
+    const product = products.find(p => p.id === item.productId);
+    return product;
+  }).filter(Boolean) || [];
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'اليوم';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ar-SA', { hour: 'numeric', minute: '2-digit' });
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -21,7 +36,7 @@ export function ConfirmationScreen({ navigation }: any) {
             تم طلبك بنجاح!
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 8 }]}>
-            رقم الطلب: #TZ-98241
+            رقم الطلب: {activeOrder?.id || '#TZ-00000'}
           </Text>
         </View>
 
@@ -30,7 +45,7 @@ export function ConfirmationScreen({ navigation }: any) {
             <MaterialCommunityIcons name="clock-outline" size={24} color={theme.colors.primary} />
             <View style={[styles.infoText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
               <Text style={theme.typography.bodySecondary}>وقت التوصيل المتوقع</Text>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>اليوم، ١٠:٣٠ م - ١١:٠٠ م</Text>
+              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{formatDate(activeOrder?.estimatedDelivery)}</Text>
             </View>
           </View>
           <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
@@ -38,34 +53,43 @@ export function ConfirmationScreen({ navigation }: any) {
             <MaterialCommunityIcons name="map-marker-outline" size={24} color={theme.colors.primary} />
             <View style={[styles.infoText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
               <Text style={theme.typography.bodySecondary}>عنوان التوصيل</Text>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>حي الصحافة، شارع الملك فهد، الرياض</Text>
+              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{activeOrder?.address?.details || 'العنوان غير محدد'}</Text>
             </View>
           </View>
         </GlassCard>
 
         <Text style={[theme.typography.h2, { marginVertical: 16 }]}>ملخص المنتجات</Text>
         <View style={styles.itemsPreview}>
-          {[1, 2, 3].map((i) => (
-            <Image 
-              key={i}
-              source={{ uri: `https://images.unsplash.com/photo-${1591189863430 + i}?q=80&w=100&auto=format&fit=crop` }} 
-              style={[styles.itemThumb, { borderColor: theme.colors.outlineVariant }]} 
-            />
+          {orderItems.slice(0, 3).map((product, index) => (
+            product && (
+              <Image 
+                key={index}
+                source={{ uri: product.image }} 
+                style={[styles.itemThumb, { borderColor: theme.colors.outlineVariant }]} 
+              />
+            )
           ))}
-          <View style={[styles.moreThumb, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
-            <Text style={[theme.typography.bodySecondary, { fontWeight: '700' }]}>+٢</Text>
-          </View>
+          {orderItems.length > 3 && (
+            <View style={[styles.moreThumb, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
+              <Text style={[theme.typography.bodySecondary, { fontWeight: '700' }]}>+{orderItems.length - 3}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.totalRow}>
+          <Text style={theme.typography.bodyMain}>الإجمالي</Text>
+          <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{activeOrder?.total?.toFixed(2) || '0'} ر.س</Text>
         </View>
 
         <View style={styles.actions}>
           <AppButton 
             title="تتبع الطلب" 
-            onPress={() => navigation.navigate('Tracking')} 
+            onPress={() => navigation.navigate('Order', { screen: 'Tracking', params: { orderId: activeOrder?.id } })} 
             style={styles.actionBtn}
           />
           <AppButton 
             title="العودة للرئيسية" 
-            onPress={() => navigation.navigate('Home')} 
+            onPress={() => navigation.navigate('Main')} 
             variant="glass"
             style={styles.actionBtn}
           />
@@ -131,6 +155,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    marginBottom: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
   },
   actions: {
     gap: 16,

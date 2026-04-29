@@ -5,7 +5,7 @@ import { ShopStack } from './ShopStack';
 import { OrderStack } from './OrderStack';
 import { BottomTabBar } from '../components/common/BottomTabBar';
 import { OrganicScreen } from '../screens/catalog/OrganicScreen';
-import { AccountScreen } from '../screens/profile/AccountScreen';
+import { ProfileStack } from './ProfileStack';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -18,7 +18,7 @@ export function MobileTabNavigator() {
       <Tab.Screen name="Shop" component={ShopStack} />
       <Tab.Screen name="Organic" component={OrganicScreen} />
       <Tab.Screen name="Orders" component={OrderStack} />
-      <Tab.Screen name="Account" component={AccountScreen} />
+      <Tab.Screen name="Account" component={ProfileStack} />
     </Tab.Navigator>
   );
 }

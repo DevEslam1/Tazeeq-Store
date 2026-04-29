@@ -20,7 +20,7 @@ function formatTime(seconds: number): string {
 }
 
 export function HomeScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState(2 * 3600 + 15 * 60 + 30);
 
@@ -30,9 +30,6 @@ export function HomeScreen({ navigation }: any) {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  // RTL is handled by I18nManager.forceRTL(true) — use plain 'row' everywhere.
-  // No need for isRTL ? 'row-reverse' : 'row' patterns.
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -65,7 +62,7 @@ export function HomeScreen({ navigation }: any) {
           />
         </View>
 
-        {/* Promo Banner */}
+{/* Promo Banner */}
         <View style={styles.promoContainer}>
           <LinearGradient
             colors={['#10b981', '#fea619']}
@@ -75,14 +72,21 @@ export function HomeScreen({ navigation }: any) {
           >
             <View style={styles.promoContent}>
               <View style={{ flex: 1 }}>
-                <Text style={[theme.typography.h2, { color: 'white' }]}>
+                <Text style={[theme.typography.h2, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>
                   خصم ٤٠٪ على الخضروات الطازجة 🔥
                 </Text>
-                <View style={styles.timerBadge}>
+                <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
                   <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
                   <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
                 </View>
               </View>
+              <TouchableOpacity 
+                style={styles.ctaButton}
+                onPress={() => navigation.navigate('ProductList', { categoryName: 'العروض' })}
+              >
+                <Text style={styles.ctaButtonText}>تسوق الآن</Text>
+                <MaterialCommunityIcons name="arrow-left" size={18} color="white" />
+              </TouchableOpacity>
             </View>
           </LinearGradient>
         </View>
@@ -108,7 +112,6 @@ export function HomeScreen({ navigation }: any) {
                 key={product.id} 
                 product={product} 
                 onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: product.id } }) || navigation.navigate('ProductDetail', { productId: product.id })}
-                onAddToCart={() => {}}
               />
             ))}
           </View>
@@ -126,7 +129,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 20,
-    // Space for the floating AppHeader (status bar + header height + breathing room)
     paddingTop: 170,
   },
   section: {
@@ -164,6 +166,21 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   timerText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  ctaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    gap: 6,
+    marginTop: 12,
+  },
+  ctaButtonText: {
     color: 'white',
     fontWeight: '700',
     fontSize: 14,

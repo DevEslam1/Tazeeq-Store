@@ -5,24 +5,57 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { PriceTag } from '../../components/common/PriceTag';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllOrders } from '../../store/slices/orderSlice';
+import { useCart } from '../../hooks/useCart';
+import { addItem } from '../../store/slices/cartSlice';
+import { AppDispatch } from '../../store';
 
 export function OrderHistoryScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
-
-  const orders = [
-    { id: 'TZ-98241', date: '٢٤ أبريل ٢٠٢٤', status: 'delivered', total: 85.00, items: 5 },
-    { id: 'TZ-98120', date: '١٨ أبريل ٢٠٢٤', status: 'delivered', total: 120.50, items: 8 },
-    { id: 'TZ-97900', date: '١٠ أبريل ٢٠٢٤', status: 'cancelled', total: 45.00, items: 2 },
-  ];
+  const dispatch = useDispatch<AppDispatch>();
+  const { addToCart } = useCart();
+  const orders = useSelector(selectAllOrders);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'delivered': return theme.colors.primary;
-      case 'cancelled': return theme.colors.error;
+      case 'Delivered': return theme.colors.primary;
+      case 'On the way': return theme.colors.secondary;
+      case 'Processing': return theme.colors.tertiary;
+      case 'Placed': return theme.colors.primaryContainer;
+      case 'Cancelled': return theme.colors.error;
       default: return theme.colors.onSurfaceVariant;
     }
   };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'Delivered': return 'تم التوصيل';
+      case 'On the way': return 'في الطريق';
+      case 'Processing': return 'قيد التجهيز';
+      case 'Placed': return 'تم الطلب';
+      case 'Cancelled': return 'ملغي';
+      default: return status;
+    }
+  };
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' });
+  };
+
+  const handleReorder = (order: any) => {
+    order.cartItems?.forEach((item: any) => {
+      addToCart(item.productId, item.quantity);
+    });
+    navigation.navigate('Checkout', { screen: 'Cart' });
+  };
+
+  const displayOrders = orders.length > 0 ? orders : [
+    { id: 'TZ-98241', date: new Date().toISOString(), status: 'Delivered', total: 85, items: 5 },
+    { id: 'TZ-98120', date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), status: 'Delivered', total: 120.50, items: 8 },
+  ];
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -33,19 +66,19 @@ export function OrderHistoryScreen({ navigation }: any) {
       </View>
 
       <FlatList
-        data={orders}
+        data={displayOrders}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('Tracking')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Tracking', { orderId: item.id })}>
             <GlassCard style={styles.orderCard}>
               <View style={[styles.cardHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) + '20' }]}>
                   <Text style={[theme.typography.labelCaps, { color: getStatusColor(item.status) }]}>
-                    {item.status === 'delivered' ? 'تم التوصيل' : 'ملغي'}
+                    {getStatusLabel(item.status)}
                   </Text>
                 </View>
-                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{item.date}</Text>
+                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{formatDate(item.date)}</Text>
               </View>
 
               <View style={[styles.cardBody, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
@@ -58,13 +91,22 @@ export function OrderHistoryScreen({ navigation }: any) {
 
               <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
               
-              <TouchableOpacity style={[styles.reorderBtn, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+              <TouchableOpacity 
+                style={[styles.reorderBtn, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+                onPress={() => handleReorder(item)}
+              >
                 <MaterialCommunityIcons name="refresh" size={20} color={theme.colors.primary} />
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.primary, fontWeight: '700', marginHorizontal: 8 }]}>إعادة طلب</Text>
               </TouchableOpacity>
             </GlassCard>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <MaterialCommunityIcons name="receipt" size={64} color={theme.colors.outlineVariant} />
+            <Text style={[theme.typography.bodyMain, { color: theme.colors.outlineVariant, marginTop: 16 }]}>لا توجد طلبات سابقة</Text>
+          </View>
+        }
       />
     </View>
   );
@@ -112,5 +154,11 @@ const styles = StyleSheet.create({
   reorderBtn: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 60,
   },
 });

@@ -6,15 +6,29 @@ import { GlassCard } from '../common/GlassCard';
 import { Badge } from '../common/Badge';
 import { PriceTag } from '../common/PriceTag';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useWishlist } from '../../hooks/useWishlist';
+import { useCart } from '../../hooks/useCart';
 
 interface ProductCardProps {
   product: Product;
   onPress: () => void;
-  onAddToCart: () => void;
 }
 
-export function ProductCard({ product, onPress, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, onPress }: ProductCardProps) {
   const { theme, isRTL } = useAppTheme();
+  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
+  const { addToCart, getItem } = useCart();
+  
+  const wishlisted = isWishlisted(product.id);
+  const cartItem = getItem(product.id);
+
+  const handleAddToCart = () => {
+    addToCart(product.id, 1);
+  };
+
+  const handleToggleWishlist = () => {
+    toggleWishlist(product.id);
+  };
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
@@ -28,6 +42,16 @@ export function ProductCard({ product, onPress, onAddToCart }: ProductCardProps)
               ))}
             </View>
           )}
+          <TouchableOpacity 
+            style={[styles.wishlistButton, isRTL ? { left: 8 } : { right: 8 }]}
+            onPress={handleToggleWishlist}
+          >
+            <MaterialCommunityIcons 
+              name={wishlisted ? 'heart' : 'heart-outline'} 
+              size={20} 
+              color={wishlisted ? '#ef4444' : theme.colors.outline} 
+            />
+          </TouchableOpacity>
         </View>
         
         <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
@@ -48,12 +72,30 @@ export function ProductCard({ product, onPress, onAddToCart }: ProductCardProps)
           )}
           
           <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <TouchableOpacity 
-              onPress={onAddToCart}
-              style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
-            >
-              <MaterialCommunityIcons name="plus" size={20} color="white" />
-            </TouchableOpacity>
+            {cartItem ? (
+              <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer + '30' }]}>
+                <TouchableOpacity 
+                  style={styles.qtyButton}
+                  onPress={() => {}}
+                >
+                  <MaterialCommunityIcons name="minus" size={16} color={theme.colors.primary} />
+                </TouchableOpacity>
+                <Text style={[styles.qtyText, { color: theme.colors.primary }]}>{cartItem.quantity}</Text>
+                <TouchableOpacity 
+                  style={styles.qtyButton}
+                  onPress={() => addToCart(product.id, 1)}
+                >
+                  <MaterialCommunityIcons name="plus" size={16} color={theme.colors.primary} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity 
+                onPress={handleAddToCart}
+                style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
+              >
+                <MaterialCommunityIcons name="plus" size={20} color="white" />
+              </TouchableOpacity>
+            )}
             <PriceTag price={product.price} oldPrice={product.oldPrice} size="md" />
           </View>
         </View>
@@ -87,6 +129,17 @@ const styles = StyleSheet.create({
     top: 8,
     gap: 4,
     zIndex: 1,
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 8,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2,
   },
   info: {
     padding: 12,
@@ -127,5 +180,24 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 4,
+  },
+  quantityControl: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 18,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  qtyButton: {
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  qtyText: {
+    fontSize: 14,
+    fontWeight: '700',
+    minWidth: 24,
+    textAlign: 'center',
   },
 });

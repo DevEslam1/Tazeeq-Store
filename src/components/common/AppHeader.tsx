@@ -6,12 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCart } from '../../hooks/useCart';
 
 export function AppHeader() {
   const { theme } = useAppTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
+  const { itemCount } = useCart();
 
   return (
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
@@ -23,28 +25,32 @@ export function AppHeader() {
           </TouchableOpacity>
 
           <Text style={[styles.logo, { color: theme.colors.primary }]}>
-            طازج
+            تساج
           </Text>
 
           <View style={styles.actionsRow}>
-            <TouchableOpacity style={styles.actionButton} accessibilityLabel="الإشعارات">
+            <TouchableOpacity 
+              style={styles.actionButton} 
+              accessibilityLabel="الإشعارات"
+              onPress={() => navigation.navigate('Notifications')}
+            >
               <View>
                 <MaterialCommunityIcons name="bell-outline" size={24} color={theme.colors.primary} />
-                {/* Notification badge dot */}
                 <View style={[styles.notifDot, { backgroundColor: theme.colors.tertiary }]} />
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={() => navigation.navigate('Cart')}
+              onPress={() => navigation.navigate('Checkout', { screen: 'Cart' })}
               accessibilityLabel="سلة التسوق"
             >
               <View>
                 <MaterialCommunityIcons name="cart-outline" size={24} color={theme.colors.primary} />
-                {/* Cart count badge */}
-                <View style={[styles.cartBadge, { backgroundColor: theme.colors.primaryContainer }]}>
-                  <Text style={styles.cartBadgeText}>3</Text>
-                </View>
+                {itemCount > 0 && (
+                  <View style={[styles.cartBadge, { backgroundColor: theme.colors.primaryContainer }]}>
+                    <Text style={styles.cartBadgeText}>{itemCount}</Text>
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           </View>
@@ -55,6 +61,7 @@ export function AppHeader() {
           <TouchableOpacity
             style={[styles.searchBar, { borderColor: theme.colors.outlineVariant }]}
             activeOpacity={0.7}
+            onPress={() => navigation.navigate('Search')}
           >
             <MaterialCommunityIcons name="magnify" size={22} color={theme.colors.outline} />
             <Text style={[styles.searchPlaceholder, { color: theme.colors.outline }]}>

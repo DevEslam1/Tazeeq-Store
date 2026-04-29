@@ -1,33 +1,51 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
+import { AppDispatch } from '../../store';
 
 export function AccountScreen({ navigation }: any) {
   const { theme, isRTL, locale, setLocale } = useAppTheme();
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
 
   const menuItems = [
-    { icon: 'account-outline', title: 'الملف الشخصي', subtitle: 'تعديل بياناتك الشخصية' },
-    { icon: 'map-marker-outline', title: 'عناويني', subtitle: 'إدارة مواقع التوصيل' },
-    { icon: 'credit-card-outline', title: 'طرق الدفع', subtitle: 'البطاقات والمحافظ' },
-    { icon: 'bell-outline', title: 'التنبيهات', subtitle: 'إعدادات الإشعارات' },
+    { icon: 'account-outline', title: 'الملف الشخصي', subtitle: 'تعديل بياناتك الشخصية', onPress: () => navigation.navigate('EditProfile') },
+    { icon: 'map-marker-outline', title: 'عناويني', subtitle: 'إدارة مواقع التوصيل', onPress: () => navigation.navigate('AddressList') },
+    { icon: 'heart-outline', title: 'المفضلة', subtitle: 'منتجاتك المفضلة', onPress: () => navigation.navigate('Wishlist') },
+    { icon: 'credit-card-outline', title: 'طرق الدفع', subtitle: 'البطاقات والمحافظ', onPress: () => Alert.alert('قريباً', 'ستتوفر هذه الميزة قريباً') },
+    { icon: 'bell-outline', title: 'التنبيهات', subtitle: 'إعدادات الإشعارات', onPress: () => navigation.navigate('Notifications') },
   ];
+
+  const handleLogout = () => {
+    Alert.alert(
+      'تسجيل الخروج',
+      'هل أنت متأكد من تسجيل الخروج؟',
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        { text: 'تسجيل الخروج', style: 'destructive', onPress: () => dispatch(logout()) },
+      ]
+    );
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Image source={{ uri: 'https://i.pravatar.cc/150?u=user' }} style={styles.avatar} />
-          <Text style={[theme.typography.h1, { marginTop: 16 }]}>إسلام أحمد</Text>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>eslam@example.com</Text>
+          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primaryContainer }]}>
+            <MaterialCommunityIcons name="account" size={48} color="white" />
+          </View>
+          <Text style={[theme.typography.h1, { marginTop: 16 }]}>زائر</Text>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>سجل دخولك للحصول على ميزات أكثر</Text>
         </View>
 
         <View style={styles.menu}>
           {menuItems.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.menuItem}>
+            <TouchableOpacity key={index} style={styles.menuItem} onPress={item.onPress}>
               <GlassCard style={{ padding: 16 }}>
                 <View style={[styles.menuContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                   <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
@@ -67,8 +85,8 @@ export function AccountScreen({ navigation }: any) {
           </TouchableOpacity>
         </GlassCard>
 
-        <TouchableOpacity style={styles.logoutBtn}>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>تسجيل الخروج</Text>
+        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+          <Text style={[theme.typography.bodyMain, { color: '#ef4444', fontWeight: '700' }]}>تسجيل الخروج</Text>
         </TouchableOpacity>
         
         <View style={{ height: 100 }} />
@@ -87,6 +105,15 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginBottom: 40,
+  },
+  avatarContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 4,
+    borderColor: 'white',
   },
   avatar: {
     width: 100,

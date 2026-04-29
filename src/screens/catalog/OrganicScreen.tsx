@@ -34,7 +34,6 @@ export function OrganicScreen({ navigation }: any) {
           <ProductCard 
             product={item} 
             onPress={() => navigation.getParent()?.navigate('Checkout', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
-            onAddToCart={() => {}}
           />
         )}
         keyExtractor={(item) => item.id}

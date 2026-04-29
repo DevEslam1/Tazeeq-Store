@@ -1,17 +1,28 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { ProductCard } from '../../components/commerce/ProductCard';
 import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+const filterOptions = ['الكل', 'الأكثر مبيعاً', 'الأقل سعراً', 'الأعلى سعراً'];
+
 export function ProductListScreen({ route, navigation }: any) {
   const { categoryId, categoryName } = route.params;
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const [activeFilter, setActiveFilter] = useState('الكل');
 
-  const filteredProducts = products.filter(p => p.category === categoryId);
+  let filteredProducts = products.filter(p => p.category === categoryId);
+
+  if (activeFilter === 'الأقل سعراً') {
+    filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+  } else if (activeFilter === 'الأعلى سعراً') {
+    filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+  } else if (activeFilter === 'الأكثر مبيعاً') {
+    filteredProducts = [...filteredProducts].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -27,13 +38,39 @@ export function ProductListScreen({ route, navigation }: any) {
         </TouchableOpacity>
       </View>
 
+      <ScrollView 
+        horizontal 
+        showsHorizontalScrollIndicator={false}
+        style={styles.filterContainer}
+        contentContainerStyle={styles.filterContent}
+      >
+        {filterOptions.map((filter) => (
+          <TouchableOpacity
+            key={filter}
+            style={[
+              styles.filterPill,
+              { backgroundColor: activeFilter === filter ? theme.colors.primary : 'white' },
+            ]}
+            onPress={() => setActiveFilter(filter)}
+          >
+            <Text
+              style={[
+                styles.filterText,
+                { color: activeFilter === filter ? 'white' : theme.colors.onSurface },
+              ]}
+            >
+              {filter}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
       <FlatList
         data={filteredProducts}
         renderItem={({ item }) => (
           <ProductCard 
             product={item} 
             onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
-            onAddToCart={() => {}}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -59,6 +96,26 @@ const styles = StyleSheet.create({
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  filterContainer: {
+    maxHeight: 50,
+  },
+  filterContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  filterPill: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  filterText: {
+    fontSize: 14,
+    fontWeight: '500',
   },
   list: {
     padding: 8,

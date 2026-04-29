@@ -10,6 +10,22 @@ export type ShopStackParamList = {
   Categories: undefined;
   ProductList: { categoryId: string; categoryName: string };
   ProductDetail: { productId: string };
+  Search: undefined;
+};
+
+export type ProfileStackParamList = {
+  Account: undefined;
+  EditProfile: undefined;
+  AddressList: undefined;
+  AddAddress: undefined;
+  Wishlist: undefined;
+  Notifications: undefined;
+};
+
+export type AuthStackParamList = {
+  Onboarding: undefined;
+  Login: undefined;
+  Register: undefined;
 };
 
 export type CheckoutStackParamList = {
@@ -30,4 +46,9 @@ export type RootStackParamList = {
   Main: undefined;
   Checkout: undefined;
   Order: undefined;
+  Auth: undefined;
+  Search: undefined;
+  Notifications: undefined;
+  Wishlist: undefined;
+  Profile: undefined;
 };
