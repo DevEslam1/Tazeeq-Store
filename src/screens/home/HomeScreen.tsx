@@ -76,13 +76,13 @@ export function HomeScreen({ navigation }: any) {
                 <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>
                   {t('home.promo_title')} 🔥
                 </Text>
-                <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
+                <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                   <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
                   <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
                 </View>
               </View>
               <TouchableOpacity 
-                style={[styles.ctaButton, { backgroundColor: 'rgba(255,255,255,0.25)' }]}
+                style={[styles.ctaButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
                 onPress={() => navigation.navigate('ProductList', { categoryName: 'العروض' })}
               >
                 <Text style={styles.ctaButtonText}>تسوق الآن</Text>

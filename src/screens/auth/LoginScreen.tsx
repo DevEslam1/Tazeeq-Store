@@ -12,6 +12,7 @@ import { AppDispatch } from '../../store';
 import { useRTL } from '../../hooks/useRTL';
 import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useBanner } from '../../hooks/useBanner';
 
 type LoginMethod = 'phone' | 'email';
 
@@ -20,6 +21,7 @@ export function LoginScreen({ navigation }: any) {
   const { isRTL, flexRow, textAlign } = useRTL();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
+  const { showError, showSuccess } = useBanner();
   
   const [method, setMethod] = useState<LoginMethod>('phone');
   const [phone, setPhone] = useState('');
@@ -55,17 +57,17 @@ export function LoginScreen({ navigation }: any) {
         setStep('otp');
       }, 1000);
     } else {
-      Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'الرجاء إدخال رقم هاتف صحيح (9 أرقام)' : 'Please enter a valid 9-digit phone number');
+      showError(isRTL ? 'الرجاء إدخال رقم هاتف صحيح (9 أرقام)' : 'Please enter a valid 9-digit phone number');
     }
   };
 
   const handleEmailLogin = async () => {
     if (!validateEmail(email)) {
-      Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'البريد الإلكتروني غير صحيح' : 'Invalid email address');
+      showError(isRTL ? 'البريد الإلكتروني غير صحيح' : 'Invalid email address');
       return;
     }
     if (password.length < 6) {
-      Alert.alert(isRTL ? 'خطأ' : 'Error', isRTL ? 'كلمة المرور يجب أن تكون 6 أحرف على الأقل' : 'Password must be at least 6 characters');
+      showError(isRTL ? 'كلمة المرور يجب أن تكون 6 أحرف على الأقل' : 'Password must be at least 6 characters');
       return;
     }
     
@@ -78,13 +80,14 @@ export function LoginScreen({ navigation }: any) {
         name: user.displayName || 'User', 
         email: user.email || email 
       }));
+      showSuccess(isRTL ? 'تم تسجيل الدخول بنجاح' : 'Logged in successfully');
       navigation.replace('Main');
     } catch (error: any) {
       let message = isRTL ? 'حدث خطأ أثناء تسجيل الدخول' : 'An error occurred during login';
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
         message = isRTL ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password';
       }
-      Alert.alert(isRTL ? 'فشل الدخول' : 'Login Failed', message);
+      showError(message);
     } finally {
       setLoading(false);
     }

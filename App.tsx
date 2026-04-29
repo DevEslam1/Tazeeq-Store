@@ -9,6 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { store } from './src/store';
 import { AppThemeProvider } from './src/theme';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import { GlobalBanner } from './src/components/common/GlobalBanner';
 import './src/i18n';
 
 SplashScreen.preventAutoHideAsync();
@@ -41,6 +42,7 @@ export default function App() {
       <AppThemeProvider>
         <SafeAreaProvider>
           <AppNavigator />
+          <GlobalBanner />
           <StatusBar />
         </SafeAreaProvider>
       </AppThemeProvider>

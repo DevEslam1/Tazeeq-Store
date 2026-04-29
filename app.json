@@ -12,7 +12,10 @@
       "backgroundColor": "#10b981"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyDh2jY_1U8llzRSxBsJR3F6dEmbslvl6EY"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -20,7 +23,12 @@
         "backgroundColor": "#10b981"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.tazeeq.app"
+      "package": "com.tazeeq.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDh2jY_1U8llzRSxBsJR3F6dEmbslvl6EY"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

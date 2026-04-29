@@ -6,6 +6,8 @@ import orderReducer from './slices/orderSlice';
 import addressReducer from './slices/addressSlice';
 import searchReducer from './slices/searchSlice';
 
+import uiReducer from './slices/uiSlice';
+
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
@@ -14,6 +16,7 @@ export const store = configureStore({
     orders: orderReducer,
     address: addressReducer,
     search: searchReducer,
+    ui: uiReducer,
   },
 });
 
