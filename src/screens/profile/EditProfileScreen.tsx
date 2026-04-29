@@ -38,11 +38,11 @@ export function EditProfileScreen({ navigation }: any) {
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.avatarSection}>
-          <View style={[styles.avatar, { backgroundColor: theme.colors.primaryContainer }]}>
-            <MaterialCommunityIcons name="account" size={48} color="white" />
+          <View style={[styles.avatar, { backgroundColor: theme.colors.primary }]}>
+            <MaterialCommunityIcons name="account" size={48} color={theme.colors.onPrimary} />
           </View>
-          <TouchableOpacity style={styles.cameraButton}>
-            <MaterialCommunityIcons name="camera" size={20} color="white" />
+          <TouchableOpacity style={[styles.cameraButton, { backgroundColor: theme.colors.secondary }]}>
+            <MaterialCommunityIcons name="camera" size={20} color={theme.colors.onSecondary} />
           </TouchableOpacity>
         </View>
 

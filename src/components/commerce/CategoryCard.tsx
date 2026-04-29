@@ -18,6 +18,7 @@ export function CategoryCard({ category, isSelected, onPress }: CategoryCardProp
       <View
         style={[
           styles.card,
+          theme.elevation.card,
           {
             backgroundColor: isSelected ? theme.colors.primaryContainer : theme.colors.surfaceContainerLowest,
             borderWidth: 1,
@@ -26,7 +27,7 @@ export function CategoryCard({ category, isSelected, onPress }: CategoryCardProp
           },
         ]}
       >
-        <View style={[styles.iconContainer, { backgroundColor: isSelected ? theme.colors.primary + '20' : theme.colors.primaryContainer, borderRadius: theme.radius.full }]}>
+        <View style={[styles.iconContainer, { backgroundColor: isSelected ? theme.colors.primary + '20' : theme.colors.surfaceContainer, borderRadius: theme.radius.full }]}>
           <MaterialCommunityIcons
             name={category.icon as any}
             size={32}

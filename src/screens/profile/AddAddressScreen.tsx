@@ -81,6 +81,7 @@ export function AddAddressScreen({ navigation }: any) {
               value={name}
               onChangeText={setName}
               placeholder="الاسم"
+              placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
 
@@ -94,6 +95,7 @@ export function AddAddressScreen({ navigation }: any) {
                 onChangeText={setPhone}
                 keyboardType="phone-pad"
                 placeholder="5xxxxxxxx"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
               />
             </View>
           </View>
@@ -120,6 +122,7 @@ export function AddAddressScreen({ navigation }: any) {
               value={street}
               onChangeText={setStreet}
               placeholder="اسم الشارع"
+              placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
 
@@ -131,6 +134,7 @@ export function AddAddressScreen({ navigation }: any) {
                 value={building}
                 onChangeText={setBuilding}
                 placeholder="المبنى"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
               />
             </View>
             <View style={[styles.inputGroup, { flex: 1 }]}>
@@ -140,6 +144,7 @@ export function AddAddressScreen({ navigation }: any) {
                 value={floor}
                 onChangeText={setFloor}
                 placeholder="الطابق"
+                placeholderTextColor={theme.colors.onSurfaceVariant}
               />
             </View>
           </View>
@@ -151,12 +156,13 @@ export function AddAddressScreen({ navigation }: any) {
               value={apartment}
               onChangeText={setApartment}
               placeholder="رقم الشقة"
+              placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
         </GlassCard>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopColor: theme.colors.border, borderTopWidth: 1 }]}>
         <AppButton title="حفظ العنوان" onPress={handleSave} />
       </View>
     </View>
@@ -177,5 +183,5 @@ const styles = StyleSheet.create({
   picker: { flexDirection: 'row', flexWrap: 'wrap', padding: 12, borderRadius: 12, gap: 8 },
   cityOption: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
   row: { flexDirection: 'row', gap: 8 },
-  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: 'white' },
+  footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20 },
 });

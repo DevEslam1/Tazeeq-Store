@@ -51,7 +51,7 @@ export function DeliveryScreen({ navigation }: any) {
             >
               <View style={[styles.addressContent, { flexDirection: 'row' }]}>
                 <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
-                  <MaterialCommunityIcons name={address.title === 'المنزل' ? 'home' : 'office-building' as any} size={24} color="white" />
+                  <MaterialCommunityIcons name={address.title === 'المنزل' ? 'home' : 'office-building' as any} size={24} color={theme.colors.primary} />
                 </View>
                 <View style={[styles.addressInfo, { alignItems: 'flex-start', flex: 1 }]}>
                   <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{address.title}</Text>
@@ -87,14 +87,15 @@ export function DeliveryScreen({ navigation }: any) {
           <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.details') || 'تفاصيل إضافية'}</Text>
           <TextInput 
             placeholder={t('delivery.notes') || 'ملاحظات للمندوب (رقم الشقة، علامة مميزة...)'}
-            style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+            style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+            placeholderTextColor={theme.colors.onSurfaceVariant}
             multiline
             numberOfLines={4}
           />
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surfaceContainerLowest, borderTopColor: theme.colors.outlineVariant }]}>
         <AppButton 
           title={t('common.next') || 'التالي: الدفع'} 
           onPress={() => navigation.navigate('Payment')} 
@@ -169,7 +170,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     height: 100,
-    backgroundColor: 'white',
   },
   footer: {
     position: 'absolute',
@@ -178,8 +178,6 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
   },
 });

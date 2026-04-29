@@ -22,10 +22,10 @@ export function OnboardingScreen({ navigation }: any) {
   const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
   const slides: Slide[] = useMemo(() => [
-    { icon: 'leaf', title: `أهلاً بك في ${appName}`, subtitle: 'أفضل المنتجات الطازجة بين يديك', color: '#10b981' },
-    { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: '#f59e0b' },
-    { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: '#10b981' },
-  ], [appName]);
+    { icon: 'leaf', title: `أهلاً بك في ${appName}`, subtitle: 'أفضل المنتجات الطازجة بين يديك', color: theme.colors.primary },
+    { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: theme.colors.secondaryContainer },
+    { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: theme.colors.primary },
+  ], [appName, theme.colors]);
 
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
@@ -119,7 +119,7 @@ export function OnboardingScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  slide: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40, paddingTop: 80 },
+  slide: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingTop: 80 },
   iconContainer: { width: 160, height: 160, borderRadius: 80, alignItems: 'center', justifyContent: 'center' },
   footer: { paddingHorizontal: 24, paddingBottom: 40, alignItems: 'center' },
   dotsContainer: { flexDirection: 'row', marginBottom: 32 },

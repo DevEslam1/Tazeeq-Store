@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Animated, Platform } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { products } from '../../data/products';
@@ -9,6 +9,67 @@ import { useCart } from '../../hooks/useCart';
 import { useRTL } from '../../hooks/useRTL';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// Move CartItem outside to prevent hook violation and unnecessary re-renders
+const CartItem = ({ item, index, theme, t, updateQty, removeFromCart }: any) => {
+  const slideAnim = React.useRef(new Animated.Value(0)).current;
+  
+  React.useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 1,
+      duration: 300,
+      delay: index * 0.07,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  return (
+    <Animated.View style={[
+      styles.itemCard,
+      theme.elevation.card,
+      { 
+        backgroundColor: theme.colors.surfaceContainerLowest, 
+        borderColor: theme.colors.border,
+        opacity: slideAnim,
+        transform: [{ translateY: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }]
+      }
+    ]}>
+      <View style={styles.itemContent}>
+        <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.image }]}>
+          <Text style={styles.emojiFallback}>🥬</Text>
+        </View>
+        <View style={styles.itemInfo}>
+          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]}>{item.name}</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10 }]}>{item.weight || t('cart.one_unit')} • {t('cart.fresh_daily')}</Text>
+          <View style={styles.itemFooter}>
+            <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+              <TouchableOpacity 
+                style={styles.stepperButton}
+                onPress={() => updateQty(item.cartId, Math.max(1, item.quantity - 1))}
+              >
+                <MaterialCommunityIcons name="minus" size={18} color={theme.colors.primary} />
+              </TouchableOpacity>
+              <Text style={[theme.typography.itemName, { color: theme.colors.primary, marginHorizontal: 12, minWidth: 24, textAlign: 'center' }]}>{item.quantity}</Text>
+              <TouchableOpacity 
+                style={styles.stepperButton}
+                onPress={() => updateQty(item.cartId, item.quantity + 1)}
+              >
+                <MaterialCommunityIcons name="plus" size={18} color={theme.colors.primary} />
+              </TouchableOpacity>
+            </View>
+            <Text style={[theme.typography.price, { color: theme.colors.primary }]}>{(item.price * item.quantity).toFixed(2)} {t('common.currency')}</Text>
+          </View>
+        </View>
+        <TouchableOpacity 
+          style={[styles.deleteButton, { borderColor: theme.colors.errorContainer, backgroundColor: theme.colors.errorContainer + '40', borderRadius: theme.radius.deleteButton }]}
+          onPress={() => removeFromCart(item.cartId)}
+        >
+          <MaterialCommunityIcons name="trash-can" size={15} color={theme.colors.error} />
+        </TouchableOpacity>
+      </View>
+    </Animated.View>
+  );
+};
+
 export function CartScreen({ navigation }: any) {
   const { theme } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
@@ -16,11 +77,14 @@ export function CartScreen({ navigation }: any) {
   const insets = useSafeAreaInsets();
   const { items, total, removeFromCart, updateQty } = useCart();
 
-  const cartProducts = items.map(item => ({
-    ...products.find(p => p.id === item.productId)!,
-    quantity: item.quantity,
-    cartId: item.productId,
-  })).filter(p => p.id);
+  const cartProducts = items.map(item => {
+    const product = products.find(p => p.id === item.productId);
+    return {
+      ...product,
+      quantity: item.quantity,
+      cartId: item.productId,
+    };
+  }).filter(p => p.id);
 
   const deliveryFee = 15.00;
   const grandTotal = total + deliveryFee;
@@ -43,72 +107,12 @@ export function CartScreen({ navigation }: any) {
           <AppButton 
             title="تصفح المنتجات"
             onPress={() => navigation.navigate('Main')}
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 20, width: 200 }}
           />
         </View>
       </View>
     );
   }
-
-  const renderItem = ({ item, index }: { item: any; index: number }) => {
-    const slideAnim = React.useRef(new Animated.Value(0)).current;
-    
-    React.useEffect(() => {
-      Animated.timing(slideAnim, {
-        toValue: 1,
-        duration: 300,
-        delay: index * 0.07,
-        useNativeDriver: true,
-      }).start();
-    }, []);
-
-    return (
-      <Animated.View style={[
-        styles.itemCard,
-        theme.elevation.card,
-        { 
-          backgroundColor: theme.colors.surfaceContainerLowest, 
-          borderColor: theme.colors.border,
-          opacity: slideAnim,
-          transform: [{ translateY: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }]
-        }
-      ]}>
-        <View style={styles.itemContent}>
-          <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.image }]}>
-            <Text style={styles.emojiFallback}>🥬</Text>
-          </View>
-          <View style={styles.itemInfo}>
-            <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]}>{item.name}</Text>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10 }]}>{item.weight || t('cart.one_unit')} • {t('cart.fresh_daily')}</Text>
-            <View style={styles.itemFooter}>
-              <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
-                <TouchableOpacity 
-                  style={styles.stepperButton}
-                  onPress={() => updateQty(item.cartId, Math.max(1, item.quantity - 1))}
-                >
-                  <MaterialCommunityIcons name="minus" size={18} color={theme.colors.primary} />
-                </TouchableOpacity>
-                <Text style={[theme.typography.itemName, { color: theme.colors.primary, marginHorizontal: 12, minWidth: 24, textAlign: 'center' }]}>{item.quantity}</Text>
-                <TouchableOpacity 
-                  style={styles.stepperButton}
-                  onPress={() => updateQty(item.cartId, item.quantity + 1)}
-                >
-                  <MaterialCommunityIcons name="plus" size={18} color={theme.colors.primary} />
-                </TouchableOpacity>
-              </View>
-              <Text style={[theme.typography.price, { color: theme.colors.primary }]}>{(item.price * item.quantity).toFixed(2)} {t('common.currency')}</Text>
-            </View>
-          </View>
-          <TouchableOpacity 
-            style={[styles.deleteButton, { borderColor: theme.colors.errorContainer, backgroundColor: theme.colors.errorContainer + '40', borderRadius: theme.radius.deleteButton }]}
-            onPress={() => removeFromCart(item.cartId)}
-          >
-            <MaterialCommunityIcons name="trash-can" size={15} color={theme.colors.error} />
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    );
-  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -124,9 +128,18 @@ export function CartScreen({ navigation }: any) {
 
       <FlatList
         data={cartProducts}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={[styles.list, { paddingTop: insets.top + 80, paddingBottom: 240 }]}
-        renderItem={renderItem}
+        keyExtractor={(item) => item.cartId}
+        contentContainerStyle={[styles.list, { paddingTop: insets.top + 80, paddingBottom: 260 }]}
+        renderItem={({ item, index }) => (
+          <CartItem 
+            item={item} 
+            index={index} 
+            theme={theme} 
+            t={t} 
+            updateQty={updateQty} 
+            removeFromCart={removeFromCart} 
+          />
+        )}
         ListFooterComponent={
           <TouchableOpacity style={[styles.addMoreCard, { borderColor: theme.colors.border, borderRadius: theme.radius.card }]}>
             <View style={[styles.addMoreIcon, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.deleteButton }]}>
@@ -137,7 +150,7 @@ export function CartScreen({ navigation }: any) {
         }
       />
 
-      <View style={[styles.summary, theme.elevation.panel, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 28, borderTopLeftRadius: theme.radius.summary, borderTopRightRadius: theme.radius.summary, borderTopColor: theme.colors.border }]}>
+      <View style={[styles.summary, theme.elevation.panel, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopLeftRadius: theme.radius.summary, borderTopRightRadius: theme.radius.summary, borderTopColor: theme.colors.border }]}>
         <View style={[styles.promoBanner, { backgroundColor: theme.colors.primaryContainer, borderColor: theme.colors.secondary, borderRadius: theme.radius.promo }]}>
           <Text style={{ fontSize: 22 }}>🏷️</Text>
           <Text style={[theme.typography.bodySecondary, { flex: 1, marginHorizontal: 10, fontWeight: '600', color: theme.colors.primary }]}>{t('cart.promo_code')}</Text>
@@ -181,18 +194,11 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 10,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#0F6E56',
-  },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#e5ede9',
-    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -206,30 +212,25 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     borderWidth: 1,
     padding: 16,
+    borderRadius: 20,
   },
   itemContent: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   imageContainer: {
     width: 72,
     height: 72,
-    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   emojiFallback: { fontSize: 32 },
   itemInfo: { flex: 1 },
-  itemName: { fontSize: 15, fontWeight: '700', color: '#1a1a1a' },
-  itemSubtitle: { fontSize: 13, color: '#6b7280', marginBottom: 10 },
   itemFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   stepper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
     paddingHorizontal: 4,
     paddingVertical: 4,
   },
   stepperButton: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
-  stepperText: { marginHorizontal: 12, fontSize: 15, fontWeight: '700', color: '#0F6E56', minWidth: 24, textAlign: 'center' },
-  itemPrice: { fontSize: 17, fontWeight: '700', color: '#0F6E56' },
   deleteButton: {
     width: 36,
     height: 36,
@@ -246,6 +247,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
+    marginTop: 8,
   },
   addMoreIcon: {
     width: 32,
@@ -265,31 +267,24 @@ const styles = StyleSheet.create({
   promoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 16,
     borderWidth: 1,
     borderStyle: 'dashed',
     padding: 14,
     marginBottom: 16,
   },
-  promoText: { flex: 1, marginHorizontal: 10, fontSize: 13, fontWeight: '600', color: '#0F6E56' },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  summaryLabel: { fontSize: 14, color: '#6b7280' },
-  summaryValue: { fontSize: 14, fontWeight: '600', color: '#1a1a1a' },
   divider: { height: 1, marginVertical: 14 },
   totalRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
   },
-  totalLabel: { fontSize: 17, fontWeight: '700', color: '#1a1a1a' },
-  totalValue: { fontSize: 22, fontWeight: '700', color: '#0F6E56' },
   checkoutButton: {
-    borderRadius: 18,
-    paddingVertical: 17,
+    width: '100%',
   },
   emptyState: {
     flex: 1,

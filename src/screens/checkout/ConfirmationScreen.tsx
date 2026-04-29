@@ -29,10 +29,13 @@ export function ConfirmationScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 40 }]} 
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.successHeader}>
-          <View style={[styles.iconBadge, { backgroundColor: theme.colors.primaryContainer }]}>
-            <MaterialCommunityIcons name="check" size={48} color="white" />
+          <View style={[styles.iconBadge, { backgroundColor: theme.colors.primary }]}>
+            <MaterialCommunityIcons name="check" size={48} color={theme.colors.onPrimary} />
           </View>
           <Text style={[theme.typography.h1, { color: theme.colors.primary, marginTop: 24 }]}>
             تم طلبك بنجاح!
@@ -106,8 +109,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: 20,
-    paddingTop: 20,
+    paddingHorizontal: 20,
   },
   successHeader: {
     alignItems: 'center',
@@ -165,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     marginBottom: 20,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: theme.colors.outlineVariant,
   },
   actions: {
     gap: 16,

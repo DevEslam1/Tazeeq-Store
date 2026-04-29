@@ -51,7 +51,7 @@ export function AppButton({
           style={styles.touchable}
         >
           <LinearGradient
-            colors={['#1D9E75', '#0F6E56']}
+            colors={[theme.colors.secondary, theme.colors.primary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[styles.gradient, { borderRadius: theme.radius.checkout }]}
@@ -63,7 +63,7 @@ export function AppButton({
     );
   }
 
-  const bgColor = variant === 'secondary' ? theme.colors.secondaryContainer : 'rgba(255, 255, 255, 0.15)';
+  const bgColor = variant === 'secondary' ? theme.colors.secondaryContainer : 'rgba(255, 255, 255, 0.2)';
 
   return (
     <TouchableOpacity 

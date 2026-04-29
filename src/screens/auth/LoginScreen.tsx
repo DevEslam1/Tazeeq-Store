@@ -111,7 +111,7 @@ export function LoginScreen({ navigation }: any) {
         style={[styles.switchTab, { borderRadius: theme.radius.full }, method === 'phone' && { backgroundColor: theme.colors.primary }]} 
         onPress={() => { setMethod('phone'); setStep('phone'); }}
       >
-        <Text style={[theme.typography.meta, { color: method === 'phone' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant }]}>
+        <Text numberOfLines={1} style={[styles.switchText, { color: method === 'phone' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant, fontFamily: 'Cairo_700Bold' }]}>
           {isRTL ? 'رقم الهاتف' : 'Phone'}
         </Text>
       </TouchableOpacity>
@@ -119,7 +119,7 @@ export function LoginScreen({ navigation }: any) {
         style={[styles.switchTab, { borderRadius: theme.radius.full }, method === 'email' && { backgroundColor: theme.colors.primary }]} 
         onPress={() => setMethod('email')}
       >
-        <Text style={[theme.typography.meta, { color: method === 'email' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant }]}>
+        <Text numberOfLines={1} style={[styles.switchText, { color: method === 'email' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant, fontFamily: 'Cairo_700Bold' }]}>
           {isRTL ? 'البريد الإلكتروني' : 'Email'}
         </Text>
       </TouchableOpacity>
@@ -150,7 +150,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign, marginTop: 24 }]}>
                     رقم الهاتف
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: isRTL ? 'row-reverse' : 'row', borderRadius: theme.radius.card }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: isRTL ? 'row-reverse' : 'row', borderRadius: theme.radius.card }]}>
                     <Text style={[theme.typography.itemName, { color: theme.colors.primary }]}>+966</Text>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12, fontFamily: 'Cairo_400Regular' }]}
@@ -177,7 +177,7 @@ export function LoginScreen({ navigation }: any) {
                       <TextInput
                         key={index}
                         ref={(el) => { otpRefs.current[index] = el; }}
-                        style={[styles.otpInput, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, color: theme.colors.primary, borderRadius: theme.radius.card }]}
+                        style={[styles.otpInput, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, color: theme.colors.primary, borderRadius: theme.radius.card }]}
                         keyboardType="number-pad"
                         maxLength={1}
                         value={digit}
@@ -198,7 +198,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>
                     البريد الإلكتروني
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
                       placeholder="example@email.com"
@@ -213,7 +213,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign, marginTop: 16 }]}>
                     كلمة المرور
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
                       placeholder="********"
@@ -255,12 +255,17 @@ export function LoginScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollContent: { paddingHorizontal: 24, flexGrow: 1, justifyContent: 'center', alignItems: 'center' },
-  logoSection: { alignItems: 'center', marginBottom: 56 },
+  logoSection: { 
+    alignItems: 'center', 
+    marginBottom: 56,
+    width: '100%',
+    paddingHorizontal: 20,
+  },
   cardWrapper: { width: '100%', maxWidth: 450 },
   card: { padding: 28, borderRadius: 24 },
-  switcher: { height: 54, borderRadius: 27, padding: 4, marginBottom: 12 },
-  switchTab: { flex: 1, borderRadius: 23, alignItems: 'center', justifyContent: 'center' },
-  switchText: { fontWeight: '700', fontSize: 15 },
+  switcher: { height: 58, borderRadius: 29, padding: 4, marginBottom: 16 },
+  switchTab: { flex: 1, borderRadius: 25, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
+  switchText: { fontWeight: '700', fontSize: 13 },
   inputContainer: { alignItems: 'center', paddingHorizontal: 16, height: 60, borderRadius: 16, marginBottom: 16 },
   input: { flex: 1, fontSize: 16, height: '100%' },
   button: { width: '100%', marginTop: 12, height: 56 },

@@ -38,8 +38,8 @@ export function AccountScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primaryContainer }]}>
-            <MaterialCommunityIcons name="account" size={48} color="white" />
+          <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary }]}>
+            <MaterialCommunityIcons name="account" size={48} color={theme.colors.onPrimary} />
           </View>
           <Text style={[theme.typography.h1, { marginTop: 16 }]}>زائر</Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>سجل دخولك للحصول على ميزات أكثر</Text>
@@ -51,7 +51,7 @@ export function AccountScreen({ navigation }: any) {
               <GlassCard style={{ padding: 16 }}>
                 <View style={[styles.menuContent, { flexDirection: 'row' }]}>
                   <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
-                    <MaterialCommunityIcons name={item.icon as any} size={24} color="white" />
+                    <MaterialCommunityIcons name={item.icon as any} size={24} color={theme.colors.primary} />
                   </View>
                   <View style={[styles.menuText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
                     <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{item.title}</Text>
@@ -75,7 +75,7 @@ export function AccountScreen({ navigation }: any) {
             style={[styles.menuContent, { flexDirection: 'row' }]}
           >
             <View style={[styles.iconContainer, { backgroundColor: theme.colors.secondaryContainer }]}>
-              <MaterialCommunityIcons name="translate" size={24} color="white" />
+              <MaterialCommunityIcons name="translate" size={24} color={theme.colors.onSecondaryContainer} />
             </View>
             <View style={[styles.menuText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
               <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>اللغة</Text>
@@ -88,7 +88,7 @@ export function AccountScreen({ navigation }: any) {
         </GlassCard>
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Text style={[theme.typography.bodyMain, { color: '#ef4444', fontWeight: '700' }]}>تسجيل الخروج</Text>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>تسجيل الخروج</Text>
         </TouchableOpacity>
         
         <View style={{ height: 100 }} />

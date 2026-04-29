@@ -13,7 +13,11 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <BlurView intensity={40} tint="light" style={styles.tabBarInner}>
+      <BlurView
+        intensity={Platform.OS === 'android' ? 0 : 65}
+        tint="light"
+        style={styles.tabBarInner}
+      >
         <View style={styles.tabContent}>
           {state.routes.map((route: any, index: number) => {
             const isFocused = state.index === index;
@@ -40,7 +44,7 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
               }
             };
 
-            const color = isFocused ? theme.colors.primaryContainer : theme.colors.outline;
+            const color = isFocused ? theme.colors.primary : theme.colors.outline;
 
             return (
               <TouchableOpacity
@@ -64,7 +68,7 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
                 ]}>
                   {t(`nav.${route.name.toLowerCase()}`)}
                 </Text>
-                {isFocused && <View style={[styles.activeDot, { backgroundColor: theme.colors.primaryContainer }]} />}
+                {isFocused && <View style={[styles.activeDot, { backgroundColor: theme.colors.primary }]} />}
               </TouchableOpacity>
             );
           })}
@@ -86,15 +90,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 40,
     overflow: 'hidden',
-    backgroundColor: 'rgba(244, 251, 244, 0.85)',
+    backgroundColor: Platform.OS === 'android' ? 'rgba(244, 251, 244, 0.93)' : 'rgba(244, 251, 244, 0.72)',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
-    // Tinted ambient shadow
-    shadowColor: '#10B981',
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 12,
+    borderColor: 'rgba(255, 255, 255, 0.75)',
+    borderTopColor: 'rgba(255, 255, 255, 0.95)',
+    shadowColor: '#0F6E56',
+    shadowOpacity: 0.14,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
   },
   tabContent: {
     flex: 1,

@@ -63,10 +63,10 @@ export function HomeScreen({ navigation }: any) {
 {/* Promo Banner */}
         <View style={styles.promoContainer}>
           <LinearGradient
-            colors={['#10b981', '#fea619']}
+            colors={[theme.colors.primary, theme.colors.secondary]}
             start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.promoGradient}
+            end={{ x: 1, y: 1 }}
+            style={[styles.promoGradient, theme.elevation.panel]}
           >
             <View style={styles.promoContent}>
               <View style={{ flex: 1 }}>
@@ -79,11 +79,11 @@ export function HomeScreen({ navigation }: any) {
                 </View>
               </View>
               <TouchableOpacity 
-                style={styles.ctaButton}
+                style={[styles.ctaButton, { backgroundColor: 'rgba(255,255,255,0.25)' }]}
                 onPress={() => navigation.navigate('ProductList', { categoryName: 'العروض' })}
               >
                 <Text style={styles.ctaButtonText}>تسوق الآن</Text>
-                <MaterialCommunityIcons name="arrow-left" size={18} color="white" />
+                <MaterialCommunityIcons name={isRTL ? "arrow-left" : "arrow-right"} size={18} color="white" />
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 120,
-    paddingTop: 170,
+    paddingTop: 160,
   },
   section: {
     marginTop: 32,

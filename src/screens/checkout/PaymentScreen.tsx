@@ -110,15 +110,17 @@ export function PaymentScreen({ navigation }: any) {
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>اسم صاحب البطاقة</Text>
                 <TextInput 
                   placeholder="أحمد محمد"
-                  style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                  style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                  placeholderTextColor={theme.colors.onSurfaceVariant}
                 />
               </View>
               <View style={styles.inputGroup}>
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>رقم البطاقة</Text>
-                <View style={[styles.input, { flexDirection: 'row', alignItems: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}>
+                <View style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row', alignItems: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}>
                   <TextInput 
                     placeholder="**** **** **** 1234"
-                    style={{ flex: 1, textAlign: 'left' }}
+                    style={{ flex: 1, textAlign: 'left', color: theme.colors.onSurface }}
+                    placeholderTextColor={theme.colors.onSurfaceVariant}
                   />
                   <MaterialCommunityIcons name="credit-card" size={32} color="#1A1F71" />
                 </View>
@@ -128,7 +130,8 @@ export function PaymentScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>تاريخ الانتهاء</Text>
                   <TextInput 
                     placeholder="MM/YY"
-                    style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    placeholderTextColor={theme.colors.onSurfaceVariant}
                   />
                 </View>
                 <View style={{ width: 16 }} />
@@ -136,7 +139,8 @@ export function PaymentScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>CVV</Text>
                   <TextInput 
                     placeholder="***"
-                    style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    placeholderTextColor={theme.colors.onSurfaceVariant}
                     secureTextEntry
                   />
                 </View>
@@ -147,8 +151,8 @@ export function PaymentScreen({ navigation }: any) {
 
         <View style={styles.summary}>
           <GlassCard style={styles.summaryCard}>
-            <View style={styles.summaryRow}>
-              <Text style={theme.typography.bodyMain}>إجمالي الطلب</Text>
+            <View style={[styles.summaryRow, { flexDirection: flexRow }]}>
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface }]}>إجمالي الطلب</Text>
               <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{total.toFixed(2)} ر.س</Text>
             </View>
           </GlassCard>
@@ -162,7 +166,7 @@ export function PaymentScreen({ navigation }: any) {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surfaceContainerLowest, borderTopColor: theme.colors.outlineVariant }]}>
         <AppButton 
           title={t('payment.confirm') || 'تأكيد الطلب والدفع'} 
           onPress={handleConfirm} 
@@ -216,7 +220,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     height: 50,
-    backgroundColor: 'white',
   },
   row: {
     flexDirection: 'row',
@@ -226,13 +229,15 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   summaryCard: {
-    padding: 16,
-    backgroundColor: 'rgba(16, 185, 129, 0.05)',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.2)',
   },
   summaryRow: {
-    flexDirection: 'row',
+    paddingHorizontal: 8,
     justifyContent: 'space-between',
     alignItems: 'center',
+    minHeight: 48,
   },
   security: {
     flexDirection: 'row',
@@ -247,8 +252,6 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
   },
 });

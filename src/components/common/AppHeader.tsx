@@ -21,15 +21,17 @@ export function AppHeader() {
 
   return (
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
-      <BlurView intensity={40} tint="light" style={[styles.blurContainer, theme.elevation.panel, { backgroundColor: 'rgba(244, 249, 246, 0.9)', borderRadius: theme.radius.card }]}>
+      <BlurView intensity={Platform.OS === 'android' ? 0 : 60} tint="light" style={[styles.blurContainer, { borderRadius: theme.radius.card }]}>
         <View style={[styles.topRow, { flexDirection: flexRow }]}>
           <TouchableOpacity style={[styles.actionButton, { borderRadius: theme.radius.headerButton }]} accessibilityLabel="القائمة">
             <MaterialCommunityIcons name="menu" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
 
-          <Text style={[styles.logo, { color: theme.colors.primary }]}>
-            {appName}
-          </Text>
+          <View style={styles.logoContainer}>
+            <Text style={[styles.logo, { color: theme.colors.primary }]}>
+              {appName}
+            </Text>
+          </View>
 
           <View style={styles.actionsRow}>
             <TouchableOpacity 
@@ -87,8 +89,15 @@ const styles = StyleSheet.create({
   },
   blurContainer: {
     overflow: 'hidden',
+    backgroundColor: Platform.OS === 'android' ? 'rgba(244, 251, 244, 0.92)' : 'rgba(244, 251, 244, 0.75)',
     borderWidth: 1,
-    borderColor: 'rgba(229, 237, 233, 0.5)',
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderTopColor: 'rgba(255, 255, 255, 0.95)',
+    shadowColor: '#0F6E56',
+    shadowOpacity: 0.10,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
   topRow: {
     flexDirection: 'row',
@@ -96,6 +105,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  logoContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logo: {
     fontWeight: '800',
