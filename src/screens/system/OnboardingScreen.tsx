@@ -20,9 +20,17 @@ const slides: Slide[] = [
 ];
 
 export function OnboardingScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, locale } = useAppTheme();
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
+
+  const slides: Slide[] = [
+    { icon: 'leaf', title: `أهلاً بك في ${appName}`, subtitle: 'أفضل المنتجات الطازجة بين يديك', color: '#10b981' },
+    { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: '#f59e0b' },
+    { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: '#10b981' },
+  ];
 
   const renderSlide = ({ item }: { item: Slide }) => (
     <View style={styles.slide}>

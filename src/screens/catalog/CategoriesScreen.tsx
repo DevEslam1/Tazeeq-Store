@@ -6,16 +6,18 @@ import { AppHeader } from '../../components/common/AppHeader';
 import { CategoryCard } from '../../components/commerce/CategoryCard';
 import { categories } from '../../data/categories';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function CategoriesScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('categories.title')}
@@ -24,7 +26,7 @@ export function CategoriesScreen({ navigation }: any) {
       </View>
 
       <View style={styles.content}>
-        <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left', marginBottom: 20 }]}>
+        <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginBottom: 20 }]}>
           {t('categories.subtitle')}
         </Text>
 
@@ -52,10 +54,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 80,
     paddingHorizontal: 20,
     alignItems: 'center',
-    paddingTop: 20,
   },
   backButton: {
     width: 44,

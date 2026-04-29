@@ -9,11 +9,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../../hooks/useCart';
 
 export function AppHeader() {
-  const { theme } = useAppTheme();
+  const { theme, locale } = useAppTheme();
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const insets = useSafeAreaInsets();
   const { itemCount } = useCart();
+
+  const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
   return (
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
@@ -25,7 +27,7 @@ export function AppHeader() {
           </TouchableOpacity>
 
           <Text style={[styles.logo, { color: theme.colors.primary }]}>
-            تساج
+            {appName}
           </Text>
 
           <View style={styles.actionsRow}>

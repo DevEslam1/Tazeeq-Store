@@ -8,7 +8,17 @@
     "prime": "PRIME",
     "sar": "SAR",
     "kg": "kg",
-    "unit": "pc"
+    "unit": "pc",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "quantity": "Quantity",
+    "total_price": "Total Price",
+    "reviews": "Reviews",
+    "browse_products": "Browse Products"
   },
   "nav": {
     "shop": "Shop",
@@ -22,11 +32,18 @@
   "home": {
     "promo_title": "40% Off on Fresh Vegetables",
     "best_sellers": "Best Sellers",
-    "categories": "Categories"
+    "categories": "Categories",
+    "shop_now": "Shop Now"
   },
   "categories": {
     "title": "Categories",
     "subtitle": "Explore our fresh products"
+  },
+  "product": {
+    "description": "Description",
+    "reviews": "Reviews",
+    "share": "Share",
+    "add_to_cart": "Add to Cart"
   },
   "cart": {
     "title": "Shopping Cart",
@@ -35,6 +52,85 @@
     "subtotal": "Subtotal",
     "delivery_fee": "Delivery Fee",
     "discount": "Discount",
-    "total": "Total"
+    "total": "Total",
+    "coupon_placeholder": "Enter coupon code",
+    "apply": "Apply"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Create Account",
+    "phone": "Phone Number",
+    "otp": "Verification Code",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "name": "Name",
+    "email": "Email",
+    "continue_guest": "Continue as Guest",
+    "have_account": "Have an account?",
+    "no_account": "New account?",
+    "terms": "I agree to Terms and Conditions"
+  },
+  "profile": {
+    "title": "My Account",
+    "edit_profile": "Edit Profile",
+    "save_changes": "Save Changes",
+    "addresses": "My Addresses",
+    "add_address": "Add New Address",
+    "payment_methods": "Payment Methods",
+    "notifications": "Notifications",
+    "logout": "Logout",
+    "coming_soon": "Coming soon"
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "empty": "Your wishlist is empty"
+  },
+  "search": {
+    "placeholder": "Search for products...",
+    "recent": "Recent Searches",
+    "no_results": "No results found",
+    "clear_recent": "Clear All"
+  },
+  "delivery": {
+    "title": "Delivery Information",
+    "saved_addresses": "Saved Addresses",
+    "add_new": "Add New Address",
+    "map_preview": "Map Preview",
+    "details": "Additional Details",
+    "notes": "Notes for delivery"
+  },
+  "payment": {
+    "title": "Payment Method",
+    "select_method": "Select Payment Method",
+    "confirm": "Confirm Order & Pay"
+  },
+  "order": {
+    "title": "My Orders",
+    "tracking": "Track Order",
+    "rating": "Rate Order",
+    "submit_rating": "Submit Rating",
+    "reorder": "Reorder",
+    "empty": "No orders yet",
+    "placed": "Placed",
+    "preparing": "Preparing",
+    "on_the_way": "On the way",
+    "delivered": "Delivered"
+  },
+  "address": {
+    "home": "Home",
+    "work": "Work",
+    "other": "Other",
+    "street": "Street",
+    "building": "Building",
+    "floor": "Floor",
+    "apartment": "Apartment",
+    "city": "City",
+    "save": "Save Address"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Tazeeq",
+    "delivery": "Fast Delivery",
+    "organic": "100% Organic",
+    "start": "Start Shopping"
   }
 }

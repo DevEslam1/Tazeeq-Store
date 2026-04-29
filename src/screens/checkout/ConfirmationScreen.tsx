@@ -8,10 +8,12 @@ import { GlassCard } from '../../components/common/GlassCard';
 import { useSelector } from 'react-redux';
 import { selectActiveOrder } from '../../store/slices/orderSlice';
 import { products } from '../../data/products';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function ConfirmationScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const activeOrder = useSelector(selectActiveOrder);
 
   const orderItems = activeOrder?.cartItems?.map(item => {
@@ -41,17 +43,17 @@ export function ConfirmationScreen({ navigation }: any) {
         </View>
 
         <GlassCard style={styles.infoCard}>
-          <View style={[styles.infoRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={[styles.infoRow, { flexDirection: 'row' }]}>
             <MaterialCommunityIcons name="clock-outline" size={24} color={theme.colors.primary} />
-            <View style={[styles.infoText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+            <View style={[styles.infoText, { alignItems: 'flex-start' }]}>
               <Text style={theme.typography.bodySecondary}>وقت التوصيل المتوقع</Text>
               <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{formatDate(activeOrder?.estimatedDelivery)}</Text>
             </View>
           </View>
           <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
-          <View style={[styles.infoRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={[styles.infoRow, { flexDirection: 'row' }]}>
             <MaterialCommunityIcons name="map-marker-outline" size={24} color={theme.colors.primary} />
-            <View style={[styles.infoText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+            <View style={[styles.infoText, { alignItems: 'flex-start' }]}>
               <Text style={theme.typography.bodySecondary}>عنوان التوصيل</Text>
               <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{activeOrder?.address?.details || 'العنوان غير محدد'}</Text>
             </View>
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 20,
   },
   successHeader: {
     alignItems: 'center',

@@ -8,14 +8,16 @@ import { AppButton } from '../../components/common/AppButton';
 import { useDispatch } from 'react-redux';
 import { addAddress } from '../../store/slices/addressSlice';
 import { AppDispatch } from '../../store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const addressTypes = ['المنزل', 'العمل', 'أخرى'];
 const cities = ['الرياض', 'جدة', 'الدمام', 'الخبر', 'مكة', 'المدينة'];
 
 export function AddAddressScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const insets = useSafeAreaInsets();
   
   const [type, setType] = useState('المنزل');
   const [name, setName] = useState('');
@@ -43,7 +45,7 @@ export function AddAddressScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { backgroundColor: theme.colors.primary }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: 'white' }]}>إضافة عنوان جديد</Text>
         <View style={{ width: 44 }} />
@@ -52,7 +54,7 @@ export function AddAddressScreen({ navigation }: any) {
       <ScrollView contentContainerStyle={styles.content}>
         <GlassCard style={styles.card}>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface, marginBottom: 12 }]}>نوع العنوان</Text>
-          <View style={[styles.typeRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={styles.typeRow}>
             {addressTypes.map((item) => (
               <TouchableOpacity
                 key={item}
@@ -118,8 +120,8 @@ export function AddAddressScreen({ navigation }: any) {
             />
           </View>
 
-          <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <View style={[styles.inputGroup, { flex: 1, marginRight: isRTL ? 0 : 8, marginLeft: isRTL ? 8 : 0 }]}>
+          <View style={styles.row}>
+            <View style={[styles.inputGroup, { flex: 1, marginEnd: 8 }]}>
               <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>المبنى</Text>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
@@ -160,17 +162,17 @@ export function AddAddressScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, paddingTop: 48 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, paddingTop: 16 },
   backButton: { padding: 8 },
   content: { padding: 16, paddingBottom: 100 },
   card: { padding: 20 },
-  typeRow: { gap: 8, marginBottom: 20 },
+  typeRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
   typeButton: { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20 },
   inputGroup: { marginBottom: 16 },
   input: { height: 56, borderRadius: 12, paddingHorizontal: 16, fontSize: 16 },
   phoneInput: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, borderRadius: 12 },
   picker: { flexDirection: 'row', flexWrap: 'wrap', padding: 12, borderRadius: 12, gap: 8 },
   cityOption: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
-  row: { gap: 8 },
+  row: { flexDirection: 'row', gap: 8 },
   footer: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: 'white' },
 });

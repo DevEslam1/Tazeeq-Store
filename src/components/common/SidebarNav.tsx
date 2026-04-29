@@ -27,10 +27,10 @@ export function SidebarNav({ navigation, state }: any) {
         {menuItems.map((item) => (
           <TouchableOpacity 
             key={item.name}
-            style={[styles.menuItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+            style={[styles.menuItem, { flexDirection: 'row' }]}
           >
             <MaterialCommunityIcons name={item.icon as any} size={24} color={theme.colors.onSurfaceVariant} />
-            <Text style={[styles.menuText, theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginLeft: isRTL ? 0 : 16, marginRight: isRTL ? 16 : 0 }]}>
+            <Text style={[styles.menuText, theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginStart: 16 }]}>
               {t(`nav.${item.name.toLowerCase()}`)}
             </Text>
           </TouchableOpacity>
@@ -39,7 +39,7 @@ export function SidebarNav({ navigation, state }: any) {
 
       <View style={styles.footer}>
         <Image source={{ uri: 'https://i.pravatar.cc/100' }} style={styles.avatar} />
-        <View style={{ marginLeft: 12 }}>
+        <View style={{ marginStart: 12 }}>
           <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>Eslam</Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>eslam@example.com</Text>
         </View>

@@ -11,7 +11,7 @@ interface PriceTagProps {
 }
 
 export function PriceTag({ price, oldPrice, currency, size = 'md', style }: PriceTagProps) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
   
   const curr = currency || t('common.sar');
@@ -28,7 +28,7 @@ export function PriceTag({ price, oldPrice, currency, size = 'md', style }: Pric
   const mainTextStyle = getTextStyle();
 
   return (
-    <View style={[styles.container, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style]}>
+    <View style={[styles.container, { flexDirection: 'row' }, style]}>
       <Text style={[mainTextStyle, { color: theme.colors.primaryContainer, fontWeight: '800' }]}>
         {`${price.toFixed(2)} ${curr}`}
       </Text>
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
   },
   oldPrice: {
     textDecorationLine: 'line-through',
-    marginLeft: 4,
+    marginStart: 4,
   },
 });

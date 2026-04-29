@@ -38,7 +38,7 @@ export function useCart() {
   };
 
   const getItem = (productId: string) => 
-    useSelector((state: RootState) => selectCartItemById(state, productId));
+    items.find(i => i.productId === productId);
 
   return {
     items,

@@ -5,22 +5,24 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAllAddresses, selectAddress } from '../../store/slices/addressSlice';
+import { AppDispatch } from '../../store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function DeliveryScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
-  const [selectedAddress, setSelectedAddress] = useState('1');
-
-  const addresses = [
-    { id: '1', title: 'المنزل', details: 'شارع الملك فهد، حي الصحافة، الرياض', icon: 'home' },
-    { id: '2', title: 'العمل', details: 'برج المملكة، الطابق ٢٤، الرياض', icon: 'office-building' },
-  ];
+  const insets = useSafeAreaInsets();
+  const dispatch = useDispatch<AppDispatch>();
+  const addresses = useSelector(selectAllAddresses);
+  const selectedAddressId = useSelector((state: any) => state.address.selectedAddressId);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('delivery.title') || 'معلومات التوصيل'}
@@ -34,25 +36,25 @@ export function DeliveryScreen({ navigation }: any) {
         {addresses.map((address) => (
           <TouchableOpacity 
             key={address.id} 
-            onPress={() => setSelectedAddress(address.id)}
+            onPress={() => dispatch(selectAddress(address.id))}
             style={styles.addressWrapper}
           >
             <GlassCard 
               style={[
                 styles.addressCard,
-                selectedAddress === address.id && { borderColor: theme.colors.primary, borderWidth: 2 }
+                selectedAddressId === address.id && { borderColor: theme.colors.primary, borderWidth: 2 }
               ]}
-              intensity={selectedAddress === address.id ? 30 : 15}
+              intensity={selectedAddressId === address.id ? 30 : 15}
             >
-              <View style={[styles.addressContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+              <View style={[styles.addressContent, { flexDirection: 'row' }]}>
                 <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
-                  <MaterialCommunityIcons name={address.icon as any} size={24} color="white" />
+                  <MaterialCommunityIcons name={address.title === 'المنزل' ? 'home' : 'office-building' as any} size={24} color="white" />
                 </View>
-                <View style={[styles.addressInfo, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+                <View style={[styles.addressInfo, { alignItems: 'flex-start', flex: 1 }]}>
                   <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{address.title}</Text>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{address.details}</Text>
                 </View>
-                {selectedAddress === address.id && (
+                {selectedAddressId === address.id && (
                   <MaterialCommunityIcons name="check-circle" size={24} color={theme.colors.primary} />
                 )}
               </View>
@@ -104,10 +106,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 80,
     paddingHorizontal: 20,
     alignItems: 'center',
-    paddingTop: 20,
   },
   backButton: {
     width: 44,

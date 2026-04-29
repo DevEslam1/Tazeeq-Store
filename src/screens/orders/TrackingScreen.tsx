@@ -4,10 +4,12 @@ import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function TrackingScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -18,7 +20,7 @@ export function TrackingScreen({ navigation }: any) {
           style={styles.map} 
         />
         <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, { backgroundColor: 'white' }]}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name="arrow-right" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
 
         <View style={styles.etaContainer}>
@@ -30,7 +32,7 @@ export function TrackingScreen({ navigation }: any) {
       </View>
 
       <View style={styles.content}>
-        <View style={[styles.stepper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={[styles.stepper, { flexDirection: 'row' }]}>
           {[1, 2, 3, 4].map((step) => (
             <React.Fragment key={step}>
               <View style={[styles.stepDot, { backgroundColor: step <= 3 ? theme.colors.primary : theme.colors.outlineVariant }]} />
@@ -38,7 +40,7 @@ export function TrackingScreen({ navigation }: any) {
             </React.Fragment>
           ))}
         </View>
-        <View style={[styles.stepLabels, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={[styles.stepLabels, { flexDirection: 'row' }]}>
           <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>تم الطلب</Text>
           <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>تجهيز</Text>
           <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>في الطريق</Text>
@@ -46,9 +48,9 @@ export function TrackingScreen({ navigation }: any) {
         </View>
 
         <GlassCard style={styles.driverCard}>
-          <View style={[styles.driverInfo, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={[styles.driverInfo, { flexDirection: 'row' }]}>
             <Image source={{ uri: 'https://i.pravatar.cc/150?u=driver' }} style={styles.driverAvatar} />
-            <View style={[styles.driverText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+            <View style={[styles.driverText, { alignItems: 'flex-start' }]}>
               <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>محمد مبروك</Text>
               <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>مندوب توصيل • ٤.٩ ★</Text>
             </View>
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 16,
     left: 20,
     width: 44,
     height: 44,

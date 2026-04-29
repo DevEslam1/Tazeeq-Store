@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tazeeq",
-    "slug": "Tazeeq",
+    "slug": "tazeeq",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,11 +20,14 @@
         "backgroundColor": "#10b981"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.Tazeeq.app"
+      "package": "com.tazeeq.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": [
+      "expo-font"
+    ]
   }
+}
 }

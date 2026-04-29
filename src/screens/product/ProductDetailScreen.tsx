@@ -7,14 +7,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Badge } from '../../components/common/Badge';
 import { PriceTag } from '../../components/common/PriceTag';
 import { AppButton } from '../../components/common/AppButton';
+import { useCart } from '../../hooks/useCart';
+import { useWishlist } from '../../hooks/useWishlist';
 
 export function ProductDetailScreen({ route, navigation }: any) {
   const { productId } = route.params;
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
 
   const product = products.find(p => p.id === productId);
+  const wishlisted = product ? isWishlisted(product.id) : false;
 
   if (!product) return null;
 
@@ -24,12 +29,12 @@ export function ProductDetailScreen({ route, navigation }: any) {
         <View style={styles.imageContainer}>
           <Image source={{ uri: product.image }} style={styles.image} />
           <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
-            <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+            <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.content}>
-          <View style={[styles.headerRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={styles.headerRow}>
             <View style={{ flex: 1 }}>
               <Text style={[theme.typography.h1, { color: theme.colors.onSurface }]}>
                 {product.name}
@@ -38,12 +43,16 @@ export function ProductDetailScreen({ route, navigation }: any) {
                 {product.weight}
               </Text>
             </View>
-            <TouchableOpacity>
-              <MaterialCommunityIcons name="heart-outline" size={28} color={theme.colors.primary} />
+            <TouchableOpacity onPress={() => toggleWishlist(product.id)}>
+              <MaterialCommunityIcons 
+                name={wishlisted ? 'heart' : 'heart-outline'} 
+                size={28} 
+                color={wishlisted ? '#ef4444' : theme.colors.primary} 
+              />
             </TouchableOpacity>
           </View>
 
-          <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={styles.ratingRow}>
             <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondaryContainer} />
             <Text style={[theme.typography.bodyMain, { fontWeight: '700', marginHorizontal: 4 }]}>
               {product.rating}
@@ -66,9 +75,9 @@ export function ProductDetailScreen({ route, navigation }: any) {
             {product.description}
           </Text>
 
-          <View style={[styles.quantityRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={styles.quantityRow}>
             <Text style={[theme.typography.h2]}>{t('common.quantity')}</Text>
-            <View style={[styles.stepper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={styles.stepper}>
               <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={styles.stepperButton}>
                 <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
@@ -81,7 +90,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <View style={styles.footer}>
         <View style={{ flex: 1 }}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}
@@ -90,8 +99,8 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
         <AppButton 
           title={t('common.add_to_cart')} 
-          onPress={() => {}} 
-          style={{ flex: 1, marginLeft: isRTL ? 0 : 16, marginRight: isRTL ? 16 : 0 }}
+          onPress={() => addToCart(product.id, quantity)} 
+          style={{ flex: 1, marginStart: 16 }}
         />
       </View>
     </View>
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 50,
+    top: 16,
     left: 20,
     width: 44,
     height: 44,
@@ -130,10 +139,12 @@ const styles = StyleSheet.create({
     marginTop: -32,
   },
   headerRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
   ratingRow: {
+    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 8,
   },
@@ -144,12 +155,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   quantityRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 32,
     marginBottom: 40,
   },
   stepper: {
+    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 16,
@@ -164,6 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   footer: {
+    flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
     backgroundColor: 'white',

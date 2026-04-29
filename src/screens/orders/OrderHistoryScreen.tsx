@@ -10,10 +10,12 @@ import { selectAllOrders } from '../../store/slices/orderSlice';
 import { useCart } from '../../hooks/useCart';
 import { addItem } from '../../store/slices/cartSlice';
 import { AppDispatch } from '../../store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function OrderHistoryScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const { addToCart } = useCart();
   const orders = useSelector(selectAllOrders);
@@ -59,8 +61,8 @@ export function OrderHistoryScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-        <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: isRTL ? 'right' : 'left', paddingHorizontal: 20 }]}>
+      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
+        <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'left', paddingHorizontal: 20 }]}>
           طلباتي
         </Text>
       </View>
@@ -72,7 +74,7 @@ export function OrderHistoryScreen({ navigation }: any) {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => navigation.navigate('Tracking', { orderId: item.id })}>
             <GlassCard style={styles.orderCard}>
-              <View style={[styles.cardHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+              <View style={styles.cardHeader}>
                 <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) + '20' }]}>
                   <Text style={[theme.typography.labelCaps, { color: getStatusColor(item.status) }]}>
                     {getStatusLabel(item.status)}
@@ -81,8 +83,8 @@ export function OrderHistoryScreen({ navigation }: any) {
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{formatDate(item.date)}</Text>
               </View>
 
-              <View style={[styles.cardBody, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+              <View style={styles.cardBody}>
+                <View style={styles.info}>
                   <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>طلب #{item.id}</Text>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{item.items} منتجات</Text>
                 </View>
@@ -92,7 +94,7 @@ export function OrderHistoryScreen({ navigation }: any) {
               <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
               
               <TouchableOpacity 
-                style={[styles.reorderBtn, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+                style={styles.reorderBtn}
                 onPress={() => handleReorder(item)}
               >
                 <MaterialCommunityIcons name="refresh" size={20} color={theme.colors.primary} />
@@ -117,9 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 80,
     alignItems: 'center',
-    paddingTop: 20,
   },
   list: {
     padding: 20,
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardHeader: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cardBody: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -152,6 +154,7 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   reorderBtn: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function RatingScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [rating, setRating] = useState(0);
 
   return (
@@ -23,7 +25,7 @@ export function RatingScreen({ navigation }: any) {
 
         <GlassCard style={styles.ratingCard}>
           <Text style={[theme.typography.h2, { textAlign: 'center', marginBottom: 20 }]}>تقييم التوصيل</Text>
-          <View style={[styles.stars, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={[styles.stars, { flexDirection: 'row' }]}>
             {[1, 2, 3, 4, 5].map((star) => (
               <TouchableOpacity key={star} onPress={() => setRating(star)}>
                 <MaterialCommunityIcons 
@@ -40,7 +42,7 @@ export function RatingScreen({ navigation }: any) {
           <Text style={[theme.typography.h2, { marginBottom: 12 }]}>أضف تعليقك</Text>
           <TextInput 
             placeholder="اكتب هنا..."
-            style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+            style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
             multiline
             numberOfLines={4}
           />
@@ -48,9 +50,9 @@ export function RatingScreen({ navigation }: any) {
 
         <View style={styles.bonusCard}>
           <GlassCard style={{ backgroundColor: theme.colors.primaryContainer }}>
-            <View style={[styles.bonusContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={[styles.bonusContent, { flexDirection: 'row' }]}>
               <MaterialCommunityIcons name="gift-outline" size={32} color="white" />
-              <View style={[styles.bonusText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+              <View style={[styles.bonusText, { alignItems: 'flex-start' }]}>
                 <Text style={[theme.typography.bodyMain, { color: 'white', fontWeight: '700' }]}>حصلت على ٥٠ نقطة!</Text>
                 <Text style={[theme.typography.bodySecondary, { color: 'white' }]}>شكراً لتقييمك، تمت إضافة النقاط لحسابك</Text>
               </View>
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 24,
-    paddingTop: 60,
+    paddingTop: 20,
   },
   header: {
     marginBottom: 40,

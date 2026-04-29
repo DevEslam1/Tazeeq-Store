@@ -7,11 +7,13 @@ import { GlassCard } from '../../components/common/GlassCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function AccountScreen({ navigation }: any) {
   const { theme, isRTL, locale, setLocale } = useAppTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const insets = useSafeAreaInsets();
 
   const menuItems = [
     { icon: 'account-outline', title: 'الملف الشخصي', subtitle: 'تعديل بياناتك الشخصية', onPress: () => navigation.navigate('EditProfile') },
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingTop: 60,
+    paddingTop: 20,
   },
   header: {
     alignItems: 'center',

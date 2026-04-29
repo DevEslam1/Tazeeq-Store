@@ -5,16 +5,20 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { AppButton } from '../../components/common/AppButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function RegisterScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme, locale } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
   const handleRegister = () => {
     if (!name || !email || !phone || !password || !confirmPassword) {
@@ -29,7 +33,7 @@ export function RegisterScreen({ navigation }: any) {
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]} contentContainerStyle={styles.content}>
       <View style={styles.logoSection}>
-        <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>تساج</Text>
+        <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>{appName}</Text>
         <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>أنشئ حسابك الآن</Text>
       </View>
 
@@ -96,7 +100,7 @@ export function RegisterScreen({ navigation }: any) {
           />
         </View>
 
-        <View style={[styles.termsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={styles.termsRow}>
           <Switch value={agreedToTerms} onValueChange={setAgreedToTerms} trackColor={{ true: theme.colors.primary }} />
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginRight: 12, flex: 1 }]}>
             أوافق على <Text style={{ color: theme.colors.primary }}>الشروط والأحكام</Text>
@@ -118,7 +122,7 @@ export function RegisterScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  content: { padding: 24, paddingTop: 60 },
+  content: { padding: 24, paddingTop: 20 },
   logoSection: { alignItems: 'center', marginBottom: 32 },
   card: { padding: 20 },
   inputGroup: { marginBottom: 16 },

@@ -15,9 +15,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onPress }: ProductCardProps) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
-  const { addToCart, getItem } = useCart();
+  const { addToCart, getItem, removeFromCart, updateQty } = useCart();
   
   const wishlisted = isWishlisted(product.id);
   const cartItem = getItem(product.id);
@@ -30,20 +30,30 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
     toggleWishlist(product.id);
   };
 
+  const handleDecrease = () => {
+    if (!cartItem) return;
+    const newQty = cartItem.quantity - 1;
+    if (newQty <= 0) {
+      removeFromCart(product.id);
+    } else {
+      updateQty(product.id, newQty);
+    }
+  };
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <GlassCard style={styles.card} transparent>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderRadius: theme.radius.xl }]}>
           <Image source={{ uri: product.image }} style={styles.image} />
           {product.badges && product.badges.length > 0 && (
-            <View style={[styles.badgeContainer, isRTL ? { left: 12 } : { right: 12 }]}>
+            <View style={[styles.badgeContainer, { right: 12 }]}>
               {product.badges.map((badge, index) => (
                 <Badge key={index} type={badge} />
               ))}
             </View>
           )}
           <TouchableOpacity 
-            style={[styles.wishlistButton, isRTL ? { left: 8 } : { right: 8 }]}
+            style={[styles.wishlistButton, { left: 8 }]}
             onPress={handleToggleWishlist}
           >
             <MaterialCommunityIcons 
@@ -54,16 +64,16 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
           </TouchableOpacity>
         </View>
         
-        <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-          <Text style={[styles.title, { textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2}>
+        <View style={styles.info}>
+          <Text style={styles.title} numberOfLines={2}>
             {product.name}
           </Text>
-          <Text style={[styles.weight, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left' }]}>
+          <Text style={[styles.weight, { color: theme.colors.outline }]}>
             {product.weight}
           </Text>
           
           {product.rating && (
-            <View style={[styles.ratingRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={styles.ratingRow}>
               <MaterialCommunityIcons name="star" size={14} color={theme.colors.secondary} />
               <Text style={[styles.rating, { color: theme.colors.outline }]}>
                 {product.rating} ({product.reviewCount || 0})
@@ -71,12 +81,12 @@ export function ProductCard({ product, onPress }: ProductCardProps) {
             </View>
           )}
           
-          <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <View style={styles.footer}>
             {cartItem ? (
               <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer + '30' }]}>
                 <TouchableOpacity 
                   style={styles.qtyButton}
-                  onPress={() => {}}
+                  onPress={handleDecrease}
                 >
                   <MaterialCommunityIcons name="minus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
@@ -145,11 +155,15 @@ const styles = StyleSheet.create({
     padding: 12,
     flex: 1,
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
     fontSize: 14,
     fontWeight: '700',
     color: '#161d19',
+    textAlign: 'left',
+    writingDirection: 'rtl',
+    width: '100%',
   },
   weight: {
     fontSize: 12,
@@ -158,16 +172,18 @@ const styles = StyleSheet.create({
   ratingRow: {
     marginTop: 6,
     alignItems: 'center',
+    flexDirection: 'row',
   },
   rating: {
     fontSize: 12,
-    marginLeft: 4,
+    marginStart: 4,
   },
   footer: {
     marginTop: 10,
     justifyContent: 'space-between',
     width: '100%',
     alignItems: 'center',
+    flexDirection: 'row',
   },
   addButton: {
     width: 36,

@@ -68,7 +68,7 @@ export const products: Product[] = [
   },
   {
     id: '6',
-    name: 'جبنة汾 عربية',
+    name: 'جبنة عربية',
     category: '3',
     weight: '250 جم',
     price: 18,
@@ -128,7 +128,7 @@ export const products: Product[] = [
     reviewCount: 200,
     image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=400&auto=format&fit=crop',
     inStock: true,
-    description: 'دجاج طازج س\Local مصلي.',
+    description: 'دجاج طازج محلي.',
     badges: ['organic'],
   },
   {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ProductCard } from '../../components/commerce/ProductCard';
 import { products } from '../../data/products';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const filterOptions = ['الكل', 'الأكثر مبيعاً', 'الأقل سعراً', 'الأعلى سعراً'];
 
@@ -12,6 +13,7 @@ export function ProductListScreen({ route, navigation }: any) {
   const { categoryId, categoryName } = route.params;
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = useState('الكل');
 
   let filteredProducts = products.filter(p => p.category === categoryId);
@@ -26,9 +28,9 @@ export function ProductListScreen({ route, navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: theme.colors.primary }]}>
+      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10, backgroundColor: theme.colors.primary }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name="arrow-left" size={28} color="white" />
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: 'white', flex: 1, textAlign: 'center' }]}>
           {categoryName}
@@ -86,10 +88,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 100,
     paddingHorizontal: 20,
     alignItems: 'center',
-    paddingTop: 40,
   },
   backButton: {
     width: 44,

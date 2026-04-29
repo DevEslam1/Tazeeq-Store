@@ -12,10 +12,12 @@ import { placeOrder } from '../../store/slices/orderSlice';
 import { clearCart } from '../../store/slices/cartSlice';
 import { AppDispatch } from '../../store';
 import { products } from '../../data/products';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function PaymentScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const [selectedMethod, setSelectedMethod] = useState('card');
   const { items, total } = useCart();
@@ -58,9 +60,9 @@ export function PaymentScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <View style={[styles.header, { flexDirection: 'row', paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('payment.title') || 'طريقة الدفع'}
@@ -105,25 +107,25 @@ export function PaymentScreen({ navigation }: any) {
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>اسم صاحب البطاقة</Text>
                 <TextInput 
                   placeholder="أحمد محمد"
-                  style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                  style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
                 />
               </View>
               <View style={styles.inputGroup}>
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>رقم البطاقة</Text>
-                <View style={[styles.input, { flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}>
+                <View style={[styles.input, { flexDirection: 'row', alignItems: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}>
                   <TextInput 
                     placeholder="**** **** **** 1234"
-                    style={{ flex: 1, textAlign: isRTL ? 'right' : 'left' }}
+                    style={{ flex: 1, textAlign: 'left' }}
                   />
                   <MaterialCommunityIcons name="credit-card" size={32} color="#1A1F71" />
                 </View>
               </View>
-              <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+              <View style={styles.row}>
                 <View style={[styles.inputGroup, { flex: 1 }]}>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>تاريخ الانتهاء</Text>
                   <TextInput 
                     placeholder="MM/YY"
-                    style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
                   />
                 </View>
                 <View style={{ width: 16 }} />
@@ -131,7 +133,7 @@ export function PaymentScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>CVV</Text>
                   <TextInput 
                     placeholder="***"
-                    style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+                    style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
                     secureTextEntry
                   />
                 </View>
@@ -142,14 +144,14 @@ export function PaymentScreen({ navigation }: any) {
 
         <View style={styles.summary}>
           <GlassCard style={styles.summaryCard}>
-            <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={styles.summaryRow}>
               <Text style={theme.typography.bodyMain}>إجمالي الطلب</Text>
               <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{total.toFixed(2)} ر.س</Text>
             </View>
           </GlassCard>
         </View>
 
-        <View style={[styles.security, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={styles.security}>
           <MaterialCommunityIcons name="shield-check" size={24} color={theme.colors.primary} />
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginHorizontal: 8 }]}>
             دفع آمن ومشفر ١٠٠٪
@@ -172,10 +174,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 80,
     paddingHorizontal: 20,
     alignItems: 'center',
-    paddingTop: 20,
   },
   backButton: {
     width: 44,
@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   row: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   summary: {
@@ -226,10 +227,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(16, 185, 129, 0.05)',
   },
   summaryRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   security: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 100,

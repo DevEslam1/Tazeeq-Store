@@ -8,7 +8,17 @@
     "prime": "برايم",
     "sar": "ر.س",
     "kg": "كجم",
-    "unit": "حبة"
+    "unit": "حبة",
+    "next": "التالي",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع",
+    "quantity": "الكمية",
+    "total_price": "السعر الإجمالي",
+    "reviews": "تقييم",
+    "browse_products": "تصفح المنتجات"
   },
   "nav": {
     "shop": "تسوق",
@@ -22,11 +32,18 @@
   "home": {
     "promo_title": "خصم 40% على الخضروات الطازجة",
     "best_sellers": "الأكثر مبيعاً",
-    "categories": "الفئات"
+    "categories": "الفئات",
+    "shop_now": "تسوق الآن"
   },
   "categories": {
     "title": "الفئات",
     "subtitle": "اكتشف منتجاتنا الطازجة"
+  },
+  "product": {
+    "description": "الوصف",
+    "reviews": "التقييمات",
+    "share": "مشاركة",
+    "add_to_cart": "أضف إلى السلة"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -35,6 +52,85 @@
     "subtotal": "المجموع الفرعي",
     "delivery_fee": "رسوم التوصيل",
     "discount": "الخصم",
-    "total": "الإجمالي"
+    "total": "الإجمالي",
+    "coupon_placeholder": "أدخل كود الخصم",
+    "apply": "تطبيق"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "phone": "رقم الهاتف",
+    "otp": "رمز التحقق",
+    "password": "كلمة المرور",
+    "confirm_password": "تأكيد كلمة المرور",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "continue_guest": "متابعة كزائر",
+    "have_account": "لديك حساب؟",
+    "no_account": "حساب جديد؟",
+    "terms": "أوافق على الشروط والأحكام"
+  },
+  "profile": {
+    "title": "حسابي",
+    "edit_profile": "الملف الشخصي",
+    "save_changes": "حفظ التعديلات",
+    "addresses": "عناويني",
+    "add_address": "إضافة عنوان جديد",
+    "payment_methods": "طرق الدفع",
+    "notifications": "التنبيهات",
+    "logout": "تسجيل الخروج",
+    "coming_soon": "ستتوفر هذه الميزة قريباً"
+  },
+  "wishlist": {
+    "title": "المفضلة",
+    "empty": "المفضلة فارغة"
+  },
+  "search": {
+    "placeholder": "ابحث عن منتجات...",
+    "recent": "عمليات البحث الأخيرة",
+    "no_results": "لا توجد نتائج",
+    "clear_recent": "مسح الكل"
+  },
+  "delivery": {
+    "title": "معلومات التوصيل",
+    "saved_addresses": "العناوين المحفوظة",
+    "add_new": "إضافة عنوان جديد",
+    "map_preview": "معاينة الموقع على الخريطة",
+    "details": "تفاصيل إضافية",
+    "notes": "ملاحظات للمندوب"
+  },
+  "payment": {
+    "title": "طريقة الدفع",
+    "select_method": "اختر وسيلة الدفع",
+    "confirm": "تأكيد الطلب والدفع"
+  },
+  "order": {
+    "title": "طلباتي",
+    "tracking": "تتبع الطلب",
+    "rating": "تقييم الطلب",
+    "submit_rating": "إرسال التقييم",
+    "reorder": "إعادة طلب",
+    "empty": "لا توجد طلبات",
+    "placed": "تم الطلب",
+    "preparing": "تجهيز",
+    "on_the_way": "في الطريق",
+    "delivered": "تم التوصيل"
+  },
+  "address": {
+    "home": "المنزل",
+    "work": "العمل",
+    "other": "أخرى",
+    "street": "الشارع",
+    "building": "المبنى",
+    "floor": "الطابق",
+    "apartment": "الشقة",
+    "city": "المدينة",
+    "save": "حفظ العنوان"
+  },
+  "onboarding": {
+    "welcome": "أهلاً بك في طازج",
+    "delivery": "توصيل سريع",
+    "organic": "عضوي ١٠٠٪",
+    "start": "ابدأ التسوق"
   }
 }

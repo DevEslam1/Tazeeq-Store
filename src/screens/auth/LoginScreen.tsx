@@ -5,13 +5,17 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { AppButton } from '../../components/common/AppButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function LoginScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme, locale } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(['', '', '', '']);
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
+
+  const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
   const handleSendOTP = () => {
     if (phone.length >= 9) {
@@ -30,7 +34,7 @@ export function LoginScreen({ navigation }: any) {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.logoSection}>
-        <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>تساج</Text>
+        <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>{appName}</Text>
         <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>أفضل المنتجات الطازجة</Text>
       </View>
 
@@ -44,7 +48,7 @@ export function LoginScreen({ navigation }: any) {
             <View style={[styles.phoneInput, { backgroundColor: theme.colors.surfaceContainerLow }]}>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>+966</Text>
               <TextInput
-                style={[styles.input, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
+                style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
                 placeholder="5xxxxxxxx"
                 placeholderTextColor={theme.colors.outline}
                 keyboardType="phone-pad"
@@ -63,7 +67,7 @@ export function LoginScreen({ navigation }: any) {
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 16, textAlign: 'center' }]}>
               تم إرسال رمز التحقق إلى رقمك
             </Text>
-            <View style={[styles.otpContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={styles.otpContainer}>
               {otp.map((_, index) => (
                 <TextInput
                   key={index}

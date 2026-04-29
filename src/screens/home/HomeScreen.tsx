@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
-import { useDeviceType } from '../../hooks/useDeviceType';
 import { AppHeader } from '../../components/common/AppHeader';
 import { CategoryCard } from '../../components/commerce/CategoryCard';
 import { ProductCard } from '../../components/commerce/ProductCard';
 import { categories } from '../../data/categories';
 import { products } from '../../data/products';
-import { FadeInView } from '../../components/animations/FadeInView';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

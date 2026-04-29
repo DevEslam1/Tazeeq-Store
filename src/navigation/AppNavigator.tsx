@@ -15,6 +15,8 @@ import { ProfileStack } from './ProfileStack';
 import { WishlistScreen } from '../screens/wishlist/WishlistScreen';
 import { NotificationsScreen } from '../screens/system/NotificationsScreen';
 import { SearchScreen } from '../screens/search/SearchScreen';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 function TabletNavigator() {
   const { isRTL } = useAppTheme();
@@ -33,10 +35,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function AppNavigator() {
   const { isTablet } = useDeviceType();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator 
+        screenOptions={{ headerShown: false }}
+        initialRouteName={isLoggedIn ? 'Main' : 'Auth'}
+      >
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen 
           name="Main" 

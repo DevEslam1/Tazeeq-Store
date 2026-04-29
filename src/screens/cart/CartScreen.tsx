@@ -7,31 +7,54 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PriceTag } from '../../components/common/PriceTag';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
+import { useCart } from '../../hooks/useCart';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function CartScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const { items, total, removeFromCart, updateQty } = useCart();
 
-  // Mock cart items
-  const cartItems = [
-    { productId: '1', quantity: 2 },
-    { productId: '3', quantity: 1 },
-  ];
-
-  const cartProducts = cartItems.map(item => ({
+  const cartProducts = items.map(item => ({
     ...products.find(p => p.id === item.productId)!,
     quantity: item.quantity,
-  }));
+    cartId: item.productId,
+  })).filter(p => p.id);
 
-  const subtotal = cartProducts.reduce((sum, p) => sum + p.price * p.quantity, 0);
-  const deliveryFee = 15;
-  const total = subtotal + deliveryFee;
+  const deliveryFee = items.length > 0 ? 15 : 0;
+  const grandTotal = total + deliveryFee;
+
+  if (items.length === 0) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
+          </TouchableOpacity>
+          <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
+            {t('cart.title')}
+          </Text>
+          <View style={{ width: 44 }} />
+        </View>
+        <View style={styles.emptyState}>
+          <MaterialCommunityIcons name="cart-off" size={80} color={theme.colors.outlineVariant} />
+          <Text style={[theme.typography.h2, { marginTop: 20, color: theme.colors.onSurface }]}>{t('cart.empty')}</Text>
+          <AppButton 
+            title="تصفح المنتجات"
+            onPress={() => navigation.navigate('Main')}
+            style={{ marginTop: 20 }}
+          />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+          <MaterialCommunityIcons name="arrow-left" size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
           {t('cart.title')}
@@ -45,25 +68,34 @@ export function CartScreen({ navigation }: any) {
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <GlassCard style={styles.itemCard}>
-            <View style={[styles.itemContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={styles.itemContent}>
               <Image source={{ uri: item.image }} style={styles.itemImage} />
-              <View style={[styles.itemInfo, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+              <View style={styles.itemInfo}>
                 <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{item.name}</Text>
                 <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{item.weight}</Text>
-                <View style={[styles.itemFooter, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                <View style={styles.itemFooter}>
                   <PriceTag price={item.price} size="md" />
-                  <View style={[styles.stepper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                    <TouchableOpacity style={styles.stepperButton}>
+                  <View style={styles.stepper}>
+                    <TouchableOpacity 
+                      style={styles.stepperButton}
+                      onPress={() => updateQty(item.cartId, item.quantity - 1)}
+                    >
                       <MaterialCommunityIcons name="minus" size={18} color={theme.colors.primary} />
                     </TouchableOpacity>
                     <Text style={[theme.typography.bodyMain, { marginHorizontal: 12 }]}>{item.quantity}</Text>
-                    <TouchableOpacity style={styles.stepperButton}>
+                    <TouchableOpacity 
+                      style={styles.stepperButton}
+                      onPress={() => updateQty(item.cartId, item.quantity + 1)}
+                    >
                       <MaterialCommunityIcons name="plus" size={18} color={theme.colors.primary} />
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
-              <TouchableOpacity style={styles.deleteButton}>
+              <TouchableOpacity 
+                style={styles.deleteButton}
+                onPress={() => removeFromCart(item.cartId)}
+              >
                 <MaterialCommunityIcons name="trash-can-outline" size={24} color={theme.colors.error} />
               </TouchableOpacity>
             </View>
@@ -73,22 +105,22 @@ export function CartScreen({ navigation }: any) {
 
       <View style={styles.summary}>
         <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('cart.summary')}</Text>
-        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={styles.summaryRow}>
           <Text style={[theme.typography.bodyMain]}>{t('cart.subtotal')}</Text>
-          <PriceTag price={subtotal} size="md" />
+          <PriceTag price={total} size="md" />
         </View>
-        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={styles.summaryRow}>
           <Text style={[theme.typography.bodyMain]}>{t('cart.delivery_fee')}</Text>
           <PriceTag price={deliveryFee} size="md" />
         </View>
         <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
-        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <View style={styles.summaryRow}>
           <Text style={[theme.typography.h2]}>{t('cart.total')}</Text>
-          <PriceTag price={total} size="lg" />
+          <PriceTag price={grandTotal} size="lg" />
         </View>
         <AppButton 
           title={t('common.checkout')} 
-          onPress={() => {}} 
+          onPress={() => navigation.navigate('Checkout', { screen: 'Delivery' })} 
           style={{ marginTop: 24 }}
         />
       </View>
@@ -101,10 +133,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    height: 80,
+    flexDirection: 'row',
     paddingHorizontal: 20,
     alignItems: 'center',
-    paddingTop: 20,
   },
   backButton: {
     width: 44,
@@ -120,6 +151,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   itemContent: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
   itemImage: {
@@ -132,12 +164,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   itemFooter: {
+    flexDirection: 'row',
     marginTop: 8,
     justifyContent: 'space-between',
     width: '100%',
     alignItems: 'center',
   },
   stepper: {
+    flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.05)',
     borderRadius: 8,
@@ -166,11 +200,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -5 },
   },
   summaryRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
   divider: {
     height: 1,
     marginVertical: 12,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 100,
   },
 });
