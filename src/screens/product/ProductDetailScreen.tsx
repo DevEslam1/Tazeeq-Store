@@ -57,7 +57,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
         <View style={styles.content}>
           <View style={styles.headerRow}>
             <View style={{ flex: 1 }}>
-              <Text style={[theme.typography.h1, { color: theme.colors.onSurface }]}>
+              <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface }]}>
                 {product.name}
               </Text>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
@@ -74,8 +74,8 @@ export function ProductDetailScreen({ route, navigation }: any) {
           </View>
 
           <View style={styles.ratingRow}>
-            <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondaryContainer} />
-            <Text style={[theme.typography.bodyMain, { fontWeight: '700', marginHorizontal: 4 }]}>
+            <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondary} />
+            <Text style={[theme.typography.itemName, { marginHorizontal: 4 }]}>
               {product.rating}
             </Text>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
@@ -89,7 +89,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
             ))}
           </View>
 
-          <Text style={[theme.typography.h2, { marginTop: 24, marginBottom: 8 }]}>
+          <Text style={[theme.typography.sectionTitle, { marginTop: 24, marginBottom: 8 }]}>
             {t('product.description')}
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, lineHeight: 24 }]}>
@@ -97,13 +97,13 @@ export function ProductDetailScreen({ route, navigation }: any) {
           </Text>
 
           <View style={styles.quantityRow}>
-            <Text style={[theme.typography.h2]}>{t('common.quantity')}</Text>
-            <View style={styles.stepper}>
-              <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={styles.stepperButton}>
+            <Text style={[theme.typography.sectionTitle]}>{t('common.quantity')}</Text>
+            <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+              <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { borderRadius: theme.radius.sm }]}>
                 <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
-              <Text style={[theme.typography.h2, { marginHorizontal: 16 }]}>{quantity}</Text>
-              <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={styles.stepperButton}>
+              <Text style={[theme.typography.itemName, { marginHorizontal: 16, color: theme.colors.primary }]}>{quantity}</Text>
+              <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={[styles.stepperButton, { borderRadius: theme.radius.sm }]}>
                 <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
               </TouchableOpacity>
             </View>
@@ -116,7 +116,9 @@ export function ProductDetailScreen({ route, navigation }: any) {
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}
           </Text>
-          <PriceTag price={product.price * quantity} size="lg" />
+          <Text style={[theme.typography.priceLarge, { color: theme.colors.primary }]}>
+            {product.price * quantity} {t('common.currency')}
+          </Text>
         </View>
         <AppButton 
           title={t('common.add_to_cart')} 
@@ -153,8 +155,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    padding: 20,
-    backgroundColor: '#f4fbf4',
+    padding: 24,
+    backgroundColor: 'white',
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
     marginTop: -32,

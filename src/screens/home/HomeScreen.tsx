@@ -36,11 +36,11 @@ export function HomeScreen({ navigation }: any) {
         {/* Categories Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>
+            <Text style={[theme.typography.sectionTitle, { color: theme.colors.primary }]}>
               {t('home.categories')}
             </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Categories')}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.primaryContainer, fontWeight: '700' }]}>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.primary, fontWeight: '700' }]}>
                 {t('common.view_all')}
               </Text>
             </TouchableOpacity>
@@ -70,8 +70,8 @@ export function HomeScreen({ navigation }: any) {
           >
             <View style={styles.promoContent}>
               <View style={{ flex: 1 }}>
-                <Text style={[theme.typography.h2, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>
-                  خصم ٤٠٪ على الخضروات الطازجة 🔥
+                <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>
+                  {t('home.promo_title')} 🔥
                 </Text>
                 <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
                   <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
@@ -93,13 +93,13 @@ export function HomeScreen({ navigation }: any) {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.headerWithIcon}>
-              <MaterialCommunityIcons name="star-outline" size={24} color={theme.colors.primaryContainer} />
-              <Text style={[theme.typography.h2, { color: theme.colors.primary, marginHorizontal: 8 }]}>
+              <MaterialCommunityIcons name="star-outline" size={24} color={theme.colors.primary} />
+              <Text style={[theme.typography.sectionTitle, { color: theme.colors.primary, marginHorizontal: 8 }]}>
                 {t('home.best_sellers')}
               </Text>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('ProductList', { categoryName: t('home.best_sellers') })}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, fontWeight: '500' }]}>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, fontWeight: '500' }]}>
                 {t('common.view_all')}
               </Text>
             </TouchableOpacity>

@@ -7,7 +7,6 @@ import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../../hooks/useCart';
-
 import { useRTL } from '../../hooks/useRTL';
 
 export function AppHeader() {
@@ -22,10 +21,9 @@ export function AppHeader() {
 
   return (
     <View style={[styles.outerContainer, { marginTop: insets.top + 4 }]}>
-      <BlurView intensity={40} tint="light" style={styles.blurContainer}>
-        {/* Top row: Menu (start) — Logo (center) — Actions (end) */}
+      <BlurView intensity={40} tint="light" style={[styles.blurContainer, theme.elevation.panel, { backgroundColor: 'rgba(244, 249, 246, 0.9)', borderRadius: theme.radius.card }]}>
         <View style={[styles.topRow, { flexDirection: flexRow }]}>
-          <TouchableOpacity style={styles.actionButton} accessibilityLabel="القائمة">
+          <TouchableOpacity style={[styles.actionButton, { borderRadius: theme.radius.headerButton }]} accessibilityLabel="القائمة">
             <MaterialCommunityIcons name="menu" size={24} color={theme.colors.primary} />
           </TouchableOpacity>
 
@@ -35,7 +33,7 @@ export function AppHeader() {
 
           <View style={styles.actionsRow}>
             <TouchableOpacity 
-              style={styles.actionButton} 
+              style={[styles.actionButton, { borderRadius: theme.radius.headerButton }]} 
               accessibilityLabel="الإشعارات"
               onPress={() => navigation.navigate('Notifications')}
             >
@@ -45,14 +43,14 @@ export function AppHeader() {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.actionButton}
+              style={[styles.actionButton, { borderRadius: theme.radius.headerButton }]}
               onPress={() => navigation.navigate('Checkout', { screen: 'Cart' })}
               accessibilityLabel="سلة التسوق"
             >
               <View>
                 <MaterialCommunityIcons name="cart-outline" size={24} color={theme.colors.primary} />
                 {itemCount > 0 && (
-                  <View style={[styles.cartBadge, { backgroundColor: theme.colors.primaryContainer }]}>
+                  <View style={[styles.cartBadge, { backgroundColor: theme.colors.primary }]}>
                     <Text style={styles.cartBadgeText}>{itemCount}</Text>
                   </View>
                 )}
@@ -61,15 +59,14 @@ export function AppHeader() {
           </View>
         </View>
 
-        {/* Search bar */}
         <View style={styles.searchSection}>
           <TouchableOpacity
-            style={[styles.searchBar, { borderColor: theme.colors.outlineVariant }]}
+            style={[styles.searchBar, { borderColor: theme.colors.border, backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.full }]}
             activeOpacity={0.7}
             onPress={() => navigation.navigate('Search')}
           >
-            <MaterialCommunityIcons name="magnify" size={22} color={theme.colors.outline} />
-            <Text style={[styles.searchPlaceholder, { color: theme.colors.outline }]}>
+            <MaterialCommunityIcons name="magnify" size={22} color={theme.colors.primary} />
+            <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginHorizontal: 10 }]}>
               {t('home.search_placeholder', { defaultValue: 'بحث عن خضروات، بقالة...' })}
             </Text>
           </TouchableOpacity>
@@ -89,17 +86,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   blurContainer: {
-    borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.35)',
-    backgroundColor: 'rgba(244, 251, 244, 0.85)',
-    // Tinted ambient shadow — emerald glow per design spec
-    shadowColor: '#10B981',
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 12,
+    borderColor: 'rgba(229, 237, 233, 0.5)',
   },
   topRow: {
     flexDirection: 'row',
@@ -112,7 +101,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontSize: 26,
     letterSpacing: -0.5,
-    // Text center is handled by flex layout, not textAlign
   },
   actionsRow: {
     flexDirection: 'row',
@@ -133,7 +121,7 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: 'rgba(244, 251, 244, 0.9)',
+    borderColor: 'rgba(244, 249, 246, 0.9)',
   },
   cartBadge: {
     position: 'absolute',
@@ -158,17 +146,9 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
     height: 48,
-    borderRadius: 24,
     alignItems: 'center',
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.04)',
-  },
-  searchPlaceholder: {
-    fontSize: 14,
-    marginHorizontal: 10,
-    // writingDirection handles text direction automatically via I18nManager
   },
 });

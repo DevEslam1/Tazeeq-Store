@@ -19,9 +19,9 @@ export function PriceTag({ price, oldPrice, currency, size = 'md', style }: Pric
   const getTextStyle = () => {
     switch (size) {
       case 'sm': return theme.typography.bodySecondary;
-      case 'md': return theme.typography.bodyMain;
-      case 'lg': return theme.typography.priceLg;
-      default: return theme.typography.bodyMain;
+      case 'md': return theme.typography.price;
+      case 'lg': return theme.typography.priceLarge;
+      default: return theme.typography.price;
     }
   };
 
@@ -29,7 +29,7 @@ export function PriceTag({ price, oldPrice, currency, size = 'md', style }: Pric
 
   return (
     <View style={[styles.container, { flexDirection: 'row' }, style]}>
-      <Text style={[mainTextStyle, { color: theme.colors.primaryContainer, fontWeight: '800' }]}>
+      <Text style={[mainTextStyle, { color: theme.colors.primary }]}>
         {`${price.toFixed(2)} ${curr}`}
       </Text>
       {oldPrice && (

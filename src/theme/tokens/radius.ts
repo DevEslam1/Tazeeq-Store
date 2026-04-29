@@ -4,5 +4,13 @@ export const radius = {
   default: 12,
   lg: 16,
   xl: 20,
+  card: 20,
+  headerButton: 12,
+  stepper: 14,
+  image: 16,
+  deleteButton: 10,
+  promo: 16,
+  checkout: 18,
+  summary: 28,
   full: 9999,
 };

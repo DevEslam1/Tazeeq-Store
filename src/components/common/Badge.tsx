@@ -17,9 +17,9 @@ export function Badge({ type, label }: BadgeProps) {
       case 'tazeeq':
         return { backgroundColor: theme.colors.secondaryContainer, color: theme.colors.onSecondaryContainer };
       case 'organic':
-        return { backgroundColor: theme.colors.primaryContainer, color: 'white' };
+        return { backgroundColor: theme.colors.primary, color: '#ffffff' };
       default:
-        return { backgroundColor: theme.colors.primaryContainer, color: 'white' };
+        return { backgroundColor: theme.colors.primary, color: '#ffffff' };
     }
   };
 

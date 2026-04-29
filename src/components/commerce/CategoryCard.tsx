@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { Category } from '../../types/app';
-import { GlassCard } from '../common/GlassCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface CategoryCardProps {
@@ -16,28 +15,28 @@ export function CategoryCard({ category, isSelected, onPress }: CategoryCardProp
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <GlassCard 
+      <View
         style={[
-          styles.card, 
-          { 
-            backgroundColor: isSelected ? theme.colors.secondaryContainer + '20' : 'white',
-            borderWidth: isSelected ? 2 : 0,
-            borderColor: theme.colors.secondaryContainer,
-          }
+          styles.card,
+          {
+            backgroundColor: isSelected ? theme.colors.primaryContainer : theme.colors.surfaceContainerLowest,
+            borderWidth: 1,
+            borderColor: isSelected ? theme.colors.primary : theme.colors.border,
+            borderRadius: theme.radius.card,
+          },
         ]}
-        transparent
       >
-        <View style={[styles.iconContainer, { backgroundColor: isSelected ? theme.colors.secondaryContainer + '30' : theme.colors.surfaceContainerLow }]}>
-          <MaterialCommunityIcons 
-            name={category.icon as any} 
-            size={32} 
-            color={isSelected ? theme.colors.secondary : theme.colors.onSurfaceVariant} 
+        <View style={[styles.iconContainer, { backgroundColor: isSelected ? theme.colors.primary + '20' : theme.colors.primaryContainer, borderRadius: theme.radius.full }]}>
+          <MaterialCommunityIcons
+            name={category.icon as any}
+            size={32}
+            color={theme.colors.primary}
           />
         </View>
-        <Text style={[styles.text, { color: isSelected ? theme.colors.secondary : theme.colors.onSurface, fontWeight: '700' }]}>
+        <Text style={[theme.typography.meta, { color: isSelected ? theme.colors.primary : theme.colors.onSurface, textAlign: 'center' }]}>
           {category.name}
         </Text>
-      </GlassCard>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -51,19 +50,13 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     padding: 12,
-    borderRadius: 20,
     overflow: 'hidden',
   },
   iconContainer: {
     width: 64,
     height: 64,
-    borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 11,
   },
 });

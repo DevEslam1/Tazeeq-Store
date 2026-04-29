@@ -32,7 +32,7 @@ export function EditProfileScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
-        <Text style={[theme.typography.h3, { color: 'white' }]}>تعديل الملف الشخصي</Text>
+        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>تعديل الملف الشخصي</Text>
         <View style={{ width: 44 }} />
       </View>
 

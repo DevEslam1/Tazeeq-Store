@@ -99,7 +99,7 @@ export function SearchScreen({ navigation }: any) {
       {inputValue.length > 0 && results.length === 0 && (
         <View style={styles.emptyState}>
           <MaterialCommunityIcons name="magnify" size={64} color={theme.colors.outline} />
-          <Text style={[theme.typography.h3, { color: theme.colors.onSurface, marginTop: 16 }]}>لا توجد نتائج</Text>
+          <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>لا توجد نتائج</Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 8 }]}>جرب كلمات مختلفة</Text>
         </View>
       )}

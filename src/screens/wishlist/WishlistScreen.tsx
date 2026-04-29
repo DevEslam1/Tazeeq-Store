@@ -34,7 +34,7 @@ export function WishlistScreen({ navigation }: any) {
       {wishlistProducts.length === 0 ? (
         <View style={styles.emptyState}>
           <MaterialCommunityIcons name="heart-outline" size={80} color={theme.colors.outline} />
-          <Text style={[theme.typography.h3, { color: theme.colors.onSurface, marginTop: 16 }]}>المفضلة فارغة</Text>
+          <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>المفضلة فارغة</Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 8 }]}>أضف منتجات للمفضلة</Text>
           <TouchableOpacity 
             style={[styles.ctaButton, { backgroundColor: theme.colors.primary }]}

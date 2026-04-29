@@ -106,20 +106,20 @@ export function LoginScreen({ navigation }: any) {
   };
 
   const renderMethodSwitcher = () => (
-    <View style={[styles.switcher, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+    <View style={[styles.switcher, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.full }]}>
       <TouchableOpacity 
-        style={[styles.switchTab, method === 'phone' && { backgroundColor: theme.colors.primary }]} 
+        style={[styles.switchTab, { borderRadius: theme.radius.full }, method === 'phone' && { backgroundColor: theme.colors.primary }]} 
         onPress={() => { setMethod('phone'); setStep('phone'); }}
       >
-        <Text style={[styles.switchText, { color: method === 'phone' ? theme.colors.onPrimary : theme.colors.outline }]}>
+        <Text style={[theme.typography.meta, { color: method === 'phone' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant }]}>
           {isRTL ? 'رقم الهاتف' : 'Phone'}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity 
-        style={[styles.switchTab, method === 'email' && { backgroundColor: theme.colors.primary }]} 
+        style={[styles.switchTab, { borderRadius: theme.radius.full }, method === 'email' && { backgroundColor: theme.colors.primary }]} 
         onPress={() => setMethod('email')}
       >
-        <Text style={[styles.switchText, { color: method === 'email' ? theme.colors.onPrimary : theme.colors.outline }]}>
+        <Text style={[theme.typography.meta, { color: method === 'email' ? theme.colors.onPrimary : theme.colors.onSurfaceVariant }]}>
           {isRTL ? 'البريد الإلكتروني' : 'Email'}
         </Text>
       </TouchableOpacity>
@@ -136,8 +136,8 @@ export function LoginScreen({ navigation }: any) {
         keyboardShouldPersistTaps="handled"
       >
         <Animated.View style={[styles.logoSection, { opacity: fadeAnim }]}>
-          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48 }]}>{appName}</Text>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 12 }]}>أفضل المنتجات الطازجة</Text>
+          <Text style={[theme.typography.h1, { color: theme.colors.primary, fontSize: 48, fontWeight: '700' }]}>{appName}</Text>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 12 }]}>أفضل المنتجات الطازجة</Text>
         </Animated.View>
 
         <Animated.View style={[styles.cardWrapper, { opacity: fadeAnim }]}>
@@ -147,15 +147,15 @@ export function LoginScreen({ navigation }: any) {
             {method === 'phone' ? (
               step === 'phone' ? (
                 <>
-                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign, marginTop: 24 }]}>
+                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign, marginTop: 24 }]}>
                     رقم الهاتف
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                    <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, fontWeight: '700' }]}>+966</Text>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: isRTL ? 'row-reverse' : 'row', borderRadius: theme.radius.card }]}>
+                    <Text style={[theme.typography.itemName, { color: theme.colors.primary }]}>+966</Text>
                     <TextInput
-                      style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12 }]}
+                      style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12, fontFamily: 'Cairo_400Regular' }]}
                       placeholder="5xxxxxxxx"
-                      placeholderTextColor={theme.colors.outline}
+                      placeholderTextColor={theme.colors.onSurfaceVariant}
                       keyboardType="phone-pad"
                       value={phone}
                       onChangeText={setPhone}
@@ -166,7 +166,7 @@ export function LoginScreen({ navigation }: any) {
                 </>
               ) : (
                 <>
-                  <Text style={[theme.typography.h3, { color: theme.colors.onSurface, marginBottom: 12, textAlign: 'center', marginTop: 24 }]}>
+                  <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface, marginBottom: 12, textAlign: 'center', marginTop: 24 }]}>
                     أدخل الرمز
                   </Text>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 24, textAlign: 'center' }]}>
@@ -177,7 +177,7 @@ export function LoginScreen({ navigation }: any) {
                       <TextInput
                         key={index}
                         ref={(el) => { otpRefs.current[index] = el; }}
-                        style={[styles.otpInput, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', color: theme.colors.onSurface }]}
+                        style={[styles.otpInput, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, color: theme.colors.primary, borderRadius: theme.radius.card }]}
                         keyboardType="number-pad"
                         maxLength={1}
                         value={digit}
@@ -198,7 +198,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>
                     البريد الإلكتروني
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
                       placeholder="example@email.com"
@@ -213,7 +213,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign, marginTop: 16 }]}>
                     كلمة المرور
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.primaryContainer, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
                       placeholder="********"

@@ -3,8 +3,8 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { GlassCard } from '../../components/common/GlassCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRTL } from '../../hooks/useRTL';
 
 interface Notification {
   id: string;
@@ -25,7 +25,8 @@ const mockNotifications: Notification[] = [
 ];
 
 export function NotificationsScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
 
@@ -33,28 +34,36 @@ export function NotificationsScreen({ navigation }: any) {
     switch (type) {
       case 'order': return theme.colors.primary;
       case 'promo': return theme.colors.secondary;
-      case 'delivery': return theme.colors.primaryContainer;
+      case 'delivery': return theme.colors.primary;
       default: return theme.colors.primary;
     }
   };
 
   const renderItem = ({ item }: { item: Notification }) => (
-    <GlassCard style={[styles.notificationCard, !item.read && { borderWidth: 1, borderColor: theme.colors.primary }]}>
-      <View style={[styles.iconContainer, { backgroundColor: getIconColor(item.type) + '20' }]}>
+    <View style={[
+      styles.notificationCard,
+      {
+        backgroundColor: item.read ? theme.colors.surfaceContainerLowest : theme.colors.primaryContainer,
+        borderColor: item.read ? theme.colors.border : theme.colors.primary,
+        borderRadius: theme.radius.card,
+        flexDirection: flexRow,
+      },
+    ]}>
+      <View style={[styles.iconContainer, { backgroundColor: getIconColor(item.type) + '20', borderRadius: theme.radius.full }]}>
         <MaterialCommunityIcons name={item.icon as any} size={24} color={getIconColor(item.type)} />
       </View>
       <View style={styles.content}>
-        <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface, fontWeight: item.read ? '400' : '700' }]}>
+        <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]}>
           {item.title}
         </Text>
-        <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 4 }]}>
+        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 4 }]}>
           {item.message}
         </Text>
-        <Text style={[theme.typography.label, { color: theme.colors.outline, marginTop: 8 }]}>
+        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 8, fontSize: 11 }]}>
           {item.time}
         </Text>
       </View>
-    </GlassCard>
+    </View>
   );
 
   return (
@@ -63,7 +72,7 @@ export function NotificationsScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>التنبيهات</Text>
+        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>التنبيهات</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -82,7 +91,13 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16, paddingTop: 48 },
   backButton: { padding: 8 },
   list: { padding: 16, paddingBottom: 100 },
-  notificationCard: { flexDirection: 'row', marginBottom: 12, padding: 16 },
-  iconContainer: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  notificationCard: { 
+    marginBottom: 12, 
+    padding: 16, 
+    borderWidth: 1, 
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  iconContainer: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
   content: { flex: 1 },
 });

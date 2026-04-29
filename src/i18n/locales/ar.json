@@ -18,7 +18,8 @@
     "quantity": "الكمية",
     "total_price": "السعر الإجمالي",
     "reviews": "تقييم",
-    "browse_products": "تصفح المنتجات"
+    "browse_products": "تصفح المنتجات",
+    "currency": "ر.س"
   },
   "nav": {
     "shop": "تسوق",
@@ -54,7 +55,12 @@
     "discount": "الخصم",
     "total": "الإجمالي",
     "coupon_placeholder": "أدخل كود الخصم",
-    "apply": "تطبيق"
+    "apply": "تطبيق",
+    "items_unit": "منتج",
+    "one_unit": "حبة واحدة",
+    "fresh_daily": "طازج يومياً",
+    "add_more": "إضافة منتجات أخرى",
+    "promo_code": "هل لديك كود خصم؟ أضفه هنا"
   },
   "auth": {
     "login": "تسجيل الدخول",

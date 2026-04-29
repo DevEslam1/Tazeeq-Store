@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { Product } from '../../types/app';
-import { GlassCard } from '../common/GlassCard';
 import { Badge } from '../common/Badge';
 import { PriceTag } from '../common/PriceTag';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -42,9 +41,9 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <GlassCard style={styles.card} transparent>
-        <View style={[styles.imageContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderRadius: theme.radius.xl }]}>
-          <Image source={{ uri: product.image }} style={styles.image} />
+      <View style={[styles.card, theme.elevation.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }]}>
+        <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg }]}>
+          <Image source={{ uri: product.image }} style={[styles.image, { borderRadius: theme.radius.default }]} />
           {product.badges && product.badges.length > 0 && (
             <View style={[styles.badgeContainer, { right: 12 }]}>
               {product.badges.map((badge, index) => (
@@ -59,23 +58,23 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
             <MaterialCommunityIcons 
               name={wishlisted ? 'heart' : 'heart-outline'} 
               size={20} 
-              color={wishlisted ? '#ef4444' : theme.colors.outline} 
+              color={wishlisted ? '#ef4444' : theme.colors.onSurfaceVariant} 
             />
           </TouchableOpacity>
         </View>
         
         <View style={styles.info}>
-          <Text style={styles.title} numberOfLines={2}>
+          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]} numberOfLines={2}>
             {product.name}
           </Text>
-          <Text style={[styles.weight, { color: theme.colors.outline }]}>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2 }]}>
             {product.weight}
           </Text>
           
           {product.rating && (
             <View style={styles.ratingRow}>
-              <MaterialCommunityIcons name="star" size={14} color={theme.colors.secondary} />
-              <Text style={[styles.rating, { color: theme.colors.outline }]}>
+              <MaterialCommunityIcons name="star" size={14} color="#f59e0b" />
+              <Text style={[theme.typography.meta, { color: theme.colors.onSurfaceVariant, marginStart: 4 }]}>
                 {product.rating} ({product.reviewCount || 0})
               </Text>
             </View>
@@ -83,14 +82,14 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
           
           <View style={styles.footer}>
             {cartItem ? (
-              <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer + '30' }]}>
+              <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
                 <TouchableOpacity 
                   style={styles.qtyButton}
                   onPress={handleDecrease}
                 >
                   <MaterialCommunityIcons name="minus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
-                <Text style={[styles.qtyText, { color: theme.colors.primary }]}>{cartItem.quantity}</Text>
+                <Text style={[theme.typography.itemName, { color: theme.colors.primary, minWidth: 20, textAlign: 'center' }]}>{cartItem.quantity}</Text>
                 <TouchableOpacity 
                   style={styles.qtyButton}
                   onPress={() => addToCart(product.id, 1)}
@@ -101,7 +100,7 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
             ) : (
               <TouchableOpacity 
                 onPress={handleAddToCart}
-                style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
+                style={[styles.addButton, theme.elevation.button, { backgroundColor: theme.colors.primary, borderRadius: theme.radius.full }]}
               >
                 <MaterialCommunityIcons name="plus" size={20} color="white" />
               </TouchableOpacity>
@@ -109,7 +108,7 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
             <PriceTag price={product.price} oldPrice={product.oldPrice} size="md" />
           </View>
         </View>
-      </GlassCard>
+      </View>
     </TouchableOpacity>
   );
 });
@@ -122,6 +121,7 @@ const styles = StyleSheet.create({
   card: {
     overflow: 'hidden',
     padding: 0,
+    borderWidth: 1,
   },
   imageContainer: {
     height: 140,
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     resizeMode: 'cover',
-    borderRadius: 12,
   },
   badgeContainer: {
     position: 'absolute',
@@ -157,26 +156,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  title: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#161d19',
-    textAlign: 'left',
-    writingDirection: 'rtl',
-    width: '100%',
-  },
-  weight: {
-    fontSize: 12,
-    marginTop: 2,
-  },
   ratingRow: {
     marginTop: 6,
     alignItems: 'center',
     flexDirection: 'row',
-  },
-  rating: {
-    fontSize: 12,
-    marginStart: 4,
   },
   footer: {
     marginTop: 10,
@@ -191,16 +174,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#10B981',
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 4,
   },
   quantityControl: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 18,
     paddingHorizontal: 4,
     paddingVertical: 2,
   },
@@ -209,11 +186,5 @@ const styles = StyleSheet.create({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  qtyText: {
-    fontSize: 14,
-    fontWeight: '700',
-    minWidth: 24,
-    textAlign: 'center',
   },
 });

@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle, StyleProp } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle, StyleProp, View, Platform } from 'react-native';
 import { useAppTheme } from '../../theme/ThemeProvider';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface AppButtonProps {
   title: string;
@@ -23,31 +24,46 @@ export function AppButton({
 }: AppButtonProps) {
   const { theme } = useAppTheme();
 
-  const getButtonStyle = () => {
-    switch (variant) {
-      case 'primary':
-        return { backgroundColor: theme.colors.primary, ...theme.elevation.card };
-      case 'secondary':
-        return { backgroundColor: theme.colors.secondaryContainer };
-      case 'glass':
-        return { ...theme.glassmorphism.card, backgroundColor: 'rgba(255, 255, 255, 0.15)' };
-      default:
-        return { backgroundColor: theme.colors.primary };
+  const getButtonContent = () => {
+    if (loading) {
+      return <ActivityIndicator color="#ffffff" />;
     }
+    return (
+      <Text style={[styles.text, theme.typography.button, { color: '#ffffff' }, textStyle]}>
+        {title}
+      </Text>
+    );
   };
 
-  const getTextStyle = () => {
-    switch (variant) {
-      case 'primary':
-        return { color: theme.colors.onPrimary };
-      case 'secondary':
-        return { color: theme.colors.onSecondaryContainer };
-      case 'glass':
-        return { color: theme.colors.primary };
-      default:
-        return { color: theme.colors.onPrimary };
-    }
-  };
+  if (variant === 'primary') {
+    return (
+      <View style={[
+        styles.buttonWrapper, 
+        { borderRadius: theme.radius.checkout },
+        Platform.OS === 'ios' && theme.elevation.button,
+        style,
+        disabled && { opacity: 0.5 },
+      ]}>
+        <TouchableOpacity 
+          onPress={onPress} 
+          disabled={disabled || loading}
+          activeOpacity={0.85}
+          style={styles.touchable}
+        >
+          <LinearGradient
+            colors={['#1D9E75', '#0F6E56']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[styles.gradient, { borderRadius: theme.radius.checkout }]}
+          >
+            {getButtonContent()}
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const bgColor = variant === 'secondary' ? theme.colors.secondaryContainer : 'rgba(255, 255, 255, 0.15)';
 
   return (
     <TouchableOpacity 
@@ -55,16 +71,26 @@ export function AppButton({
       disabled={disabled || loading}
       style={[
         styles.button, 
-        { borderRadius: theme.radius.default },
-        getButtonStyle(),
+        { 
+          borderRadius: theme.radius.card, 
+          backgroundColor: bgColor,
+          borderColor: theme.colors.border
+        },
         style,
         disabled && { opacity: 0.5 }
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={getTextStyle().color} />
+        <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : '#ffffff'} />
       ) : (
-        <Text style={[styles.text, theme.typography.bodyMain, getTextStyle(), textStyle]}>
+        <Text style={[
+          styles.text, 
+          theme.typography.button, 
+          { 
+            color: variant === 'glass' ? theme.colors.primary : '#ffffff',
+          }, 
+          textStyle
+        ]}>
           {title}
         </Text>
       )}
@@ -73,11 +99,24 @@ export function AppButton({
 }
 
 const styles = StyleSheet.create({
+  buttonWrapper: {
+    height: 56,
+    overflow: 'hidden',
+  },
+  touchable: {
+    flex: 1,
+  },
   button: {
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
+  },
+  gradient: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     fontWeight: '700',

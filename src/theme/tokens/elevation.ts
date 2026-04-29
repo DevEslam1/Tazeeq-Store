@@ -3,13 +3,37 @@ import { Platform } from 'react-native';
 export const elevation = {
   card: Platform.select({
     ios: {
-      shadowColor: '#10B981',
-      shadowOpacity: 0.15,
-      shadowRadius: 30,
-      shadowOffset: { width: 0, height: 10 },
+      shadowColor: '#0F6E56',
+      shadowOpacity: 0.06,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 2 },
     },
     android: {
-      elevation: 10,
+      elevation: 2,
+    },
+    default: {},
+  }),
+  panel: Platform.select({
+    ios: {
+      shadowColor: '#0F6E56',
+      shadowOpacity: 0.1,
+      shadowRadius: 32,
+      shadowOffset: { width: 0, height: -8 },
+    },
+    android: {
+      elevation: 8,
+    },
+    default: {},
+  }),
+  button: Platform.select({
+    ios: {
+      shadowColor: '#0F6E56',
+      shadowOpacity: 0.35,
+      shadowRadius: 20,
+      shadowOffset: { width: 0, height: 6 },
+    },
+    android: {
+      elevation: 6,
     },
     default: {},
   }),

@@ -18,7 +18,8 @@
     "quantity": "Quantity",
     "total_price": "Total Price",
     "reviews": "Reviews",
-    "browse_products": "Browse Products"
+    "browse_products": "Browse Products",
+    "currency": "SAR"
   },
   "nav": {
     "shop": "Shop",
@@ -53,8 +54,13 @@
     "delivery_fee": "Delivery Fee",
     "discount": "Discount",
     "total": "Total",
-    "coupon_placeholder": "Enter coupon code",
-    "apply": "Apply"
+    "coupon_placeholder": "Enter promo code",
+    "apply": "Apply",
+    "items_unit": "Items",
+    "one_unit": "One Unit",
+    "fresh_daily": "Fresh Daily",
+    "add_more": "Add More Products",
+    "promo_code": "Have a promo code? Add it here"
   },
   "auth": {
     "login": "Sign In",
