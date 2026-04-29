@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, ActivityIndicator, ViewStyle, TextStyle, StyleProp, View, Platform } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useAppTheme } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -23,6 +24,19 @@ export function AppButton({
   textStyle
 }: AppButtonProps) {
   const { theme } = useAppTheme();
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handlePressIn = () => {
+    scale.value = withSpring(0.96, { damping: 10, stiffness: 300 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 10, stiffness: 300 });
+  };
 
   const getButtonContent = () => {
     if (loading) {
@@ -37,17 +51,20 @@ export function AppButton({
 
   if (variant === 'primary') {
     return (
-      <View style={[
+      <Animated.View style={[
         styles.buttonWrapper, 
         { borderRadius: theme.radius.checkout },
         Platform.OS === 'ios' && theme.elevation.button,
         style,
         disabled && { opacity: 0.5 },
+        animatedStyle
       ]}>
         <TouchableOpacity 
           onPress={onPress} 
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
           disabled={disabled || loading}
-          activeOpacity={0.85}
+          activeOpacity={1}
           style={styles.touchable}
         >
           <LinearGradient
@@ -59,42 +76,47 @@ export function AppButton({
             {getButtonContent()}
           </LinearGradient>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     );
   }
 
   const bgColor = variant === 'secondary' ? theme.colors.secondaryContainer : 'rgba(255, 255, 255, 0.2)';
 
   return (
-    <TouchableOpacity 
-      onPress={onPress} 
-      disabled={disabled || loading}
-      style={[
-        styles.button, 
-        { 
-          borderRadius: theme.radius.card, 
-          backgroundColor: bgColor,
-          borderColor: theme.colors.border
-        },
-        style,
-        disabled && { opacity: 0.5 }
-      ]}
-    >
-      {loading ? (
-        <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : '#ffffff'} />
-      ) : (
-        <Text style={[
-          styles.text, 
-          theme.typography.button, 
+    <Animated.View style={[animatedStyle, style, { borderRadius: theme.radius.card }]}>
+      <TouchableOpacity 
+        onPress={onPress} 
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        activeOpacity={1}
+        style={[
+          styles.button, 
           { 
-            color: variant === 'glass' ? theme.colors.primary : '#ffffff',
-          }, 
-          textStyle
-        ]}>
-          {title}
-        </Text>
-      )}
-    </TouchableOpacity>
+            borderRadius: theme.radius.card, 
+            backgroundColor: bgColor,
+            borderColor: theme.colors.border,
+            borderWidth: variant === 'glass' ? 1 : 0,
+          },
+          disabled && { opacity: 0.5 }
+        ]}
+      >
+        {loading ? (
+          <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : '#ffffff'} />
+        ) : (
+          <Text style={[
+            styles.text, 
+            theme.typography.button, 
+            { 
+              color: variant === 'glass' ? theme.colors.primary : '#ffffff',
+            }, 
+            textStyle
+          ]}>
+            {title}
+          </Text>
+        )}
+      </TouchableOpacity>
+    </Animated.View>
   );
 }
 

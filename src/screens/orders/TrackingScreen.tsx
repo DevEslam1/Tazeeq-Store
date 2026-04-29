@@ -1,24 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
+import { darkMapStyle } from '../../constants/MapStyles';
 
 export function TrackingScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme, isRTL, mode } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+
+  const [region] = useState({
+    latitude: 24.7136,
+    longitude: 46.6753,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
+  const driverPos = { latitude: 24.7200, longitude: 46.6800 };
+  const destinationPos = { latitude: 24.7136, longitude: 46.6753 };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.mapContainer}>
-        {/* Mock Map */}
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop' }} 
-          style={styles.map} 
-        />
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          initialRegion={region}
+          customMapStyle={mode === 'dark' ? darkMapStyle : []}
+        >
+          <Marker coordinate={destinationPos} title="منزلك">
+            <View style={[styles.markerContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.primary, borderWidth: 2 }]}>
+              <MaterialCommunityIcons name="home" size={20} color={theme.colors.primary} />
+            </View>
+          </Marker>
+          <Marker coordinate={driverPos} title="المندوب">
+            <View style={[styles.markerContainer, { backgroundColor: theme.colors.primary }]}>
+              <MaterialCommunityIcons name="moped" size={20} color="white" />
+            </View>
+          </Marker>
+          <Polyline 
+            coordinates={[driverPos, destinationPos]} 
+            strokeWidth={3} 
+            strokeColor={theme.colors.primary} 
+            lineDashPattern={[1, 5]}
+          />
+        </MapView>
         <TouchableOpacity 
           onPress={() => navigation.goBack()} 
           style={[
@@ -164,6 +194,18 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  markerContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

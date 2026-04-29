@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,17 +9,40 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAllAddresses, selectAddress } from '../../store/slices/addressSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import { useRTL } from '../../hooks/useRTL';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from 'expo-location';
+import { darkMapStyle } from '../../constants/MapStyles';
 
 export function DeliveryScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, mode } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const addresses = useSelector(selectAllAddresses);
   const selectedAddressId = useSelector((state: any) => state.address.selectedAddressId);
+  
+  const [region, setRegion] = useState({
+    latitude: 24.7136,
+    longitude: 46.6753,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') return;
+
+      let location = await Location.getCurrentPositionAsync({});
+      setRegion({
+        ...region,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -28,13 +51,13 @@ export function DeliveryScreen({ navigation }: any) {
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
-          {t('delivery.title') || 'معلومات التوصيل'}
+          {t('delivery.title')}
         </Text>
         <View style={{ width: 44 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.saved_addresses') || 'العناوين المحفوظة'}</Text>
+        <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.saved_addresses')}</Text>
         
         {addresses.map((address) => (
           <TouchableOpacity 
@@ -68,17 +91,23 @@ export function DeliveryScreen({ navigation }: any) {
         <TouchableOpacity style={[styles.addNewButton, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
           <Text style={[theme.typography.bodyMain, { color: theme.colors.primary, fontWeight: '700', marginHorizontal: 8 }]}>
-            {t('delivery.add_new') || 'إضافة عنوان جديد'}
+            {t('delivery.add_new')}
           </Text>
         </TouchableOpacity>
 
         <View style={styles.mapPreview}>
           <GlassCard style={styles.mapCard}>
-            <View style={styles.mapPlaceholder}>
-              <MaterialCommunityIcons name="map-marker-radius" size={48} color={theme.colors.primary} />
-              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 12 }]}>
-                {t('delivery.map_preview') || 'معاينة الموقع على الخريطة'}
-              </Text>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              region={region}
+              onRegionChangeComplete={setRegion}
+              customMapStyle={mode === 'dark' ? darkMapStyle : []}
+            >
+              <Marker coordinate={region} pinColor={theme.colors.primary} />
+            </MapView>
+            <View style={styles.markerFixed} pointerEvents="none">
+              <MaterialCommunityIcons name="map-marker" size={40} color={theme.colors.primary} />
             </View>
           </GlassCard>
         </View>
@@ -160,6 +189,18 @@ const styles = StyleSheet.create({
   mapPlaceholder: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.02)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    flex: 1,
+  },
+  markerFixed: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginLeft: -20,
+    marginTop: -40,
     alignItems: 'center',
     justifyContent: 'center',
   },

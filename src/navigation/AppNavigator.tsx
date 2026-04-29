@@ -44,20 +44,39 @@ export function AppNavigator() {
     <NavigationContainer>
       <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
       <Stack.Navigator 
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ 
+          headerShown: false,
+          animation: 'slide_from_right',
+          animationDuration: 400,
+          gestureEnabled: true,
+          contentStyle: { backgroundColor: theme.colors.background }
+        }}
         initialRouteName={isLoggedIn ? 'Main' : 'Auth'}
       >
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen 
           name="Main" 
           component={isTablet ? TabletNavigator : MobileTabNavigator} 
+          options={{ animation: 'fade' }}
         />
-        <Stack.Screen name="Checkout" component={CheckoutStack} />
+        <Stack.Screen 
+          name="Checkout" 
+          component={CheckoutStack} 
+          options={{ animation: 'slide_from_bottom' }}
+        />
         <Stack.Screen name="Order" component={OrderStack} />
         <Stack.Screen name="Profile" component={ProfileStack} />
         <Stack.Screen name="Wishlist" component={WishlistScreen} />
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen 
+          name="Notifications" 
+          component={NotificationsScreen} 
+          options={{ animation: 'fade_from_bottom' }}
+        />
+        <Stack.Screen 
+          name="Search" 
+          component={SearchScreen} 
+          options={{ animation: 'fade' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

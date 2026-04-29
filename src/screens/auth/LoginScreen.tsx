@@ -11,7 +11,7 @@ import { login } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useRTL } from '../../hooks/useRTL';
 import { auth } from '../../services/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInAnonymously } from 'firebase/auth';
 import { useBanner } from '../../hooks/useBanner';
 
 type LoginMethod = 'phone' | 'email';
@@ -93,8 +93,22 @@ export function LoginScreen({ navigation }: any) {
     }
   };
 
-  const handleGuest = () => {
-    navigation.replace('Main');
+  const handleGuest = async () => {
+    setLoading(true);
+    try {
+      const userCredential = await signInAnonymously(auth);
+      const user = userCredential.user;
+      dispatch(login({ 
+        id: user.uid, 
+        name: isRTL ? 'زائر' : 'Guest', 
+        email: 'guest@tazeeq.app' 
+      }));
+      navigation.replace('Main');
+    } catch (error: any) {
+      showError(isRTL ? 'فشل الدخول كضيف' : 'Guest login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerify = () => {

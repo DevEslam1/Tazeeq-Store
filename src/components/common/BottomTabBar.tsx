@@ -1,15 +1,71 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
-import { useAppTheme } from '../../theme';
+import { Platform, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTranslation } from 'react-i18next';
 import { BlurView } from 'expo-blur';
+import Animated, { 
+  useAnimatedStyle, 
+  withSpring, 
+  withTiming, 
+} from 'react-native-reanimated';
+import { useAppTheme } from '../../theme';
+import { useTranslation } from 'react-i18next';
+
+function TabItem({ isFocused, onPress, icon, label, theme }: any) {
+  const animatedIconStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: withSpring(isFocused ? 1.2 : 1, { damping: 12, stiffness: 100 }) }],
+      opacity: withTiming(isFocused ? 1 : 0.7, { duration: 200 }),
+    };
+  });
+
+  const animatedLabelStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(isFocused ? 1 : 0.6, { duration: 200 }),
+      transform: [{ translateY: withSpring(isFocused ? 0 : 2) }],
+    };
+  });
+
+  const animatedDotStyle = useAnimatedStyle(() => {
+    return {
+      width: withSpring(isFocused ? 5 : 0),
+      height: withSpring(isFocused ? 5 : 0),
+      opacity: withTiming(isFocused ? 1 : 0),
+    };
+  });
+
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.tabItem}
+      accessibilityRole="tab"
+      accessibilityState={isFocused ? { selected: true } : {}}
+      activeOpacity={0.7}
+    >
+      <Animated.View style={animatedIconStyle}>
+        <MaterialCommunityIcons 
+          name={icon as any} 
+          size={24} 
+          color={isFocused ? theme.colors.primary : theme.colors.outline} 
+        />
+      </Animated.View>
+      <Animated.Text style={[
+        styles.tabLabel, 
+        { 
+          color: isFocused ? theme.colors.primary : theme.colors.outline, 
+          fontWeight: isFocused ? '800' : '500',
+        },
+        animatedLabelStyle
+      ]}>
+        {label}
+      </Animated.Text>
+      <Animated.View style={[styles.activeDot, { backgroundColor: theme.colors.primary }, animatedDotStyle]} />
+    </TouchableOpacity>
+  );
+}
 
 export function BottomTabBar({ state, descriptors, navigation }: any) {
   const { theme, mode } = useAppTheme();
   const { t } = useTranslation();
-
-  // RTL is handled by I18nManager.forceRTL(true) — use plain 'row'.
 
   return (
     <View style={styles.container}>
@@ -51,32 +107,15 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
               }
             };
 
-            const color = isFocused ? theme.colors.primary : theme.colors.outline;
-
             return (
-              <TouchableOpacity
+              <TabItem 
                 key={index}
+                isFocused={isFocused}
                 onPress={onPress}
-                style={styles.tabItem}
-                accessibilityRole="tab"
-                accessibilityState={isFocused ? { selected: true } : {}}
-              >
-                <MaterialCommunityIcons 
-                  name={getIcon() as any} 
-                  size={26} 
-                  color={color} 
-                />
-                <Text style={[
-                  styles.tabLabel, 
-                  { 
-                    color, 
-                    fontWeight: isFocused ? '800' : '500',
-                  }
-                ]}>
-                  {t(`nav.${route.name.toLowerCase()}`)}
-                </Text>
-                {isFocused && <View style={[styles.activeDot, { backgroundColor: theme.colors.primary }]} />}
-              </TouchableOpacity>
+                icon={getIcon()}
+                label={t(`nav.${route.name.toLowerCase()}`)}
+                theme={theme}
+              />
             );
           })}
         </View>

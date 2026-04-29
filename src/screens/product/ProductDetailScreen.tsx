@@ -12,6 +12,7 @@ import { useWishlist } from '../../hooks/useWishlist';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRTL } from '../../hooks/useRTL';
 
+import { useBanner } from '../../hooks/useBanner';
 import { useDeviceType } from '../../hooks/useDeviceType';
 
 export function ProductDetailScreen({ route, navigation }: any) {
@@ -24,9 +25,17 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
+  const { showSuccess } = useBanner();
 
   const product = products.find(p => p.id === productId);
   const wishlisted = product ? isWishlisted(product.id) : false;
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product.id, quantity);
+      showSuccess(t('cart.added_success', { name: product.name }));
+    }
+  };
 
   if (!product) return null;
 
@@ -129,7 +138,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
         <AppButton 
           title={t('common.add_to_cart')} 
-          onPress={() => addToCart(product.id, quantity)} 
+          onPress={handleAddToCart} 
           style={{ flex: 1, marginStart: 16 }}
         />
       </View>

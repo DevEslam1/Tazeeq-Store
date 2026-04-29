@@ -60,7 +60,8 @@
     "one_unit": "One Unit",
     "fresh_daily": "Fresh Daily",
     "add_more": "Add More Products",
-    "promo_code": "Have a promo code? Add it here"
+    "promo_code": "Have a promo code? Add it here",
+    "added_success": "{{name}} added to cart successfully!"
   },
   "auth": {
     "login": "Sign In",

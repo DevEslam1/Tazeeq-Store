@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
 import { Badge } from '../common/Badge';
@@ -7,6 +8,8 @@ import { PriceTag } from '../common/PriceTag';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useCart } from '../../hooks/useCart';
+import { useBanner } from '../../hooks/useBanner';
+import { useTranslation } from 'react-i18next';
 
 interface ProductCardProps {
   product: Product;
@@ -17,12 +20,28 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
   const { theme } = useAppTheme();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const { addToCart, getItem, removeFromCart, updateQty } = useCart();
+  const { showSuccess } = useBanner();
+  const { t } = useTranslation();
+  const scale = useSharedValue(1);
   
   const wishlisted = isWishlisted(product.id);
   const cartItem = getItem(product.id);
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handlePressIn = () => {
+    scale.value = withSpring(0.97, { damping: 10, stiffness: 300 });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withSpring(1, { damping: 10, stiffness: 300 });
+  };
+
   const handleAddToCart = () => {
     addToCart(product.id, 1);
+    showSuccess(t('cart.added_success', { name: product.name }));
   };
 
   const handleToggleWishlist = () => {
@@ -40,8 +59,14 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View style={[styles.card, theme.elevation.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }]}>
+    <TouchableOpacity 
+      onPress={onPress} 
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      activeOpacity={1}
+      style={styles.container}
+    >
+      <Animated.View style={[styles.card, theme.elevation.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }, animatedStyle]}>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg }]}>
           <Image source={{ uri: product.image }} style={[styles.image, { borderRadius: theme.radius.default }]} />
           {product.badges && product.badges.length > 0 && (
@@ -108,7 +133,7 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
             <PriceTag price={product.price} oldPrice={product.oldPrice} size="md" />
           </View>
         </View>
-      </View>
+      </Animated.View>
     </TouchableOpacity>
   );
 });
