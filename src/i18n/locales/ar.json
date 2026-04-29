@@ -1,0 +1,40 @@
+{
+  "common": {
+    "search": "بحث عن خضروات، بقالة...",
+    "view_all": "عرض الكل",
+    "add_to_cart": "أضف إلى السلة",
+    "checkout": "إتمام الشراء",
+    "organic": "عضوي",
+    "prime": "برايم",
+    "sar": "ر.س",
+    "kg": "كجم",
+    "unit": "حبة"
+  },
+  "nav": {
+    "shop": "تسوق",
+    "organic": "عضوي",
+    "orders": "طلباتي",
+    "account": "حسابي",
+    "home": "الرئيسية",
+    "categories": "الفئات",
+    "wishlist": "المفضلة"
+  },
+  "home": {
+    "promo_title": "خصم 40% على الخضروات الطازجة",
+    "best_sellers": "الأكثر مبيعاً",
+    "categories": "الفئات"
+  },
+  "categories": {
+    "title": "الفئات",
+    "subtitle": "اكتشف منتجاتنا الطازجة"
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلة التسوق فارغة",
+    "summary": "ملخص الطلب",
+    "subtotal": "المجموع الفرعي",
+    "delivery_fee": "رسوم التوصيل",
+    "discount": "الخصم",
+    "total": "الإجمالي"
+  }
+}

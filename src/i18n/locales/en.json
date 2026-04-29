@@ -1,0 +1,40 @@
+{
+  "common": {
+    "search": "Search for vegetables, grocery...",
+    "view_all": "View All",
+    "add_to_cart": "Add to Cart",
+    "checkout": "Checkout",
+    "organic": "Organic",
+    "prime": "PRIME",
+    "sar": "SAR",
+    "kg": "kg",
+    "unit": "pc"
+  },
+  "nav": {
+    "shop": "Shop",
+    "organic": "Organic",
+    "orders": "Orders",
+    "account": "Account",
+    "home": "Home",
+    "categories": "Categories",
+    "wishlist": "Wishlist"
+  },
+  "home": {
+    "promo_title": "40% Off on Fresh Vegetables",
+    "best_sellers": "Best Sellers",
+    "categories": "Categories"
+  },
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Explore our fresh products"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "delivery_fee": "Delivery Fee",
+    "discount": "Discount",
+    "total": "Total"
+  }
+}

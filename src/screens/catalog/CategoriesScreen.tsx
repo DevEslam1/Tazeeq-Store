@@ -1,0 +1,78 @@
+import React from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { useAppTheme } from '../../theme/ThemeProvider';
+import { useTranslation } from 'react-i18next';
+import { AppHeader } from '../../components/common/AppHeader';
+import { CategoryCard } from '../../components/commerce/CategoryCard';
+import { categories } from '../../data/categories';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+export function CategoriesScreen({ navigation }: any) {
+  const { theme, isRTL } = useAppTheme();
+  const { t } = useTranslation();
+
+  return (
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+        </TouchableOpacity>
+        <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
+          {t('categories.title')}
+        </Text>
+        <View style={{ width: 44 }} />
+      </View>
+
+      <View style={styles.content}>
+        <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left', marginBottom: 20 }]}>
+          {t('categories.subtitle')}
+        </Text>
+
+        <FlatList
+          data={categories}
+          renderItem={({ item }) => (
+            <View style={styles.itemContainer}>
+              <CategoryCard 
+                category={item} 
+                onPress={() => navigation.navigate('ProductList', { categoryId: item.id, categoryName: item.name })} 
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.id}
+          numColumns={3}
+          contentContainerStyle={styles.list}
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    height: 80,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  list: {
+    paddingBottom: 20,
+  },
+  itemContainer: {
+    flex: 1/3,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+});

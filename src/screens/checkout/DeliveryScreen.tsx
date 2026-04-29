@@ -1,0 +1,182 @@
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { useAppTheme } from '../../theme/ThemeProvider';
+import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AppButton } from '../../components/common/AppButton';
+import { GlassCard } from '../../components/common/GlassCard';
+
+export function DeliveryScreen({ navigation }: any) {
+  const { theme, isRTL } = useAppTheme();
+  const { t } = useTranslation();
+  const [selectedAddress, setSelectedAddress] = useState('1');
+
+  const addresses = [
+    { id: '1', title: 'المنزل', details: 'شارع الملك فهد، حي الصحافة، الرياض', icon: 'home' },
+    { id: '2', title: 'العمل', details: 'برج المملكة، الطابق ٢٤، الرياض', icon: 'office-building' },
+  ];
+
+  return (
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
+        </TouchableOpacity>
+        <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
+          {t('delivery.title') || 'معلومات التوصيل'}
+        </Text>
+        <View style={{ width: 44 }} />
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.saved_addresses') || 'العناوين المحفوظة'}</Text>
+        
+        {addresses.map((address) => (
+          <TouchableOpacity 
+            key={address.id} 
+            onPress={() => setSelectedAddress(address.id)}
+            style={styles.addressWrapper}
+          >
+            <GlassCard 
+              style={[
+                styles.addressCard,
+                selectedAddress === address.id && { borderColor: theme.colors.primary, borderWidth: 2 }
+              ]}
+              intensity={selectedAddress === address.id ? 30 : 15}
+            >
+              <View style={[styles.addressContent, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
+                  <MaterialCommunityIcons name={address.icon as any} size={24} color="white" />
+                </View>
+                <View style={[styles.addressInfo, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+                  <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{address.title}</Text>
+                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{address.details}</Text>
+                </View>
+                {selectedAddress === address.id && (
+                  <MaterialCommunityIcons name="check-circle" size={24} color={theme.colors.primary} />
+                )}
+              </View>
+            </GlassCard>
+          </TouchableOpacity>
+        ))}
+
+        <TouchableOpacity style={[styles.addNewButton, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+          <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.primary, fontWeight: '700', marginHorizontal: 8 }]}>
+            {t('delivery.add_new') || 'إضافة عنوان جديد'}
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.mapPreview}>
+          <GlassCard style={styles.mapCard}>
+            <View style={styles.mapPlaceholder}>
+              <MaterialCommunityIcons name="map-marker-radius" size={48} color={theme.colors.primary} />
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 12 }]}>
+                {t('delivery.map_preview') || 'معاينة الموقع على الخريطة'}
+              </Text>
+            </View>
+          </GlassCard>
+        </View>
+
+        <View style={styles.form}>
+          <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.details') || 'تفاصيل إضافية'}</Text>
+          <TextInput 
+            placeholder={t('delivery.notes') || 'ملاحظات للمندوب (رقم الشقة، علامة مميزة...)'}
+            style={[styles.input, { textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+            multiline
+            numberOfLines={4}
+          />
+        </View>
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <AppButton 
+          title={t('common.next') || 'التالي: الدفع'} 
+          onPress={() => navigation.navigate('Payment')} 
+        />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    height: 80,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scrollContent: {
+    padding: 20,
+  },
+  addressWrapper: {
+    marginBottom: 16,
+  },
+  addressCard: {
+    padding: 16,
+  },
+  addressContent: {
+    alignItems: 'center',
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addressInfo: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  addNewButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 32,
+    padding: 12,
+  },
+  mapPreview: {
+    marginBottom: 32,
+  },
+  mapCard: {
+    height: 200,
+    padding: 0,
+    overflow: 'hidden',
+  },
+  mapPlaceholder: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.02)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  form: {
+    marginBottom: 100,
+  },
+  input: {
+    borderWidth: 1,
+    padding: 16,
+    height: 100,
+    backgroundColor: 'white',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
+    paddingBottom: 34,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.05)',
+  },
+});
