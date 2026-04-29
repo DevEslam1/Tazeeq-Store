@@ -16,18 +16,28 @@ export function CategoryCard({ category, isSelected, onPress }: CategoryCardProp
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View style={[styles.card, { backgroundColor: isSelected ? theme.colors.primaryContainer + '20' : 'white' }]}>
-        <View style={[styles.iconContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderRadius: 20 }]}>
+      <GlassCard 
+        style={[
+          styles.card, 
+          { 
+            backgroundColor: isSelected ? theme.colors.secondaryContainer + '20' : 'white',
+            borderWidth: isSelected ? 2 : 0,
+            borderColor: theme.colors.secondaryContainer,
+          }
+        ]}
+        transparent
+      >
+        <View style={[styles.iconContainer, { backgroundColor: isSelected ? theme.colors.secondaryContainer + '30' : theme.colors.surfaceContainerLow }]}>
           <MaterialCommunityIcons 
             name={category.icon as any} 
-            size={36} 
-            color={isSelected ? theme.colors.primary : theme.colors.onSurfaceVariant} 
+            size={32} 
+            color={isSelected ? theme.colors.secondary : theme.colors.onSurfaceVariant} 
           />
         </View>
-        <Text style={[styles.text, { color: isSelected ? theme.colors.primary : theme.colors.onSurface, fontWeight: '700' }]}>
+        <Text style={[styles.text, { color: isSelected ? theme.colors.secondary : theme.colors.onSurface, fontWeight: '700' }]}>
           {category.name}
         </Text>
-      </View>
+      </GlassCard>
     </TouchableOpacity>
   );
 }
@@ -35,28 +45,25 @@ export function CategoryCard({ category, isSelected, onPress }: CategoryCardProp
 const styles = StyleSheet.create({
   container: {
     width: 110,
-    marginHorizontal: 8,
-    marginVertical: 12,
+    marginHorizontal: 6,
+    marginVertical: 8,
   },
   card: {
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 24,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    padding: 12,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   iconContainer: {
-    width: 72,
-    height: 72,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   text: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 11,
   },
 });

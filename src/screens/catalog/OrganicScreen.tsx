@@ -33,7 +33,7 @@ export function OrganicScreen({ navigation }: any) {
         renderItem={({ item }) => (
           <ProductCard 
             product={item} 
-            onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
+            onPress={() => navigation.getParent()?.navigate('Checkout', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
             onAddToCart={() => {}}
           />
         )}

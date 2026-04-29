@@ -32,7 +32,7 @@ export function ProductListScreen({ route, navigation }: any) {
         renderItem={({ item }) => (
           <ProductCard 
             product={item} 
-            onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
+            onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
             onAddToCart={() => {}}
           />
         )}

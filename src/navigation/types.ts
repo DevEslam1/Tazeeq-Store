@@ -17,6 +17,7 @@ export type CheckoutStackParamList = {
   Delivery: undefined;
   Payment: undefined;
   Confirmation: undefined;
+  ProductDetail: { productId: string };
 };
 
 export type OrderStackParamList = {

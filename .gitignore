@@ -39,3 +39,4 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+stitch_tazaj_premium_ui_design/
