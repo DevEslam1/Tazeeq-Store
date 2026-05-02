@@ -1,51 +1,46 @@
 ---
-name: Mobile App Development
-description: Guidelines and best practices for React Native, Expo, and UI/UX design focusing on high-quality shop applications.
+name: mobile-development
+description: React Native and Expo implementation workflow for this Tazeeq codebase. Use when Codex needs to add or refactor screens, navigation, hooks, Redux state, service layers, async data flows, auth bootstrap, or production app architecture in this repo.
 ---
 
-# Mobile App Development Skill
+# Mobile Development
 
-This skill provides a set of protocols and guidelines to follow when building or maintaining mobile applications using React Native and Expo.
+Work from the existing repo structure instead of introducing a new architecture.
 
-## 📱 React Native & Layout
-- **Responsive Design:** Use a combination of flexbox, percentage-based dimensions, and the `useDeviceType` hook to ensure the layout adapts to various screen sizes.
-- **Layout Consistency:** Maintain consistent spacing using a standardized spacing scale defined in `src/theme/tokens/spacing.ts`.
-- **RTL Support:** Always use logical properties or the `useRTL` hook to handle bidirectional layouts.
+## Follow the project layout
 
-## 🚀 Expo Project Structure
-- Follow a modular project structure:
-  - `src/components`: Reusable UI components.
-    - `common`: Atomic, non-business specific components.
-    - `commerce`: Components related to the shopping domain.
-  - `src/screens`: Individual screen components. Each screen should handle both mobile and tablet views.
-  - `src/navigation`: Navigation configuration and types.
-  - `src/theme`: Theme definitions and semantic tokens.
-  - `src/store`: State management (Redux Toolkit).
-  - `src/hooks`: Custom React hooks.
-  - `src/utils`: Helper functions.
-  - `src/i18n`: Internationalization configuration and translations.
+- Put reusable UI in `src/components`.
+- Put screen logic in `src/screens`.
+- Keep navigation contracts in `src/navigation/types.ts`.
+- Keep external integrations in `src/services`.
+- Keep shared app state in `src/store`.
+- Put cross-screen logic in hooks before duplicating it in screens.
 
-## ⌨️ TypeScript Strict Typing
-- Use `strict: true` in `tsconfig.json`.
-- Avoid `any`. Define interfaces and types for all props, state, and API responses in `src/types`.
-- Use discriminated unions for complex state models.
+## Prefer typed contracts
 
-## 🎨 Design System
-- **Tokens:** Strictly adhere to the tokens defined in `src/theme/tokens`.
-- **Glassmorphism:** Use the `GlassCard` component and `glassmorphic` elevation for a premium look.
-- **Typography:** Use the `typography` tokens and ensure font families are applied correctly for both Arabic and English.
+- Use typed route props for every screen.
+- Remove `any` from navigation, Redux selectors, callbacks, and component props.
+- Add or extend types in `src/types/app.ts` when backend data changes.
 
-## 🧩 Component Design System
-- Build atomic, reusable components.
-- Components should be direction-aware and responsive.
+## Treat mock data as temporary
 
-## 🛒 State Modeling
-- Use Redux Toolkit for managing global state like `cart`, `wishlist`, `orders`, and `auth`.
-- Keep state normalized where possible.
+- Do not add new product logic directly to `src/data/products.ts` unless the task is explicitly demo-only.
+- Prefer service-backed repositories and selectors that can move from mock data to Firestore without rewriting screen code.
 
-## 🔄 UX States
-- Always handle and design for Loading, Empty, Error, and Offline states.
+## Keep flows production-shaped
 
-## ♿ Accessibility
-- Ensure touch targets are at least 44x44dp.
-- Maintain high contrast and support system font scaling.
+- Restore auth state on launch instead of relying only on in-memory Redux state.
+- Design for loading, empty, error, and offline states on every async screen.
+- Persist user preferences such as locale and theme when the task touches them.
+- Keep side effects in services, hooks, or thunks instead of embedding them across multiple screens.
+
+## Reuse project primitives
+
+- Use `useAppTheme`, `useRTL`, `useDeviceType`, and existing common components before adding new styling patterns.
+- Reuse `AppButton`, `GlassCard`, `AppHeader`, `GlobalBanner`, and existing theme tokens where they fit.
+
+## Verify every meaningful change
+
+- Run `npx tsc --noEmit`.
+- Run `npx expo-doctor` when dependencies, native modules, or Expo config change.
+- Check affected navigation paths after changing route params or stack structure.

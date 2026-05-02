@@ -1,34 +1,33 @@
 ---
-name: RTL & Internationalization
-description: Guidelines for bidirectional layout using I18nManager and react-i18next patterns.
+name: rtl-i18n
+description: Arabic and English localization guidance for this React Native app. Use when Codex needs to add translations, switch locale, handle RTL or LTR layout, update fonts, fix direction-aware icons, or refactor theme and i18n behavior tied to language.
 ---
 
-# RTL & Internationalization Skill
+# RTL and I18n
 
-This skill provides guidelines for building apps that support both Arabic (RTL) and English (LTR) seamlessly.
+Support Arabic and English as real first-class modes.
 
-## 🌍 i18n Configuration
-- Use `react-i18next` for managing translations.
-- Store translation JSON files in `src/i18n/locales/ar.json` and `src/i18n/locales/en.json`.
-- Use the `useTranslation` hook for all user-facing strings.
+## Keep strings out of components
 
-## ↔️ RTL Layout Rules
-- **Logical Properties:** Always use logical properties where possible. However, React Native doesn't support all of them yet. Use the `useRTL` hook to conditionally apply styles.
-- **Direction-Aware Styles:**
-  - Instead of `paddingLeft`, use the `useRTL` hook to decide if it should be `paddingLeft` or `paddingRight` for directional intent, or use `paddingStart` and `paddingEnd`.
-  - Use `flexDirection: isRTL ? 'row-reverse' : 'row'` for horizontal layouts that need to flip.
-- **Text Alignment:** Use `textAlign: isRTL ? 'right' : 'left'` or the platform-specific `textAlign: 'auto'`.
-- **Icons:** Some icons need to be flipped in RTL (e.g., arrows, progression indicators). Check `isRTL` to apply a `transform: [{ scaleX: -1 }]`.
+- Put user-facing copy in `src/i18n/locales/ar.json` and `src/i18n/locales/en.json`.
+- Use `useTranslation()` for labels, empty states, buttons, and errors.
+- When adding a new key, update both locale files in the same change.
 
-## 🔤 Font Handling
-- Apply the correct font family based on the active locale.
-- `en` -> Be Vietnam Pro
-- `ar` -> Cairo or Tajawal
-- Ensure baseline alignment is checked when mixing scripts.
+## Make locale switching real
 
-## 🛠️ Implementation Patterns
-- Use `I18nManager.forceRTL(true)` when switching to Arabic and reload the app if necessary (Expo handles this better with some plugins or custom logic).
-- Use `useRTL` hook:
-  ```typescript
-  const { isRTL, flexRow, textAlign } = useRTL();
-  ```
+- Call `i18n.changeLanguage(...)` when locale changes.
+- Keep selected locale in persisted app state if the task touches settings or bootstrap behavior.
+- Do not force Arabic at startup if the selected locale is English.
+
+## Make direction explicit where needed
+
+- Use `paddingStart` and `paddingEnd` where practical.
+- Use `flexDirection: isRTL ? 'row-reverse' : 'row'` only for layouts that truly need to mirror.
+- Use `textAlign: isRTL ? 'right' : 'left'` for directional text blocks.
+- Mirror arrows, progress chevrons, and directional affordances when the icon itself implies direction.
+
+## Keep typography script-aware
+
+- Use the existing Arabic and Latin font setup from app bootstrap and theme primitives.
+- Check mixed-language screens for clipping, line-height issues, and baseline mismatch.
+- Avoid hardcoding one language's font on shared components unless that component is language-specific.

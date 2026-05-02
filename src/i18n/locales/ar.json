@@ -19,7 +19,8 @@
     "total_price": "السعر الإجمالي",
     "reviews": "تقييم",
     "browse_products": "تصفح المنتجات",
-    "currency": "ر.س"
+    "currency": "ر.س",
+    "no_products": "لا توجد منتجات حالياً"
   },
   "nav": {
     "shop": "تسوق",
@@ -28,7 +29,8 @@
     "account": "حسابي",
     "home": "الرئيسية",
     "categories": "الفئات",
-    "wishlist": "المفضلة"
+    "wishlist": "المفضلة",
+    "assistant": "المساعد"
   },
   "home": {
     "promo_title": "خصم 40% على الخضروات الطازجة",

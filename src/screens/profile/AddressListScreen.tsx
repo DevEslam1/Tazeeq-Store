@@ -6,9 +6,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { AppButton } from '../../components/common/AppButton';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllAddresses, selectAddress } from '../../store/slices/addressSlice';
+import { selectAllAddresses, selectAndSyncAddress, fetchAddresses, selectAddressLoading } from '../../store/slices/addressSlice';
+import { selectUser } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native';
 
 import { useRTL } from '../../hooks/useRTL';
 
@@ -19,13 +21,25 @@ export function AddressListScreen({ navigation }: any) {
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch<AppDispatch>();
   const addresses = useSelector(selectAllAddresses);
+  const loading = useSelector(selectAddressLoading);
+  const user = useSelector(selectUser);
+
+  React.useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchAddresses(user.id));
+    }
+  }, [user?.id, dispatch]);
 
   const getIcon = (title: string) => {
-    return title === 'المنزل' ? 'home' : title === 'العمل' ? 'office-building' : 'map-marker';
+    const titleLower = title.toLowerCase();
+    return titleLower.includes('منزل') || titleLower.includes('home') ? 'home' : 
+           titleLower.includes('عمل') || titleLower.includes('work') || titleLower.includes('office') ? 'office-building' : 'map-marker';
   };
 
   const handleSelect = (id: string) => {
-    dispatch(selectAddress(id));
+    if (user?.id) {
+      dispatch(selectAndSyncAddress({ userId: user.id, addressId: id }));
+    }
   };
 
   const renderItem = ({ item }: { item: typeof addresses[0] }) => (
@@ -64,6 +78,18 @@ export function AddressListScreen({ navigation }: any) {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={
+          loading ? (
+            <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} />
+          ) : (
+            <View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
+              <MaterialCommunityIcons name="map-marker-off-outline" size={64} color={theme.colors.outlineVariant} />
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 16 }]}>
+                {t('profile.no_addresses') || 'لا توجد عناوين مسجلة'}
+              </Text>
+            </View>
+          )
+        }
       />
 
       <View style={[styles.footer, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopColor: theme.colors.border, borderTopWidth: 1 }]}>

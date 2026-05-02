@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   selectWishlistItems,
@@ -10,9 +11,10 @@ import { products } from '../data/products';
 export function useWishlist() {
   const dispatch = useDispatch<AppDispatch>();
   const wishlistItems = useSelector(selectWishlistItems);
+  const wishlistSet = useMemo(() => new Set(wishlistItems), [wishlistItems]);
 
   const isWishlisted = (productId: string) => 
-    wishlistItems.includes(productId);
+    wishlistSet.has(productId);
 
   const toggle = (productId: string) => {
     dispatch(toggleWishlistItem(productId));
@@ -23,12 +25,13 @@ export function useWishlist() {
   };
 
   const getWishlistProducts = () => 
-    products.filter(p => wishlistItems.includes(p.id));
+    products.filter(p => wishlistSet.has(p.id));
 
   return {
     isWishlisted,
     toggle,
     items: wishlistItems,
+    wishlistSet,
     getWishlistProducts,
     clear,
   };

@@ -1,31 +1,63 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, DimensionValue } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { selectCartItemById } from '../../store/slices/cartSlice';
+import { selectWishlistItems } from '../../store/slices/wishlistSlice';
+import { useCart } from '../../hooks/useCart';
+import { useWishlist } from '../../hooks/useWishlist';
+import { Image } from 'expo-image';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
 import { Badge } from '../common/Badge';
 import { PriceTag } from '../common/PriceTag';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useWishlist } from '../../hooks/useWishlist';
-import { useCart } from '../../hooks/useCart';
 import { useBanner } from '../../hooks/useBanner';
 import { useTranslation } from 'react-i18next';
 
 interface ProductCardProps {
   product: Product;
   onPress: () => void;
+  width?: DimensionValue;
 }
 
-export const ProductCard = React.memo(function ProductCard({ product, onPress }: ProductCardProps) {
+export const ProductCard = React.memo(function ProductCard({
+  product,
+  onPress,
+  width = '46%',
+}: ProductCardProps) {
+  const cartItem = useSelector((state: RootState) => selectCartItemById(state, product.id));
+  const cartQuantity = cartItem?.quantity || 0;
+  const wishlistItems = useSelector(selectWishlistItems);
+  const wishlisted = wishlistItems.includes(product.id);
+
+  const { addToCart, updateQty, removeFromCart } = useCart();
+  const { toggle } = useWishlist();
+
+  const onToggleWishlist = useCallback(() => {
+    toggle(product.id);
+  }, [product.id, toggle]);
+
+  const onAddToCart = useCallback(() => {
+    addToCart(product.id, 1);
+  }, [product.id, addToCart]);
+
+  const onIncreaseQuantity = useCallback(() => {
+    addToCart(product.id, 1);
+  }, [product.id, addToCart]);
+
+  const onDecreaseQuantity = useCallback(() => {
+    if (cartQuantity <= 1) {
+      removeFromCart(product.id);
+    } else {
+      updateQty(product.id, cartQuantity - 1);
+    }
+  }, [product.id, cartQuantity, removeFromCart, updateQty]);
   const { theme } = useAppTheme();
-  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
-  const { addToCart, getItem, removeFromCart, updateQty } = useCart();
   const { showSuccess } = useBanner();
   const { t } = useTranslation();
   const scale = useSharedValue(1);
-  
-  const wishlisted = isWishlisted(product.id);
-  const cartItem = getItem(product.id);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -40,22 +72,8 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
   };
 
   const handleAddToCart = () => {
-    addToCart(product.id, 1);
+    onAddToCart?.();
     showSuccess(t('cart.added_success', { name: product.name }));
-  };
-
-  const handleToggleWishlist = () => {
-    toggleWishlist(product.id);
-  };
-
-  const handleDecrease = () => {
-    if (!cartItem) return;
-    const newQty = cartItem.quantity - 1;
-    if (newQty <= 0) {
-      removeFromCart(product.id);
-    } else {
-      updateQty(product.id, newQty);
-    }
   };
 
   return (
@@ -64,11 +82,16 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       activeOpacity={1}
-      style={styles.container}
+      style={[styles.container, { width }]}
     >
       <Animated.View style={[styles.card, theme.elevation.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }, animatedStyle]}>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg }]}>
-          <Image source={{ uri: product.image }} style={[styles.image, { borderRadius: theme.radius.default }]} />
+          <Image 
+            source={{ uri: product.image }} 
+            style={[styles.image, { borderRadius: theme.radius.default }]} 
+            contentFit="cover"
+            transition={200}
+          />
           {product.badges && product.badges.length > 0 && (
             <View style={[styles.badgeContainer, { right: 12 }]}>
               {product.badges.map((badge, index) => (
@@ -76,9 +99,10 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
               ))}
             </View>
           )}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.wishlistButton, { left: 8 }]}
-            onPress={handleToggleWishlist}
+            onPress={onToggleWishlist}
+            disabled={!onToggleWishlist}
           >
             <MaterialCommunityIcons 
               name={wishlisted ? 'heart' : 'heart-outline'} 
@@ -106,18 +130,20 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
           )}
           
           <View style={styles.footer}>
-            {cartItem ? (
+            {cartQuantity > 0 ? (
               <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
                 <TouchableOpacity 
                   style={styles.qtyButton}
-                  onPress={handleDecrease}
+                  onPress={onDecreaseQuantity}
+                  disabled={!onDecreaseQuantity}
                 >
                   <MaterialCommunityIcons name="minus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
-                <Text style={[theme.typography.itemName, { color: theme.colors.primary, minWidth: 20, textAlign: 'center' }]}>{cartItem.quantity}</Text>
+                <Text style={[theme.typography.itemName, { color: theme.colors.primary, minWidth: 20, textAlign: 'center' }]}>{cartQuantity}</Text>
                 <TouchableOpacity 
                   style={styles.qtyButton}
-                  onPress={() => addToCart(product.id, 1)}
+                  onPress={onIncreaseQuantity}
+                  disabled={!onIncreaseQuantity}
                 >
                   <MaterialCommunityIcons name="plus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
@@ -125,6 +151,7 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
             ) : (
               <TouchableOpacity 
                 onPress={handleAddToCart}
+                disabled={!onAddToCart}
                 style={[styles.addButton, theme.elevation.button, { backgroundColor: theme.colors.primary, borderRadius: theme.radius.full }]}
               >
                 <MaterialCommunityIcons name="plus" size={20} color="white" />
@@ -138,9 +165,27 @@ export const ProductCard = React.memo(function ProductCard({ product, onPress }:
   );
 });
 
+export const ProductCardSkeleton = React.memo(({ width = '46%' }: { width?: DimensionValue }) => {
+  const { theme } = useAppTheme();
+  return (
+    <View style={[styles.container, { width }]}>
+      <View style={[styles.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }]}>
+        <View style={[styles.imageContainer, { backgroundColor: theme.colors.surfaceContainerHigh, borderRadius: theme.radius.lg }]} />
+        <View style={styles.info}>
+          <View style={{ height: 16, backgroundColor: theme.colors.surfaceContainerHigh, width: '80%', borderRadius: 4 }} />
+          <View style={{ height: 12, backgroundColor: theme.colors.surfaceContainerHigh, width: '40%', marginTop: 8, borderRadius: 4 }} />
+          <View style={styles.footer}>
+            <View style={{ height: 24, backgroundColor: theme.colors.surfaceContainerHigh, width: 36, borderRadius: 18 }} />
+            <View style={{ height: 20, backgroundColor: theme.colors.surfaceContainerHigh, width: 60, borderRadius: 4 }} />
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+});
+
 const styles = StyleSheet.create({
   container: {
-    width: '46%',
     margin: '2%',
   },
   card: {

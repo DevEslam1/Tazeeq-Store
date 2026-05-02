@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
-import { products } from '../../data/products';
+import { ProductRepository } from '../../services/productService';
+import { Product } from '../../types/app';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Badge } from '../../components/common/Badge';
 import { PriceTag } from '../../components/common/PriceTag';
@@ -11,6 +13,7 @@ import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRTL } from '../../hooks/useRTL';
+import { ActivityIndicator } from 'react-native';
 
 import { useBanner } from '../../hooks/useBanner';
 import { useDeviceType } from '../../hooks/useDeviceType';
@@ -23,11 +26,27 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const { showSuccess } = useBanner();
 
-  const product = products.find(p => p.id === productId);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const data = await ProductRepository.getById(productId);
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching product detail:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [productId]);
+
   const wishlisted = product ? isWishlisted(product.id) : false;
 
   const handleAddToCart = () => {
@@ -37,13 +56,36 @@ export function ProductDetailScreen({ route, navigation }: any) {
     }
   };
 
-  if (!product) return null;
+  if (loading) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
+
+  if (!product) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center', padding: 40 }]}>
+        <MaterialCommunityIcons name="alert-circle-outline" size={64} color={theme.colors.outlineVariant} />
+        <Text style={[theme.typography.h2, { color: theme.colors.onSurface, marginTop: 16, textAlign: 'center' }]}>
+          {t('product.not_found') || 'المنتج غير متوفر'}
+        </Text>
+        <AppButton title={t('common.go_back')} onPress={() => navigation.goBack()} style={{ marginTop: 24, width: '100%' }} />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: product.image }} style={styles.image} />
+          <Image 
+            source={{ uri: product.image }} 
+            style={styles.image} 
+            contentFit="cover"
+            transition={300}
+          />
           <TouchableOpacity 
             onPress={() => navigation.goBack()} 
             style={[

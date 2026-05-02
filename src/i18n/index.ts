@@ -10,8 +10,7 @@ const resources = {
   ar: { translation: ar },
 };
 
-I18nManager.allowRTL(true);
-I18nManager.forceRTL(true);
+// RTL is managed by ThemeProvider
 
 i18n
   .use(initReactI18next)

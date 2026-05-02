@@ -10,9 +10,21 @@ import { store } from './src/store';
 import { AppThemeProvider } from './src/theme';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { GlobalBanner } from './src/components/common/GlobalBanner';
+import { useAuthBootstrap } from './src/hooks/useAuthBootstrap';
 import './src/i18n';
 
 SplashScreen.preventAutoHideAsync();
+
+function AppContent() {
+  useAuthBootstrap();
+  return (
+    <>
+      <AppNavigator />
+      <GlobalBanner />
+      <StatusBar />
+    </>
+  );
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,7 +33,7 @@ export default function App() {
     Cairo_400Regular,
     Cairo_700Bold,
   });
-
+  
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
@@ -41,9 +53,7 @@ export default function App() {
     <ReduxProvider store={store}>
       <AppThemeProvider>
         <SafeAreaProvider>
-          <AppNavigator />
-          <GlobalBanner />
-          <StatusBar />
+          <AppContent />
         </SafeAreaProvider>
       </AppThemeProvider>
     </ReduxProvider>

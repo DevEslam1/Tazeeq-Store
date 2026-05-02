@@ -19,7 +19,8 @@
     "total_price": "Total Price",
     "reviews": "Reviews",
     "browse_products": "Browse Products",
-    "currency": "SAR"
+    "currency": "SAR",
+    "no_products": "No products available"
   },
   "nav": {
     "shop": "Shop",
@@ -28,7 +29,8 @@
     "account": "Account",
     "home": "Home",
     "categories": "Categories",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "assistant": "AI Assistant"
   },
   "home": {
     "promo_title": "40% Off on Fresh Vegetables",

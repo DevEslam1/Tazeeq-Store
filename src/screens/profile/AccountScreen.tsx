@@ -1,5 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import { useBanner } from '../../hooks/useBanner';
+import { seedDatabase } from '../../services/seedData';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -15,8 +17,39 @@ export function AccountScreen({ navigation }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const insets = useSafeAreaInsets();
 
+  const user = useSelector((state: any) => state.auth.user);
+
+  const { showSuccess, showError } = useBanner();
+  const [isSeeding, setIsSeeding] = useState(false);
+
+  const handleSeed = async () => {
+    Alert.alert(
+      'Seed Database',
+      'Are you sure you want to seed the database? This will overwrite existing products/categories with original IDs.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Yes, Seed',
+          onPress: async () => {
+            setIsSeeding(true);
+            const success = await seedDatabase();
+            setIsSeeding(false);
+
+            if (success) {
+              showSuccess('Database seeded successfully!');
+              return;
+            }
+
+            showError('Failed to seed database.');
+          },
+        },
+      ]
+    );
+  };
+  
   const menuItems = [
     { icon: 'account-outline', title: 'الملف الشخصي', subtitle: 'تعديل بياناتك الشخصية', onPress: () => navigation.navigate('EditProfile') },
+    { icon: 'package-variant-closed', title: 'طلباتي', subtitle: 'عرض تاريخ طلباتك', onPress: () => navigation.navigate('OrderHistory') },
     { icon: 'map-marker-outline', title: 'عناويني', subtitle: 'إدارة مواقع التوصيل', onPress: () => navigation.navigate('AddressList') },
     { icon: 'heart-outline', title: 'المفضلة', subtitle: 'منتجاتك المفضلة', onPress: () => navigation.navigate('Wishlist') },
     { icon: 'credit-card-outline', title: 'طرق الدفع', subtitle: 'البطاقات والمحافظ', onPress: () => Alert.alert('قريباً', 'ستتوفر هذه الميزة قريباً') },
@@ -42,8 +75,12 @@ export function AccountScreen({ navigation }: any) {
           <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary, borderColor: theme.colors.border }]}>
             <MaterialCommunityIcons name="account" size={48} color={theme.colors.onPrimary} />
           </View>
-          <Text style={[theme.typography.h1, { marginTop: 16, color: theme.colors.onSurface }]}>زائر</Text>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>سجل دخولك للحصول على ميزات أكثر</Text>
+          <Text style={[theme.typography.h1, { marginTop: 16, color: theme.colors.onSurface }]}>
+            {user?.name || 'زائر'}
+          </Text>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
+            {user?.email || 'سجل دخولك للحصول على ميزات أكثر'}
+          </Text>
         </View>
 
         <View style={styles.menu}>
@@ -70,6 +107,21 @@ export function AccountScreen({ navigation }: any) {
         </View>
 
 
+
+        <TouchableOpacity
+          onPress={handleSeed}
+          disabled={isSeeding}
+          style={[styles.seedButton, { backgroundColor: theme.colors.surfaceContainerHigh, borderColor: theme.colors.primary }]}
+        >
+          {isSeeding ? (
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+          ) : (
+            <>
+              <MaterialCommunityIcons name="database-import" size={20} color={theme.colors.primary} />
+              <Text style={[theme.typography.itemName, { color: theme.colors.primary, marginStart: 8 }]}>Seed Firebase Data</Text>
+            </>
+          )}
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>تسجيل الخروج</Text>
@@ -127,6 +179,16 @@ const styles = StyleSheet.create({
   menuText: {
     flex: 1,
     marginHorizontal: 16,
+  },
+  seedButton: {
+    marginHorizontal: 24,
+    marginTop: 10,
+    padding: 12,
+    borderRadius: 16,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logoutBtn: {
     margin: 40,

@@ -1,6 +1,7 @@
 export type MainTabParamList = {
   Shop: undefined;
   Organic: undefined;
+  Assistant: undefined;
   Orders: undefined;
   Account: undefined;
 };
@@ -16,6 +17,7 @@ export type ShopStackParamList = {
 export type ProfileStackParamList = {
   ProfileMain: undefined;
   EditProfile: undefined;
+  OrderHistory: undefined;
   AddressList: undefined;
   AddAddress: undefined;
   Wishlist: undefined;

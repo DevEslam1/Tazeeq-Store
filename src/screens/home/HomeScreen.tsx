@@ -1,42 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
-import { useAppTheme } from '../../theme';
-import { useTranslation } from 'react-i18next';
-import { AppHeader } from '../../components/common/AppHeader';
-import { CategoryCard } from '../../components/commerce/CategoryCard';
-import { ProductCard } from '../../components/commerce/ProductCard';
-import { categories } from '../../data/categories';
-import { products } from '../../data/products';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { AppHeader } from '../../components/common/AppHeader';
+import { CategoryCard } from '../../components/commerce/CategoryCard';
+import { ProductCard, ProductCardSkeleton } from '../../components/commerce/ProductCard';
+import { useDeviceType } from '../../hooks/useDeviceType';
+import { CategoryRepository } from '../../services/categoryService';
+import { ProductRepository } from '../../services/productService';
+import { useAppTheme } from '../../theme';
+import { Category, Product } from '../../types/app';
+
+const INITIAL_FLASH_SALE_TIME = 2 * 3600 + 15 * 60 + 30;
 
 function formatTime(seconds: number): string {
   const hrs = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
+
   return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+const SaleCountdown = React.memo(function SaleCountdown() {
+  const { theme, isRTL } = useAppTheme();
+  const [timeLeft, setTimeLeft] = useState(INITIAL_FLASH_SALE_TIME);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 24 * 3600));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
+      <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+    </View>
+  );
+});
 
 export function HomeScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const [timeLeft, setTimeLeft] = useState(2 * 3600 + 15 * 60 + 30);
+  const { isTablet } = useDeviceType();
+  const productWidth = isTablet ? '31%' : '46%';
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadHomeData = async () => {
+    try {
+      const [cats, products] = await Promise.all([
+        CategoryRepository.getAll(),
+        ProductRepository.getFeatured(),
+      ]);
+      setCategories(cats);
+      setFeaturedProducts(products);
+    } catch (error) {
+      console.error('Error fetching home data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 3600 * 24));
-    }, 1000);
-    return () => clearInterval(timer);
+    loadHomeData();
   }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 140 }]}>
-        {/* Categories Section */}
+
+
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={[theme.typography.sectionTitle, { color: theme.colors.primary }]}>
@@ -52,18 +96,22 @@ export function HomeScreen({ navigation }: any) {
             horizontal
             showsHorizontalScrollIndicator={false}
             data={categories}
+            initialNumToRender={5}
+            maxToRenderPerBatch={5}
+            windowSize={5}
+            removeClippedSubviews={true}
             renderItem={({ item }) => (
-              <CategoryCard 
-                category={item} 
-                onPress={() => navigation.navigate('ProductList', { categoryId: item.id, categoryName: item.name })} 
+              <CategoryCard
+                category={item}
+                onPress={() => navigation.navigate('ProductList', { categoryId: item.id, categoryName: item.name })}
               />
             )}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.categoriesList}
+            ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginLeft: 20 }} /> : null}
           />
         </View>
 
-{/* Promo Banner */}
         <View style={styles.promoContainer}>
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.secondary]}
@@ -74,25 +122,21 @@ export function HomeScreen({ navigation }: any) {
             <View style={styles.promoContent}>
               <View style={{ flex: 1 }}>
                 <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>
-                  {t('home.promo_title')} 🔥
+                  {t('home.promo_title')}
                 </Text>
-                <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                  <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
-                  <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
-                </View>
+                <SaleCountdown />
               </View>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.ctaButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
-                onPress={() => navigation.navigate('ProductList', { categoryName: 'العروض' })}
+                onPress={() => navigation.navigate('ProductList', { categoryName: t('home.shop_now') })}
               >
-                <Text style={styles.ctaButtonText}>تسوق الآن</Text>
-                <MaterialCommunityIcons name={isRTL ? "arrow-left" : "arrow-right"} size={18} color="white" />
+                <Text style={styles.ctaButtonText}>{t('home.shop_now')}</Text>
+                <MaterialCommunityIcons name={isRTL ? 'arrow-left' : 'arrow-right'} size={18} color="white" />
               </TouchableOpacity>
             </View>
           </LinearGradient>
         </View>
 
-        {/* Best Sellers Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.headerWithIcon}>
@@ -108,13 +152,27 @@ export function HomeScreen({ navigation }: any) {
             </TouchableOpacity>
           </View>
           <View style={styles.productGrid}>
-            {products.slice(0, 4).map((product) => (
-              <ProductCard 
-                key={product.id} 
-                product={product} 
-                onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: product.id } }) || navigation.navigate('ProductDetail', { productId: product.id })}
-              />
-            ))}
+            {loading ? (
+              <>
+                <ProductCardSkeleton width={productWidth} />
+                <ProductCardSkeleton width={productWidth} />
+                <ProductCardSkeleton width={productWidth} />
+                <ProductCardSkeleton width={productWidth} />
+              </>
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  width={productWidth}
+                  onPress={() => navigation.navigate('ProductDetail', { productId: product.id })}
+                />
+              ))
+            ) : (
+              <Text style={[theme.typography.bodySecondary, { textAlign: 'center', width: '100%', marginVertical: 40 }]}>
+                {t('common.no_products')}
+              </Text>
+            )}
           </View>
         </View>
 
@@ -128,6 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+
   scrollContent: {
     paddingBottom: 120,
   },
@@ -198,4 +257,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 });
-

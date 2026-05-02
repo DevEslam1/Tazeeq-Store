@@ -1,31 +1,31 @@
 ---
-name: Responsive & Tablet Layout
-description: Guidelines for the useDeviceType hook and adaptive component patterns.
+name: responsive-layout
+description: Adaptive mobile and tablet layout guidance for this Expo app. Use when Codex needs to adjust breakpoints, grids, navigation chrome, screen composition, spacing, or any layout that should behave differently on phones and tablets.
 ---
 
-# Responsive & Tablet Layout Skill
+# Responsive Layout
 
-This skill ensures the Tazeeq app provides a premium experience on both mobile and tablet devices.
+Make tablet layouts meaningfully different, not just scaled-up mobile screens.
 
-## 📱 Breakpoints
-- **Mobile:** `< 768px` width.
-- **Tablet:** `≥ 768px` width.
+## Use the existing breakpoint model
 
-## 🛠️ useDeviceType Hook
-- Use this hook to determine the current device type and window dimensions.
-- Returns `{ isTablet, isMobile, width, height }`.
+- Use `useDeviceType` as the first decision point for mobile vs tablet behavior.
+- Treat widths below `768` as mobile and `768+` as tablet unless the repo is intentionally updated to a new breakpoint system.
 
-## 🗺️ Adaptive Navigation
-- **Mobile:** Uses a bottom tab bar for primary navigation.
-- **Tablet:** Uses a fixed sidebar on the left.
+## Adapt structure, not only size
 
-## 🍱 Component Adaptation
-- **Grids:**
-  - Mobile: 2 columns for products, 3 for categories.
-  - Tablet: 4-5 columns for products, 5-6 for categories.
-- **Layouts:**
-  - Mobile: Vertical stacking of elements.
-  - Tablet: Utilize horizontal space with side-by-side sections (e.g., image on left, details on right in Product Detail).
+- On mobile, favor stacked content and short interaction paths.
+- On tablet, use available width for split layouts, denser grids, and persistent navigation where appropriate.
+- Keep primary actions visible without forcing excessive scrolling on larger screens.
 
-## 📐 Scaling
-- Elements shouldn't just get bigger on tablet; they should utilize the extra space to show more content or better organized layouts.
+## Keep navigation coherent
+
+- Mobile patterns should align with the bottom-tab experience.
+- Tablet patterns should align with sidebar or wider content layouts already used by the app.
+- Audit screen transitions after changing route nesting or device-specific entry points.
+
+## Validate list and card density
+
+- Revisit `FlatList` column counts, item widths, and padding when changing catalog or wishlist layouts.
+- Avoid awkward half-empty rows and oversized cards on tablet.
+- Keep headers, filters, and search controls balanced across widths.

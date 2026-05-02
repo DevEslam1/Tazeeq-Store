@@ -8,11 +8,13 @@ import { GlassCard } from '../../components/common/GlassCard';
 import { useCart } from '../../hooks/useCart';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSelectedAddress } from '../../store/slices/addressSlice';
-import { placeOrder } from '../../store/slices/orderSlice';
+import { createNewOrder, selectOrderLoading } from '../../store/slices/orderSlice';
+import { selectUser } from '../../store/slices/authSlice';
 import { clearCart } from '../../store/slices/cartSlice';
 import { AppDispatch } from '../../store';
 import { products } from '../../data/products';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native';
 
 import { useRTL } from '../../hooks/useRTL';
 
@@ -32,33 +34,31 @@ export function PaymentScreen({ navigation }: any) {
     { id: 'wallet', title: 'محفظة طازج', icon: 'wallet-outline' },
   ];
 
-  const handleConfirm = () => {
-    const orderItems = items.map(item => {
-      const product = products.find(p => p.id === item.productId);
-      return {
-        productId: item.productId,
-        quantity: item.quantity,
-        name: product?.name || '',
-        price: product?.price || 0,
-        image: product?.image || '',
-      };
-    });
+  const user = useSelector(selectUser);
+  const isOrdering = useSelector(selectOrderLoading);
 
-    const newOrder = {
-      id: `ORD-${Date.now()}`,
+  const handleConfirm = async () => {
+    if (!user?.id) return;
+
+    const orderData = {
       status: 'Placed' as const,
       total: total,
       date: new Date().toISOString(),
       items: items.reduce((sum, item) => sum + item.quantity, 0),
       cartItems: items,
-      address: address,
+      address: address || undefined,
       paymentMethod: selectedMethod,
       estimatedDelivery: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     };
 
-    dispatch(placeOrder(newOrder));
-    dispatch(clearCart());
-    navigation.replace('Confirmation');
+    try {
+      await dispatch(createNewOrder({ userId: user.id, order: orderData })).unwrap();
+      dispatch(clearCart());
+      navigation.replace('Confirmation');
+    } catch (error) {
+      console.error("Order placement failed:", error);
+      Alert.alert("Error", "Failed to place order. Please try again.");
+    }
   };
 
   return (
@@ -170,6 +170,8 @@ export function PaymentScreen({ navigation }: any) {
         <AppButton 
           title={t('payment.confirm') || 'تأكيد الطلب والدفع'} 
           onPress={handleConfirm} 
+          disabled={isOrdering}
+          loading={isOrdering}
         />
       </View>
     </View>

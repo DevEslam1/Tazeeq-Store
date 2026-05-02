@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../../components/common/AppHeader';
 import { CategoryCard } from '../../components/commerce/CategoryCard';
-import { categories } from '../../data/categories';
+import { CategoryRepository } from '../../services/categoryService';
+import { Category } from '../../types/app';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native';
 
 import { useRTL } from '../../hooks/useRTL';
 
@@ -15,6 +17,22 @@ export function CategoriesScreen({ navigation }: any) {
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await CategoryRepository.getAll();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -35,6 +53,10 @@ export function CategoriesScreen({ navigation }: any) {
 
         <FlatList
           data={categories}
+          initialNumToRender={12}
+          maxToRenderPerBatch={12}
+          windowSize={5}
+          removeClippedSubviews={true}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
               <CategoryCard 
@@ -46,6 +68,7 @@ export function CategoriesScreen({ navigation }: any) {
           keyExtractor={(item) => item.id}
           numColumns={3}
           contentContainerStyle={styles.list}
+          ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} /> : null}
         />
       </View>
     </View>

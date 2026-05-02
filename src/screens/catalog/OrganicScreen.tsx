@@ -1,47 +1,77 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
-import { useAppTheme } from '../../theme';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ProductCard } from '../../components/commerce/ProductCard';
-import { products } from '../../data/products';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AppHeader } from '../../components/common/AppHeader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { AppHeader } from '../../components/common/AppHeader';
+import { ProductCard } from '../../components/commerce/ProductCard';
+import { ProductRepository } from '../../services/productService';
+import { useAppTheme } from '../../theme';
+import { Product } from '../../types/app';
 
 export function OrganicScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const [organicProducts, setOrganicProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const organicProducts = products.filter(p => p.badges?.includes('organic'));
+  useEffect(() => {
+    const fetchOrganicProducts = async () => {
+      setLoading(true);
+      try {
+        const products = await ProductRepository.getAll();
+        setOrganicProducts(products.filter((product) => product.badges?.includes('organic')));
+      } catch (error) {
+        console.error('Error fetching organic products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrganicProducts();
+  }, []);
+
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
-      
+
       <View style={[styles.banner, { marginTop: insets.top + 130, marginHorizontal: 20 }]}>
-        <Image 
-          source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop' }} 
-          style={styles.bannerImage} 
+        <Image
+          source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop' }}
+          style={styles.bannerImage}
         />
         <View style={[styles.overlay, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
           <Text style={[theme.typography.h1, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>{t('common.organic')}</Text>
-          <Text style={[theme.typography.bodyMain, { color: 'white', opacity: 0.8, textAlign: isRTL ? 'right' : 'left' }]}>١٠٠٪ منتجات طبيعية وعضوية</Text>
+          <Text style={[theme.typography.bodyMain, { color: 'white', opacity: 0.8, textAlign: isRTL ? 'right' : 'left' }]}>
+            Certified fresh products from the live catalog.
+          </Text>
         </View>
       </View>
 
-      <FlatList
-        data={organicProducts}
-        renderItem={({ item }) => (
-          <ProductCard 
-            product={item} 
-            onPress={() => navigation.getParent()?.navigate('Shop', { screen: 'ProductDetail', params: { productId: item.id } }) || navigation.navigate('ProductDetail', { productId: item.id })}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.list}
-      />
+      {loading ? (
+        <View style={styles.loadingState}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={organicProducts}
+          initialNumToRender={6}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          removeClippedSubviews={true}
+          renderItem={({ item }) => (
+            <ProductCard
+              product={item}
+              onPress={() => navigation.navigate('Shop', { screen: 'ProductDetail', params: { productId: item.id } })}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          contentContainerStyle={styles.list}
+        />
+      )}
     </View>
   );
 }
@@ -67,9 +97,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
+  loadingState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   list: {
     padding: 8,
     paddingBottom: 120,
   },
 });
-

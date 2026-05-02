@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
   selectCartItems, 
@@ -16,6 +17,10 @@ export function useCart() {
   const items = useSelector(selectCartItems);
   const total = useSelector(selectCartTotal);
   const itemCount = useSelector(selectCartItemCount);
+  const itemMap = useMemo(
+    () => new Map(items.map((item) => [item.productId, item])),
+    [items]
+  );
 
   const addToCart = (productId: string, quantity: number = 1) => {
     dispatch(addItem({ productId, quantity }));
@@ -38,10 +43,11 @@ export function useCart() {
   };
 
   const getItem = (productId: string) => 
-    items.find(i => i.productId === productId);
+    itemMap.get(productId);
 
   return {
     items,
+    itemMap,
     total,
     itemCount,
     addToCart,

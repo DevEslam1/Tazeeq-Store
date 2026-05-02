@@ -1,49 +1,81 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Order } from '../../types/app';
+import { OrderRepository } from '../../services/orderService';
 
 interface OrderState {
   orders: Order[];
   activeOrder: Order | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: OrderState = {
   orders: [],
   activeOrder: null,
+  loading: false,
+  error: null,
 };
+
+export const createNewOrder = createAsyncThunk(
+  'orders/create',
+  async ({ userId, order }: { userId: string; order: Omit<Order, 'id'> }) => {
+    const id = await OrderRepository.create(userId, order);
+    return { id, ...order } as Order;
+  }
+);
+
+export const fetchOrders = createAsyncThunk(
+  'orders/fetchAll',
+  async (userId: string) => {
+    return await OrderRepository.getAll(userId);
+  }
+);
 
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    placeOrder: (state, action: PayloadAction<Order>) => {
-      state.orders.unshift(action.payload);
-      state.activeOrder = action.payload;
-    },
-    updateOrderStatus: (state, action: PayloadAction<{ orderId: string; status: Order['status'] }>) => {
-      const order = state.orders.find(o => o.id === action.payload.orderId);
-      if (order) {
-        order.status = action.payload.status;
-      }
-      if (state.activeOrder?.id === action.payload.orderId) {
-        state.activeOrder.status = action.payload.status;
-      }
-    },
-    cancelOrder: (state, action: PayloadAction<string>) => {
-      state.orders = state.orders.filter(o => o.id !== action.payload);
-      if (state.activeOrder?.id === action.payload) {
-        state.activeOrder = null;
-      }
-    },
     setActiveOrder: (state, action: PayloadAction<Order | null>) => {
       state.activeOrder = action.payload;
     },
+    clearOrders: (state) => {
+      state.orders = [];
+      state.activeOrder = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createNewOrder.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(createNewOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders.unshift(action.payload);
+        state.activeOrder = action.payload;
+      })
+      .addCase(createNewOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to create order';
+      })
+      .addCase(fetchOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch orders';
+      });
   },
 });
 
-export const { placeOrder, updateOrderStatus, cancelOrder, setActiveOrder } = orderSlice.actions;
+export const { setActiveOrder, clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;
 
 export const selectAllOrders = (state: { orders: OrderState }) => state.orders.orders;
 export const selectActiveOrder = (state: { orders: OrderState }) => state.orders.activeOrder;
+export const selectOrderLoading = (state: { orders: OrderState }) => state.orders.loading;
 export const selectOrderById = (state: { orders: OrderState }, orderId: string) => 
   state.orders.orders.find(o => o.id === orderId);

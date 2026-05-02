@@ -101,6 +101,7 @@ export function BottomTabBar({ state, descriptors, navigation }: any) {
               switch (route.name) {
                 case 'Shop': return isFocused ? 'storefront' : 'storefront-outline';
                 case 'Organic': return isFocused ? 'leaf' : 'leaf';
+                case 'Assistant': return isFocused ? 'robot' : 'robot-outline';
                 case 'Orders': return isFocused ? 'file-document' : 'file-document-outline';
                 case 'Account': return isFocused ? 'account' : 'account-outline';
                 default: return 'help';

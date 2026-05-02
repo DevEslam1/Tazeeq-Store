@@ -5,7 +5,7 @@ import wishlistReducer from './slices/wishlistSlice';
 import orderReducer from './slices/orderSlice';
 import addressReducer from './slices/addressSlice';
 import searchReducer from './slices/searchSlice';
-
+import aiReducer from './slices/aiSlice';
 import uiReducer from './slices/uiSlice';
 
 export const store = configureStore({
@@ -16,6 +16,7 @@ export const store = configureStore({
     orders: orderReducer,
     address: addressReducer,
     search: searchReducer,
+    ai: aiReducer,
     ui: uiReducer,
   },
 });

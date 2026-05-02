@@ -6,7 +6,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { GlassCard } from '../../components/common/GlassCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAllAddresses, selectAddress } from '../../store/slices/addressSlice';
+import { selectAllAddresses, selectAndSyncAddress, fetchAddresses } from '../../store/slices/addressSlice';
+import { selectUser } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRTL } from '../../hooks/useRTL';
@@ -22,6 +23,7 @@ export function DeliveryScreen({ navigation }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const addresses = useSelector(selectAllAddresses);
   const selectedAddressId = useSelector((state: any) => state.address.selectedAddressId);
+  const user = useSelector(selectUser);
   
   const [region, setRegion] = useState({
     latitude: 24.7136,
@@ -29,6 +31,14 @@ export function DeliveryScreen({ navigation }: any) {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+  const [addressName, setAddressName] = useState('');
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyDh2jY_1U8llzRSxBsJR3F6dEmbslvl6EY';
+
+  useEffect(() => {
+    if (user?.id) {
+      dispatch(fetchAddresses(user.id));
+    }
+  }, [user?.id, dispatch]);
 
   useEffect(() => {
     (async () => {
@@ -36,13 +46,34 @@ export function DeliveryScreen({ navigation }: any) {
       if (status !== 'granted') return;
 
       let location = await Location.getCurrentPositionAsync({});
-      setRegion({
+      const newRegion = {
         ...region,
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      });
+      };
+      setRegion(newRegion);
+      fetchAddress(newRegion.latitude, newRegion.longitude);
     })();
   }, []);
+
+  const fetchAddress = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAPS_API_KEY}&language=${isRTL ? 'ar' : 'en'}`
+      );
+      const data = await response.json();
+      if (data.results && data.results.length > 0) {
+        setAddressName(data.results[0].formatted_address);
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+    }
+  };
+
+  const onRegionChangeComplete = (newRegion: any) => {
+    setRegion(newRegion);
+    fetchAddress(newRegion.latitude, newRegion.longitude);
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -62,7 +93,7 @@ export function DeliveryScreen({ navigation }: any) {
         {addresses.map((address) => (
           <TouchableOpacity 
             key={address.id} 
-            onPress={() => dispatch(selectAddress(address.id))}
+            onPress={() => user?.id && dispatch(selectAndSyncAddress({ userId: user.id, addressId: address.id }))}
             style={styles.addressWrapper}
           >
             <GlassCard 
@@ -88,7 +119,10 @@ export function DeliveryScreen({ navigation }: any) {
           </TouchableOpacity>
         ))}
 
-        <TouchableOpacity style={[styles.addNewButton, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        <TouchableOpacity 
+          style={[styles.addNewButton, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+          onPress={() => navigation.navigate('Profile', { screen: 'AddAddress' })}
+        >
           <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
           <Text style={[theme.typography.bodyMain, { color: theme.colors.primary, fontWeight: '700', marginHorizontal: 8 }]}>
             {t('delivery.add_new')}
@@ -101,7 +135,7 @@ export function DeliveryScreen({ navigation }: any) {
               provider={PROVIDER_GOOGLE}
               style={styles.map}
               region={region}
-              onRegionChangeComplete={setRegion}
+              onRegionChangeComplete={onRegionChangeComplete}
               customMapStyle={mode === 'dark' ? darkMapStyle : []}
             >
               <Marker coordinate={region} pinColor={theme.colors.primary} />
@@ -110,6 +144,14 @@ export function DeliveryScreen({ navigation }: any) {
               <MaterialCommunityIcons name="map-marker" size={40} color={theme.colors.primary} />
             </View>
           </GlassCard>
+          {addressName ? (
+            <View style={[styles.addressBadge, { backgroundColor: theme.colors.surfaceVariant }]}>
+              <MaterialCommunityIcons name="map-marker-check" size={16} color={theme.colors.primary} />
+              <Text style={[theme.typography.meta, { color: theme.colors.onSurfaceVariant, marginStart: 8 }]} numberOfLines={1}>
+                {addressName}
+              </Text>
+            </View>
+          ) : null}
         </View>
 
         <View style={styles.form}>
@@ -203,6 +245,16 @@ const styles = StyleSheet.create({
     marginTop: -40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  addressBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginTop: -10,
+    marginHorizontal: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
   },
   form: {
     marginBottom: 100,

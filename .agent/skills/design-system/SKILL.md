@@ -1,34 +1,32 @@
 ---
-name: Tazeeq Design System
-description: Documents the full token system and glassmorphism implementation patterns.
+name: design-system
+description: Tazeeq visual system guidance for tokens, theming, glassmorphism, and reusable commerce UI. Use when Codex needs to change colors, typography, spacing, elevation, shared components, banners, cards, or any UI that should stay consistent with the existing premium storefront look.
 ---
 
-# Tazeeq Design System Skill
+# Design System
 
-This skill defines the visual language and component architecture for the Tazeeq Premium app.
+Preserve the existing visual language unless the task explicitly asks for a redesign.
 
-## 💎 Visual Philosophy: "Ethical Opulence"
-- **Glassmorphism:** Use semi-transparent white fills (8-15% opacity) with backdrop blur (12-20px).
-- **Tinted Shadows:** Use `#10B981` at 15% opacity with a large blur (30px) for a "luminous" hovering effect.
-- **Soft Edges:** Consistent 20px corner radius for primary containers and product cards.
+## Use the token source of truth
 
-## 🎨 Color Palette (MD3 Based)
-- **Primary:** Emerald Green (`#006C49`)
-- **Primary Container:** Emerald Vitality (`#10B981`)
-- **Secondary Container:** Artisanal Gold (`#F59E0B`)
-- **Surface:** Minty White (`#F4FBF4`)
+- Read from `src/theme/tokens` before inventing colors, spacing, radius, or typography values.
+- Update tokens or shared theme objects when a value should be reused in more than one place.
+- Keep light and dark behavior aligned through `src/theme/themes.ts` and related token files.
 
-## ✍️ Typography
-- **Headings:** Bold, Deep Forest Green.
-- **Prices:** Bold, Emerald Green.
-- **Body:** Dark Gray for legibility.
+## Respect the current product style
 
-## 🧩 Atomic Components
-- **GlassCard:** The base container for almost everything.
-- **AppButton:** Emerald solid for primary actions, glass for secondary.
-- **Badge:** Pill-shaped, gold for premium, emerald for organic.
+- Keep the premium grocery identity: clean surfaces, restrained glass effects, and clear hierarchy.
+- Use `GlassCard` and shared elevation styles instead of repeating blur and transparency values inline.
+- Keep CTA hierarchy obvious: primary actions should still read as primary across screens.
 
-## 📐 Layout Rules
-- **Safe Area:** 20px horizontal margin on mobile.
-- **Vertical Spacing:** Generous spacing (32px+) between sections to prevent shadow overlap.
-- **Scale:** 4px unit based grid.
+## Build reusable UI, not one-off styling
+
+- Promote repeated layout or visual patterns into `src/components/common` or `src/components/commerce`.
+- Keep product cards, badges, price presentation, and banners visually consistent with existing components.
+- Prefer semantic names over screen-specific names when extracting shared UI.
+
+## Avoid visual drift
+
+- Do not mix ad hoc font families, random opacities, or untracked hex values into screens.
+- Do not let dark mode styling fork into separate one-off implementations.
+- If a screen needs a new pattern, define the pattern once and reuse it.

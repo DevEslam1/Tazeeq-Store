@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GlassCard } from '../../components/common/GlassCard';
 import { AppButton } from '../../components/common/AppButton';
-import { useDispatch } from 'react-redux';
-import { addAddress } from '../../store/slices/addressSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { addNewAddress } from '../../store/slices/addressSlice';
+import { selectUser } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,6 +22,7 @@ export function AddAddressScreen({ navigation }: any) {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const insets = useSafeAreaInsets();
+  const user = useSelector(selectUser);
 
   const [type, setType] = useState('المنزل');
   const [name, setName] = useState('');
@@ -32,15 +34,17 @@ export function AddAddressScreen({ navigation }: any) {
   const [apartment, setApartment] = useState('');
 
   const handleSave = () => {
-    const newAddress = {
-      id: Date.now().toString(),
+    if (!user?.id) return;
+
+    const addressData = {
       title: type,
       details: `${city} - ${street} - ${building}`,
       phone: phone || '+966501234567',
       city: city,
       selected: false,
     };
-    dispatch(addAddress(newAddress));
+    
+    dispatch(addNewAddress({ userId: user.id, address: addressData }));
     navigation.goBack();
   };
 

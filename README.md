@@ -16,6 +16,11 @@ Tazeeq is a high-fidelity, premium grocery shopping application built with React
 - **Global Premium Banners:** Animated, multi-color toast notifications using Reanimated spring physics for success, error, and info alerts.
 - **MD3 Color Palette:** A carefully curated Material Design 3 palette featuring Emerald Green, Artisanal Gold, and tailored Dark Mode desaturations.
 
+### 🤖 Gemini AI Shopping Assistant
+- **Secure AI Proxy**: Server-mediated architecture using Firebase Functions to protect API keys.
+- **Catalog Grounding**: AI responses are dynamically grounded in the live product catalog for high-accuracy suggestions.
+- **Recipe-to-Cart**: Ask for recipes and get ingredient suggestions available in the store.
+
 ### 🔐 Backend Integration
 - **Firebase Authentication:** Secure Email/Password registration and login flows.
 - **Cloud Firestore:** Real-time NoSQL database integration for storing user profiles, orders, and application data.
@@ -27,6 +32,11 @@ Tazeeq is a high-fidelity, premium grocery shopping application built with React
   - **Mobile:** Floating glassmorphic bottom tab bar.
   - **Tablet:** Permanent sidebar navigation with expanded content areas.
 
+### ⚡ Performance & Polish
+- **High-Performance Imagery:** Utilizes `expo-image` for automatic disk caching, blurhash support, and smooth transition animations.
+- **Skeleton UI Loading:** Premium shimmering placeholders display during data fetching, preventing layout shift and improving perceived performance.
+- **Optimized Interactions:** Features input debouncing for search and Reanimated 3 for fluid, native-feeling gestures and transitions.
+
 ### 🌍 Localization & RTL
 - **Full Bidirectional Support:** Built from the ground up to support Arabic (RTL) and English (LTR).
 - **Dynamic Font Loading:** Automatically switches between **Be Vietnam Pro** (Latin) and **Cairo** (Arabic) for optimal legibility.
@@ -37,6 +47,7 @@ Tazeeq is a high-fidelity, premium grocery shopping application built with React
 - **Backend Services:** [Firebase](https://firebase.google.com/) (Auth, Firestore)
 - **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/)
 - **Navigation:** [React Navigation v6](https://reactnavigation.org/)
+- **Imagery & Caching:** [expo-image](https://docs.expo.dev/versions/latest/sdk/image/)
 - **Localization:** [i18next](https://www.i18next.com/)
 - **Icons:** [Material Community Icons](https://icons.expo.fyi/)
 
