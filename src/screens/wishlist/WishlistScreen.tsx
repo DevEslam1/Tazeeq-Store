@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ProductCard } from '../../components/commerce/ProductCard';
-import { useCart } from '../../hooks/useCart';
 import { useRTL } from '../../hooks/useRTL';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useAppTheme } from '../../theme';
@@ -15,19 +14,9 @@ export function WishlistScreen({ navigation }: any) {
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const { addToCart, itemMap, removeFromCart, updateQty } = useCart();
-  const { getWishlistProducts, toggle, wishlistSet } = useWishlist();
+  const { getWishlistProducts } = useWishlist();
 
   const wishlistProducts = getWishlistProducts();
-  const wishlistProductsWithState = useMemo(
-    () =>
-      wishlistProducts.map((product) => ({
-        product,
-        cartQuantity: itemMap.get(product.id)?.quantity ?? 0,
-        wishlisted: wishlistSet.has(product.id),
-      })),
-    [itemMap, wishlistProducts, wishlistSet]
-  );
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -53,26 +42,18 @@ export function WishlistScreen({ navigation }: any) {
         </View>
       ) : (
         <FlatList
-          data={wishlistProductsWithState}
+          data={wishlistProducts}
+          initialNumToRender={6}
+          maxToRenderPerBatch={8}
+          windowSize={5}
+          removeClippedSubviews={true}
           renderItem={({ item }) => (
             <ProductCard
-              product={item.product}
-              cartQuantity={item.cartQuantity}
-              wishlisted={item.wishlisted}
-              onAddToCart={() => addToCart(item.product.id, 1)}
-              onIncreaseQuantity={() => addToCart(item.product.id, 1)}
-              onDecreaseQuantity={() => {
-                if (item.cartQuantity <= 1) {
-                  removeFromCart(item.product.id);
-                  return;
-                }
-                updateQty(item.product.id, item.cartQuantity - 1);
-              }}
-              onToggleWishlist={() => toggle(item.product.id)}
-              onPress={() => navigation.navigate('ProductDetail', { productId: item.product.id })}
+              product={item}
+              onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
             />
           )}
-          keyExtractor={(item) => item.product.id}
+          keyExtractor={(item) => item.id}
           numColumns={2}
           contentContainerStyle={styles.list}
         />
