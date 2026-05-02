@@ -13,8 +13,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useRTL } from '../../hooks/useRTL';
 
-const addressTypes = ['المنزل', 'العمل', 'أخرى'];
-const cities = ['الرياض', 'جدة', 'الدمام', 'الخبر', 'مكة', 'المدينة'];
 
 export function AddAddressScreen({ navigation }: any) {
   const { theme } = useAppTheme();
@@ -24,10 +22,13 @@ export function AddAddressScreen({ navigation }: any) {
   const insets = useSafeAreaInsets();
   const user = useSelector(selectUser);
 
-  const [type, setType] = useState('المنزل');
+  const addressTypes = [t('address.home'), t('address.work'), t('address.other')];
+  const cities = [t('address.riyadh'), t('address.jeddah'), t('address.dammam'), t('address.khobar'), t('address.makkah'), t('address.madinah')];
+
+  const [type, setType] = useState(addressTypes[0]);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [city, setCity] = useState('الرياض');
+  const [city, setCity] = useState(cities[0]);
   const [street, setStreet] = useState('');
   const [building, setBuilding] = useState('');
   const [floor, setFloor] = useState('');
@@ -54,14 +55,14 @@ export function AddAddressScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>إضافة عنوان جديد</Text>
+        <Text style={[theme.typography.h2, { color: 'white' }]}>{t('profile.add_new_address')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         <GlassCard style={styles.card}>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface, marginBottom: 12 }]}>نوع العنوان</Text>
-          <View style={styles.typeRow}>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface, marginBottom: 12, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.address_type')}</Text>
+          <View style={[styles.typeRow, { flexDirection: 'row' }]}>
             {addressTypes.map((item) => (
               <TouchableOpacity
                 key={item}
@@ -79,22 +80,22 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الاسم</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={name}
               onChangeText={setName}
-              placeholder="الاسم"
+              placeholder={t('auth.name')}
               placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الهاتف</Text>
-            <View style={[styles.phoneInput, { backgroundColor: theme.colors.surfaceContainerLow }]}>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
+            <View style={[styles.phoneInput, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row' }]}>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>+966</Text>
               <TextInput
-                style={[styles.input, { flex: 1, color: theme.colors.onSurface }]}
+                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={phone}
                 onChangeText={setPhone}
                 keyboardType="phone-pad"
@@ -105,8 +106,8 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>المدينة</Text>
-            <View style={[styles.picker, { backgroundColor: theme.colors.surfaceContainerLow }]}>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.city')}</Text>
+            <View style={[styles.picker, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row' }]}>
               {cities.map((c) => (
                 <TouchableOpacity
                   key={c}
@@ -120,46 +121,46 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الشارع</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.street')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={street}
               onChangeText={setStreet}
-              placeholder="اسم الشارع"
+              placeholder={t('address.street')}
               placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
 
-          <View style={styles.row}>
+          <View style={[styles.row, { flexDirection: 'row' }]}>
             <View style={[styles.inputGroup, { flex: 1, marginEnd: 8 }]}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>المبنى</Text>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.building')}</Text>
               <TextInput
-                style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+                style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={building}
                 onChangeText={setBuilding}
-                placeholder="المبنى"
+                placeholder={t('address.building')}
                 placeholderTextColor={theme.colors.onSurfaceVariant}
               />
             </View>
             <View style={[styles.inputGroup, { flex: 1 }]}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الطابق</Text>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.floor')}</Text>
               <TextInput
-                style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+                style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={floor}
                 onChangeText={setFloor}
-                placeholder="الطابق"
+                placeholder={t('address.floor')}
                 placeholderTextColor={theme.colors.onSurfaceVariant}
               />
             </View>
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الشقة</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.apartment')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={apartment}
               onChangeText={setApartment}
-              placeholder="رقم الشقة"
+              placeholder={t('address.apartment')}
               placeholderTextColor={theme.colors.onSurfaceVariant}
             />
           </View>
@@ -167,7 +168,7 @@ export function AddAddressScreen({ navigation }: any) {
       </ScrollView>
 
       <View style={[styles.footer, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopColor: theme.colors.border, borderTopWidth: 1 }]}>
-        <AppButton title="حفظ العنوان" onPress={handleSave} />
+        <AppButton title={t('common.save')} onPress={handleSave} />
       </View>
     </View>
   );

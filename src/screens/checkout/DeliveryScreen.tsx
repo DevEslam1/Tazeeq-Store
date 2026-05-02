@@ -120,7 +120,7 @@ export function DeliveryScreen({ navigation }: any) {
         ))}
 
         <TouchableOpacity 
-          style={[styles.addNewButton, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+          style={[styles.addNewButton, { flexDirection: 'row' }]}
           onPress={() => navigation.navigate('Profile', { screen: 'AddAddress' })}
         >
           <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />

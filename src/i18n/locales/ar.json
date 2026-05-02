@@ -20,7 +20,9 @@
     "reviews": "تقييم",
     "browse_products": "تصفح المنتجات",
     "currency": "ر.س",
-    "no_products": "لا توجد منتجات حالياً"
+    "no_products": "لا توجد منتجات حالياً",
+    "out_of_stock": "غير متوفر",
+    "go_back": "رجوع"
   },
   "nav": {
     "shop": "تسوق",
@@ -46,7 +48,8 @@
     "description": "الوصف",
     "reviews": "التقييمات",
     "share": "مشاركة",
-    "add_to_cart": "أضف إلى السلة"
+    "add_to_cart": "أضف إلى السلة",
+    "not_found": "المنتج غير موجود"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -65,6 +68,43 @@
     "promo_code": "هل لديك كود خصم؟ أضفه هنا",
     "added_success": "تم إضافة {{name}} إلى السلة بنجاح!"
   },
+  "settings": {
+    "title": "الإعدادات",
+    "appearance": "المظهر والتجربة",
+    "dark_mode": "الوضع الداكن",
+    "dark_mode_desc": "تفعيل المظهر الليلي",
+    "language": "اللغة",
+    "notifications": "التنبيهات",
+    "promo_notifications": "إشعارات العروض",
+    "promo_notifications_desc": "الحصول على تنبيهات بأحدث الخصومات",
+    "order_status": "حالة الطلب",
+    "order_status_desc": "تتبع حالة طلباتك مباشرة",
+    "legal": "معلومات قانونية",
+    "privacy_policy": "سياسة الخصوصية",
+    "terms": "الشروط والأحكام",
+    "app_version": "إصدار التطبيق {{version}}"
+  },
+  "notifications": {
+    "title": "التنبيهات",
+    "types": {
+      "delivery_title": "تم توصيل طلبك",
+      "delivery_message": "تم توصيل طلبك #{{id}} بنجاح",
+      "order_prep_title": "قيد التجهيز",
+      "order_prep_message": "طلبك #{{id}} قيد التجهيز وسيتم الشحن قريباً",
+      "promo_title": "خصم 30%",
+      "promo_message": "خصم جديد على جميع الخضروات الطازجة",
+      "order_on_way_title": "في الطريق",
+      "order_on_way_message": "طلبك #{{id}} في الطريق إليك",
+      "rating_title": "تقييم جديد",
+      "rating_message": "شكراً لتقييمك! حصلت على 50 نقطة"
+    },
+    "time": {
+      "hour_ago": "منذ ساعة",
+      "three_hours_ago": "منذ 3 ساعات",
+      "yesterday": "أمس",
+      "two_days_ago": "منذ يومين"
+    }
+  },
   "auth": {
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
@@ -81,14 +121,32 @@
   },
   "profile": {
     "title": "حسابي",
-    "edit_profile": "الملف الشخصي",
+    "edit_profile": "تعديل الملف الشخصي",
     "save_changes": "حفظ التعديلات",
     "addresses": "عناويني",
     "add_address": "إضافة عنوان جديد",
     "payment_methods": "طرق الدفع",
     "notifications": "التنبيهات",
     "logout": "تسجيل الخروج",
-    "coming_soon": "ستتوفر هذه الميزة قريباً"
+    "coming_soon": "ستتوفر هذه الميزة قريباً",
+    "no_addresses": "لا توجد عناوين مسجلة",
+    "no_previous_orders": "لا يوجد طلبات سابقة",
+    "shop_now": "تسوق الآن",
+    "address_type": "نوع العنوان",
+    "edit_profile_desc": "تعديل بياناتك الشخصية",
+    "my_orders": "طلباتي",
+    "my_orders_desc": "عرض تاريخ طلباتك",
+    "my_addresses": "عناويني",
+    "my_addresses_desc": "إدارة مواقع التوصيل",
+    "favorites": "المفضلة",
+    "favorites_desc": "منتجاتك المفضلة",
+    "payment_methods_desc": "البطاقات والمحافظ",
+    "notifications_desc": "إعدادات الإشعارات",
+    "settings": "الإعدادات",
+    "settings_desc": "اللغة، المظهر، والمزيد",
+    "guest": "زائر",
+    "login_prompt": "سجل دخولك للحصول على ميزات أكثر",
+    "logout_confirm": "هل أنت متأكد من تسجيل الخروج؟"
   },
   "wishlist": {
     "title": "المفضلة",
@@ -111,7 +169,17 @@
   "payment": {
     "title": "طريقة الدفع",
     "select_method": "اختر وسيلة الدفع",
-    "confirm": "تأكيد الطلب والدفع"
+    "confirm": "تأكيد الطلب والدفع",
+    "card_holder_name": "اسم صاحب البطاقة",
+    "card_holder_placeholder": "أحمد محمد",
+    "card_number": "رقم البطاقة",
+    "expiry_date": "تاريخ الانتهاء",
+    "cvv": "CVV",
+    "order_total": "إجمالي الطلب",
+    "secure_payment": "دفع آمن ومشفر ١٠٠٪",
+    "credit_card": "بطاقة ائتمان",
+    "apple_pay": "Apple Pay",
+    "tazeeq_wallet": "محفظة طازج"
   },
   "order": {
     "title": "طلباتي",
@@ -140,6 +208,13 @@
     "welcome": "أهلاً بك في طازج",
     "delivery": "توصيل سريع",
     "organic": "عضوي ١٠٠٪",
-    "start": "ابدأ التسوق"
+    "start": "ابدأ التسوق",
+    "slide1_title": "أهلاً بك في {{appName}}",
+    "slide1_subtitle": "أفضل المنتجات الطازجة بين يديك",
+    "slide2_title": "توصيل سريع",
+    "slide2_subtitle": "وصل إلى باب منزلك في دقائق",
+    "slide3_title": "عضوي 100%",
+    "slide3_subtitle": "منتجات طبيعية وصحية للجميع",
+    "skip": "تخطي"
   }
 }

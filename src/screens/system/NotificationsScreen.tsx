@@ -16,19 +16,21 @@ interface Notification {
   type: 'order' | 'promo' | 'delivery';
 }
 
-const mockNotifications: Notification[] = [
-  { id: '1', icon: 'truck-delivery', title: 'تم توصيل طلبك', message: 'تم توصيل طلبك #1234 بنجاح', time: 'منذ ساعة', read: false, type: 'delivery' },
-  { id: '2', icon: 'shopping', title: 'قيد التجهيز', message: 'طلبك #1235 قيد التجهيز وسيتم الشحن قريباً', time: 'منذ 3 ساعات', read: false, type: 'order' },
-  { id: '3', icon: 'tag', title: 'خصم 30%', message: 'خصم جديد على جميع الخضروات الطازجة', time: 'أمس', read: true, type: 'promo' },
-  { id: '4', icon: 'truck-delivery', title: 'في الطريق', message: 'طلبك #1236 في الطريق إليك', time: 'أمس', read: true, type: 'delivery' },
-  { id: '5', icon: 'star', title: 'تقييم جديد', message: 'شكراً لتقييمك! حصلت على 50 نقطة', time: 'منذ يومين', read: true, type: 'order' },
-];
+// Moved mock data inside component to support i18n
 
 export function NotificationsScreen({ navigation }: any) {
   const { theme } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+
+  const mockNotifications: Notification[] = [
+    { id: '1', icon: 'truck-delivery', title: t('notifications.types.delivery_title'), message: t('notifications.types.delivery_message', { id: '1234' }), time: t('notifications.time.hour_ago'), read: false, type: 'delivery' },
+    { id: '2', icon: 'shopping', title: t('notifications.types.order_prep_title'), message: t('notifications.types.order_prep_message', { id: '1235' }), time: t('notifications.time.three_hours_ago'), read: false, type: 'order' },
+    { id: '3', icon: 'tag', title: t('notifications.types.promo_title'), message: t('notifications.types.promo_message'), time: t('notifications.time.yesterday'), read: true, type: 'promo' },
+    { id: '4', icon: 'truck-delivery', title: t('notifications.types.order_on_way_title'), message: t('notifications.types.order_on_way_message', { id: '1236' }), time: t('notifications.time.yesterday'), read: true, type: 'delivery' },
+    { id: '5', icon: 'star', title: t('notifications.types.rating_title'), message: t('notifications.types.rating_message'), time: t('notifications.time.two_days_ago'), read: true, type: 'order' },
+  ];
 
   const getIconColor = (type: string) => {
     switch (type) {
@@ -53,13 +55,13 @@ export function NotificationsScreen({ navigation }: any) {
         <MaterialCommunityIcons name={item.icon as any} size={24} color={getIconColor(item.type)} />
       </View>
       <View style={styles.content}>
-        <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]}>
+        <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>
           {item.title}
         </Text>
-        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 4 }]}>
+        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }]}>
           {item.message}
         </Text>
-        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 8, fontSize: 11 }]}>
+        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 8, fontSize: 11, textAlign: isRTL ? 'right' : 'left' }]}>
           {item.time}
         </Text>
       </View>
@@ -72,7 +74,7 @@ export function NotificationsScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.sectionTitle, { color: theme.colors.onPrimary }]}>التنبيهات</Text>
+        <Text style={[theme.typography.sectionTitle, { color: theme.colors.onPrimary }]}>{t('notifications.title')}</Text>
         <View style={{ width: 44 }} />
       </View>
 

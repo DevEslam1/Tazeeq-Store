@@ -183,7 +183,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign, marginTop: 24 }]}>
                     رقم الهاتف
                   </Text>
-                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: isRTL ? 'row-reverse' : 'row', borderRadius: theme.radius.card }]}>
+                  <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <Text style={[theme.typography.itemName, { color: theme.colors.primary }]}>+966</Text>
                     <TextInput
                       style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12, fontFamily: 'Cairo_400Regular' }]}
@@ -205,7 +205,7 @@ export function LoginScreen({ navigation }: any) {
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 24, textAlign: 'center' }]}>
                     تم إرسال رمز التحقق إلى {phone}
                   </Text>
-                  <View style={[styles.otpContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                  <View style={[styles.otpContainer, { flexDirection: 'row' }]}>
                     {otp.map((digit, index) => (
                       <TextInput
                         key={index}

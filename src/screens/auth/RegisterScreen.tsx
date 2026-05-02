@@ -137,7 +137,7 @@ export function RegisterScreen({ navigation }: any) {
 
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>رقم الهاتف</Text>
-            <View style={[styles.phoneInput, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View style={[styles.phoneInput, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, fontWeight: '700' }]}>+966</Text>
               <TextInput
                 style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12 }]}

@@ -1,6 +1,7 @@
 export type Product = {
   id: string;
   name: string;
+  nameEn?: string;
   category: string;
   weight: string;
   price: number;
@@ -10,12 +11,14 @@ export type Product = {
   image: string;
   inStock: boolean;
   description: string;
+  descriptionEn?: string;
   badges?: ('organic' | 'prime' | 'premium' | 'tazeeq')[];
 };
 
 export type Category = {
   id: string;
   name: string;
+  nameEn?: string;
   icon: string;
   image?: string;
   productCount?: number;

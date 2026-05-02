@@ -23,9 +23,9 @@ export function SettingsScreen({ navigation }: any) {
         <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
           <MaterialCommunityIcons name={icon} size={22} color={theme.colors.primary} />
         </View>
-        <View style={[styles.textContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-          <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{title}</Text>
-          {subtitle && <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{subtitle}</Text>}
+        <View style={[styles.textContainer, { alignItems: 'flex-start' }]}>
+          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{title}</Text>
+          {subtitle && <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{subtitle}</Text>}
         </View>
         {type === 'switch' ? (
           <Switch 
@@ -59,55 +59,55 @@ export function SettingsScreen({ navigation }: any) {
       </View>
 
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 40 }]}>
-        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left' }]}>المظهر والتجربة</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left' }]}>{t('settings.appearance')}</Text>
         <SettingItem 
           icon="brightness-4" 
-          title="الوضع الداكن" 
-          subtitle="تفعيل المظهر الليلي" 
+          title={t('settings.dark_mode')} 
+          subtitle={t('settings.dark_mode_desc')} 
           value={isDark} 
           onValueChange={toggleTheme} 
         />
         
         <SettingItem 
           icon="translate" 
-          title="اللغة" 
+          title={t('settings.language')} 
           subtitle={locale === 'ar' ? 'العربية' : 'English'} 
           type="chevron"
           onPress={() => setLocale(locale === 'ar' ? 'en' : 'ar')}
         />
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left', marginTop: 24 }]}>التنبيهات</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left', marginTop: 24 }]}>{t('settings.notifications')}</Text>
         <SettingItem 
           icon="bell-outline" 
-          title="إشعارات العروض" 
-          subtitle="الحصول على تنبيهات بأحدث الخصومات" 
+          title={t('settings.promo_notifications')} 
+          subtitle={t('settings.promo_notifications_desc')} 
           value={true} 
           onValueChange={() => {}} 
         />
         <SettingItem 
           icon="truck-delivery-outline" 
-          title="حالة الطلب" 
-          subtitle="تتبع حالة طلباتك مباشرة" 
+          title={t('settings.order_status')} 
+          subtitle={t('settings.order_status_desc')} 
           value={true} 
           onValueChange={() => {}} 
         />
 
-        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left', marginTop: 24 }]}>معلومات قانونية</Text>
+        <Text style={[styles.sectionTitle, { color: theme.colors.outline, textAlign: isRTL ? 'right' : 'left', marginTop: 24 }]}>{t('settings.legal')}</Text>
         <SettingItem 
           icon="shield-check-outline" 
-          title="سياسة الخصوصية" 
+          title={t('settings.privacy_policy')} 
           type="chevron"
           onPress={() => {}}
         />
         <SettingItem 
           icon="file-document-outline" 
-          title="الشروط والأحكام" 
+          title={t('settings.terms')} 
           type="chevron"
           onPress={() => {}}
         />
 
         <View style={styles.footer}>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant }]}>إصدار التطبيق 2.2.0</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant }]}>{t('settings.app_version', { version: '2.2.0' })}</Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant, marginTop: 4 }]}>Tazaj Shop © 2026</Text>
         </View>
       </ScrollView>

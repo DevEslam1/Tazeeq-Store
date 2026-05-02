@@ -32,7 +32,7 @@ export function EditProfileScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
-        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>تعديل الملف الشخصي</Text>
+        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>{t('profile.edit_profile')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -48,18 +48,18 @@ export function EditProfileScreen({ navigation }: any) {
 
         <GlassCard style={styles.form}>
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>الاسم</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={name}
               onChangeText={setName}
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>البريد الإلكتروني</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.email')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -67,16 +67,16 @@ export function EditProfileScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8 }]}>رقم الهاتف</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={phone}
               onChangeText={setPhone}
               keyboardType="phone-pad"
             />
           </View>
 
-          <AppButton title="حفظ التعديلات" onPress={handleSave} style={styles.saveButton} />
+          <AppButton title={t('profile.save_changes')} onPress={handleSave} style={styles.saveButton} />
         </GlassCard>
       </ScrollView>
     </View>

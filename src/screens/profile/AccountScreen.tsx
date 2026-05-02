@@ -48,22 +48,22 @@ export function AccountScreen({ navigation }: any) {
   };
   
   const menuItems = [
-    { icon: 'account-outline', title: 'الملف الشخصي', subtitle: 'تعديل بياناتك الشخصية', onPress: () => navigation.navigate('EditProfile') },
-    { icon: 'package-variant-closed', title: 'طلباتي', subtitle: 'عرض تاريخ طلباتك', onPress: () => navigation.navigate('OrderHistory') },
-    { icon: 'map-marker-outline', title: 'عناويني', subtitle: 'إدارة مواقع التوصيل', onPress: () => navigation.navigate('AddressList') },
-    { icon: 'heart-outline', title: 'المفضلة', subtitle: 'منتجاتك المفضلة', onPress: () => navigation.navigate('Wishlist') },
-    { icon: 'credit-card-outline', title: 'طرق الدفع', subtitle: 'البطاقات والمحافظ', onPress: () => Alert.alert('قريباً', 'ستتوفر هذه الميزة قريباً') },
-    { icon: 'bell-outline', title: 'التنبيهات', subtitle: 'إعدادات الإشعارات', onPress: () => navigation.navigate('Notifications') },
-    { icon: 'cog-outline', title: 'الإعدادات', subtitle: 'اللغة، المظهر، والمزيد', onPress: () => navigation.navigate('Settings') },
+    { icon: 'account-outline', title: t('profile.edit_profile'), subtitle: t('profile.edit_profile_desc'), onPress: () => navigation.navigate('EditProfile') },
+    { icon: 'package-variant-closed', title: t('profile.my_orders'), subtitle: t('profile.my_orders_desc'), onPress: () => navigation.navigate('OrderHistory') },
+    { icon: 'map-marker-outline', title: t('profile.my_addresses'), subtitle: t('profile.my_addresses_desc'), onPress: () => navigation.navigate('AddressList') },
+    { icon: 'heart-outline', title: t('profile.favorites'), subtitle: t('profile.favorites_desc'), onPress: () => navigation.navigate('Wishlist') },
+    { icon: 'credit-card-outline', title: t('profile.payment_methods'), subtitle: t('profile.payment_methods_desc'), onPress: () => Alert.alert(t('common.coming_soon'), t('common.feature_coming_soon')) },
+    { icon: 'bell-outline', title: t('profile.notifications'), subtitle: t('profile.notifications_desc'), onPress: () => navigation.navigate('Notifications') },
+    { icon: 'cog-outline', title: t('profile.settings'), subtitle: t('profile.settings_desc'), onPress: () => navigation.navigate('Settings') },
   ];
 
   const handleLogout = () => {
     Alert.alert(
-      'تسجيل الخروج',
-      'هل أنت متأكد من تسجيل الخروج؟',
+      t('profile.logout'),
+      t('profile.logout_confirm'),
       [
-        { text: 'إلغاء', style: 'cancel' },
-        { text: 'تسجيل الخروج', style: 'destructive', onPress: () => dispatch(logout()) },
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('profile.logout'), style: 'destructive', onPress: () => dispatch(logout()) },
       ]
     );
   };
@@ -76,10 +76,10 @@ export function AccountScreen({ navigation }: any) {
             <MaterialCommunityIcons name="account" size={48} color={theme.colors.onPrimary} />
           </View>
           <Text style={[theme.typography.h1, { marginTop: 16, color: theme.colors.onSurface }]}>
-            {user?.name || 'زائر'}
+            {user?.name || t('profile.guest')}
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
-            {user?.email || 'سجل دخولك للحصول على ميزات أكثر'}
+            {user?.email || t('profile.login_prompt')}
           </Text>
         </View>
 
@@ -91,9 +91,9 @@ export function AccountScreen({ navigation }: any) {
                   <View style={[styles.iconContainer, { backgroundColor: theme.colors.primaryContainer }]}>
                     <MaterialCommunityIcons name={item.icon as any} size={24} color={theme.colors.primary} />
                   </View>
-                  <View style={[styles.menuText, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-                    <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{item.title}</Text>
-                    <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{item.subtitle}</Text>
+                  <View style={[styles.menuText, { alignItems: 'flex-start' }]}>
+                    <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{item.title}</Text>
+                    <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{item.subtitle}</Text>
                   </View>
                   <MaterialCommunityIcons 
                     name={isRTL ? 'chevron-left' : 'chevron-right'} 
@@ -124,7 +124,7 @@ export function AccountScreen({ navigation }: any) {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>تسجيل الخروج</Text>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.error, fontWeight: '700' }]}>{t('profile.logout')}</Text>
         </TouchableOpacity>
         
         <View style={{ height: 100 }} />

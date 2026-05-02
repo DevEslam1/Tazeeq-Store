@@ -5,6 +5,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AppButton } from '../../components/common/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTranslation } from 'react-i18next';
+
 interface Slide {
   icon: string;
   title: string;
@@ -14,6 +16,7 @@ interface Slide {
 
 export function OnboardingScreen({ navigation }: any) {
   const { theme, locale } = useAppTheme();
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const flatListRef = useRef<FlatList>(null);
@@ -22,10 +25,10 @@ export function OnboardingScreen({ navigation }: any) {
   const appName = locale === 'ar' ? 'طازج' : 'Tazeeq';
 
   const slides: Slide[] = useMemo(() => [
-    { icon: 'leaf', title: `أهلاً بك في ${appName}`, subtitle: 'أفضل المنتجات الطازجة بين يديك', color: theme.colors.primary },
-    { icon: 'truck-fast', title: 'توصيل سريع', subtitle: 'وصل إلى باب منزلك في دقائق', color: theme.colors.secondaryContainer },
-    { icon: 'sprout', title: 'عضوي 100%', subtitle: 'منتجات طبيعية وصحية للجميع', color: theme.colors.primary },
-  ], [appName, theme.colors]);
+    { icon: 'leaf', title: t('onboarding.slide1_title', { appName }), subtitle: t('onboarding.slide1_subtitle'), color: theme.colors.primary },
+    { icon: 'truck-fast', title: t('onboarding.slide2_title'), subtitle: t('onboarding.slide2_subtitle'), color: theme.colors.secondaryContainer },
+    { icon: 'sprout', title: t('onboarding.slide3_title'), subtitle: t('onboarding.slide3_subtitle'), color: theme.colors.primary },
+  ], [appName, theme.colors, t]);
 
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
@@ -102,14 +105,14 @@ export function OnboardingScreen({ navigation }: any) {
         {renderDots()}
         
         <AppButton
-          title={currentIndex === slides.length - 1 ? 'ابدأ التسوق' : 'التالي'}
+          title={currentIndex === slides.length - 1 ? t('onboarding.start') : t('common.next')}
           onPress={handleNext}
           style={styles.button}
         />
         
         {currentIndex < slides.length - 1 && (
           <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.skipButton}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline }]}>تخطي</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline }]}>{t('onboarding.skip')}</Text>
           </TouchableOpacity>
         )}
       </View>

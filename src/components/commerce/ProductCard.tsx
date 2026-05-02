@@ -56,7 +56,7 @@ export const ProductCard = React.memo(function ProductCard({
   }, [product.id, cartQuantity, removeFromCart, updateQty]);
   const { theme } = useAppTheme();
   const { showSuccess } = useBanner();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -88,10 +88,15 @@ export const ProductCard = React.memo(function ProductCard({
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg }]}>
           <Image 
             source={{ uri: product.image }} 
-            style={[styles.image, { borderRadius: theme.radius.default }]} 
+            style={[styles.image, { borderRadius: theme.radius.default, opacity: product.inStock ? 1 : 0.5 }]} 
             contentFit="cover"
             transition={200}
           />
+          {!product.inStock && (
+            <View style={[styles.outOfStockOverlay, { borderRadius: theme.radius.default }]}>
+              <Text style={[theme.typography.meta, { color: 'white', fontWeight: '700' }]}>{t('common.out_of_stock')}</Text>
+            </View>
+          )}
           {product.badges && product.badges.length > 0 && (
             <View style={[styles.badgeContainer, { right: 12 }]}>
               {product.badges.map((badge, index) => (
@@ -114,7 +119,7 @@ export const ProductCard = React.memo(function ProductCard({
         
         <View style={styles.info}>
           <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]} numberOfLines={2}>
-            {product.name}
+            {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
           </Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2 }]}>
             {product.weight}
@@ -147,6 +152,12 @@ export const ProductCard = React.memo(function ProductCard({
                 >
                   <MaterialCommunityIcons name="plus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
+              </View>
+            ) : !product.inStock ? (
+              <View 
+                style={[styles.addButton, { backgroundColor: '#ef4444', borderRadius: theme.radius.full, opacity: 0.8 }]}
+              >
+                <MaterialCommunityIcons name="close" size={20} color="white" />
               </View>
             ) : (
               <TouchableOpacity 
@@ -256,6 +267,16 @@ const styles = StyleSheet.create({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  outOfStockOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

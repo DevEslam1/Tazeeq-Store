@@ -32,12 +32,12 @@ export function TrackingScreen({ navigation }: any) {
           initialRegion={region}
           customMapStyle={mode === 'dark' ? darkMapStyle : []}
         >
-          <Marker coordinate={destinationPos} title="منزلك">
+          <Marker coordinate={destinationPos} title={t('order.home')}>
             <View style={[styles.markerContainer, { backgroundColor: theme.colors.surface, borderColor: theme.colors.primary, borderWidth: 2 }]}>
               <MaterialCommunityIcons name="home" size={20} color={theme.colors.primary} />
             </View>
           </Marker>
-          <Marker coordinate={driverPos} title="المندوب">
+          <Marker coordinate={driverPos} title={t('order.driver')}>
             <View style={[styles.markerContainer, { backgroundColor: theme.colors.primary }]}>
               <MaterialCommunityIcons name="moped" size={20} color="white" />
             </View>
@@ -69,8 +69,8 @@ export function TrackingScreen({ navigation }: any) {
 
         <View style={styles.etaContainer}>
           <GlassCard style={styles.etaCard}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>يصل خلال</Text>
-            <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>١٨ دقيقة</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{t('order.arriving_in')}</Text>
+            <Text style={[theme.typography.h1, { color: theme.colors.primary }]}>{t('order.minutes', { count: 18 })}</Text>
           </GlassCard>
         </View>
       </View>
@@ -85,18 +85,18 @@ export function TrackingScreen({ navigation }: any) {
           ))}
         </View>
         <View style={[styles.stepLabels, { flexDirection: 'row' }]}>
-          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>تم الطلب</Text>
-          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>تجهيز</Text>
-          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>في الطريق</Text>
-          <Text style={[theme.typography.labelCaps, { color: theme.colors.outline }]}>وصل</Text>
+          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>{t('order.order_placed')}</Text>
+          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>{t('order.preparing')}</Text>
+          <Text style={[theme.typography.labelCaps, { color: theme.colors.primary }]}>{t('order.on_the_way')}</Text>
+          <Text style={[theme.typography.labelCaps, { color: theme.colors.outline }]}>{t('order.delivered')}</Text>
         </View>
 
         <GlassCard style={styles.driverCard}>
           <View style={[styles.driverInfo, { flexDirection: 'row' }]}>
             <Image source={{ uri: 'https://i.pravatar.cc/150?u=driver' }} style={styles.driverAvatar} />
             <View style={[styles.driverText, { alignItems: 'flex-start' }]}>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>محمد مبروك</Text>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>مندوب توصيل • ٤.٩ ★</Text>
+              <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>محمد مبروك</Text>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{t('order.delivery_driver')} • ٤.٩ ★</Text>
             </View>
             <View style={styles.driverActions}>
               <TouchableOpacity style={[styles.actionIcon, { backgroundColor: theme.colors.primary }]}>

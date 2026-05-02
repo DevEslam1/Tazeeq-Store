@@ -41,7 +41,7 @@ export function OrderHistoryScreen({ navigation }: any) {
     <TouchableOpacity onPress={() => navigation.navigate('OrderDetail', { orderId: item.id })}>
       <GlassCard style={styles.orderCard}>
         <View style={[styles.cardHeader, { flexDirection: flexRow }]}>
-          <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>طلب #{item.id.slice(-6).toUpperCase()}</Text>
+          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{t('common.order')} #{item.id.slice(-6).toUpperCase()}</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) + '20' }]}>
             <Text style={[theme.typography.label, { color: getStatusColor(item.status) }]}>{item.status}</Text>
           </View>
@@ -56,7 +56,7 @@ export function OrderHistoryScreen({ navigation }: any) {
           </View>
           <View style={styles.infoGroup}>
             <Text style={theme.typography.label}>{t('common.total')}</Text>
-            <Text style={[theme.typography.bodyMain, { fontWeight: '700', color: theme.colors.primary }]}>{item.total.toFixed(2)} ر.س</Text>
+            <Text style={[theme.typography.bodyMain, { fontWeight: '700', color: theme.colors.primary, textAlign: isRTL ? 'right' : 'left' }]}>{item.total.toFixed(2)} {t('common.sar')}</Text>
           </View>
         </View>
       </GlassCard>
@@ -69,7 +69,7 @@ export function OrderHistoryScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>طلباتي</Text>
+        <Text style={[theme.typography.h2, { color: 'white' }]}>{t('order.title')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -84,9 +84,9 @@ export function OrderHistoryScreen({ navigation }: any) {
           ) : (
             <View style={styles.emptyContainer}>
               <MaterialCommunityIcons name="package-variant" size={64} color={theme.colors.outlineVariant} />
-              <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 16 }]}>لا يوجد طلبات سابقة</Text>
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 16 }]}>{t('profile.no_previous_orders')}</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Main')} style={styles.shopNow}>
-                <Text style={{ color: theme.colors.primary, fontWeight: '700' }}>تسوق الآن</Text>
+                <Text style={{ color: theme.colors.primary, fontWeight: '700' }}>{t('profile.shop_now')}</Text>
               </TouchableOpacity>
             </View>
           )

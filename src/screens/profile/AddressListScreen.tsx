@@ -69,7 +69,7 @@ export function AddressListScreen({ navigation }: any) {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>عناويني</Text>
+        <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('profile.my_addresses')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -94,7 +94,7 @@ export function AddressListScreen({ navigation }: any) {
 
       <View style={[styles.footer, { backgroundColor: theme.colors.surface, paddingBottom: insets.bottom + 20, borderTopColor: theme.colors.border, borderTopWidth: 1 }]}>
         <AppButton
-          title="إضافة عنوان جديد"
+          title={t('profile.add_new_address')}
           onPress={() => navigation.navigate('AddAddress')}
         />
       </View>

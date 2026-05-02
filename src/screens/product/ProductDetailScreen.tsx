@@ -24,7 +24,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const { isRTL, flexRow } = useRTL();
   const { isTablet } = useDeviceType();
   const insets = useSafeAreaInsets();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const wishlisted = product ? isWishlisted(product.id) : false;
 
   const handleAddToCart = () => {
-    if (product) {
+    if (product && product.inStock) {
       addToCart(product.id, quantity);
       showSuccess(t('cart.added_success', { name: product.name }));
     }
@@ -109,7 +109,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
           <View style={styles.headerRow}>
             <View style={{ flex: 1 }}>
               <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface }]}>
-                {product.name}
+                {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
               </Text>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
                 {product.weight}
@@ -144,21 +144,23 @@ export function ProductDetailScreen({ route, navigation }: any) {
             {t('product.description')}
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, lineHeight: 24 }]}>
-            {product.description}
+            {i18n.language === 'en' && product.descriptionEn ? product.descriptionEn : product.description}
           </Text>
 
-          <View style={styles.quantityRow}>
-            <Text style={[theme.typography.sectionTitle]}>{t('common.quantity')}</Text>
-            <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
-              <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
-                <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
-              </TouchableOpacity>
-              <Text style={[theme.typography.itemName, { marginHorizontal: 16, color: theme.colors.primary }]}>{quantity}</Text>
-              <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
-                <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
-              </TouchableOpacity>
+          {product.inStock && (
+            <View style={styles.quantityRow}>
+              <Text style={[theme.typography.sectionTitle]}>{t('common.quantity')}</Text>
+              <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+                <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
+                  <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
+                </TouchableOpacity>
+                <Text style={[theme.typography.itemName, { marginHorizontal: 16, color: theme.colors.primary }]}>{quantity}</Text>
+                <TouchableOpacity onPress={() => setQuantity(quantity + 1)} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
+                  <MaterialCommunityIcons name="plus" size={24} color={theme.colors.primary} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          )}
         </View>
       </ScrollView>
 
@@ -179,9 +181,14 @@ export function ProductDetailScreen({ route, navigation }: any) {
           </Text>
         </View>
         <AppButton 
-          title={t('common.add_to_cart')} 
+          title={product.inStock ? t('common.add_to_cart') : t('common.out_of_stock')} 
           onPress={handleAddToCart} 
-          style={{ flex: 1, marginStart: 16 }}
+          disabled={!product.inStock}
+          style={{ 
+            flex: 1, 
+            marginStart: 16,
+            backgroundColor: product.inStock ? theme.colors.primary : '#ef4444'
+          }}
         />
       </View>
     </View>

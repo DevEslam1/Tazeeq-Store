@@ -20,7 +20,9 @@
     "reviews": "Reviews",
     "browse_products": "Browse Products",
     "currency": "SAR",
-    "no_products": "No products available"
+    "no_products": "No products available",
+    "out_of_stock": "Out of Stock",
+    "go_back": "Go Back"
   },
   "nav": {
     "shop": "Shop",
@@ -46,7 +48,8 @@
     "description": "Description",
     "reviews": "Reviews",
     "share": "Share",
-    "add_to_cart": "Add to Cart"
+    "add_to_cart": "Add to Cart",
+    "not_found": "Product not found"
   },
   "cart": {
     "title": "Shopping Cart",
@@ -64,6 +67,43 @@
     "add_more": "Add More Products",
     "promo_code": "Have a promo code? Add it here",
     "added_success": "{{name}} added to cart successfully!"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance & Experience",
+    "dark_mode": "Dark Mode",
+    "dark_mode_desc": "Enable dark theme",
+    "language": "Language",
+    "notifications": "Notifications",
+    "promo_notifications": "Promo Notifications",
+    "promo_notifications_desc": "Get alerts for latest discounts",
+    "order_status": "Order Status",
+    "order_status_desc": "Track your order status directly",
+    "legal": "Legal Information",
+    "privacy_policy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "app_version": "App Version {{version}}"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "types": {
+      "delivery_title": "Order Delivered",
+      "delivery_message": "Your order #{{id}} has been delivered successfully",
+      "order_prep_title": "Preparing Order",
+      "order_prep_message": "Your order #{{id}} is being prepared and will be shipped soon",
+      "promo_title": "30% Discount",
+      "promo_message": "New discount on all fresh vegetables",
+      "order_on_way_title": "On the Way",
+      "order_on_way_message": "Your order #{{id}} is on the way to you",
+      "rating_title": "New Rating",
+      "rating_message": "Thank you for your rating! You received 50 points"
+    },
+    "time": {
+      "hour_ago": "1 hour ago",
+      "three_hours_ago": "3 hours ago",
+      "yesterday": "Yesterday",
+      "two_days_ago": "2 days ago"
+    }
   },
   "auth": {
     "login": "Sign In",
@@ -88,7 +128,25 @@
     "payment_methods": "Payment Methods",
     "notifications": "Notifications",
     "logout": "Logout",
-    "coming_soon": "Coming soon"
+    "coming_soon": "Coming soon",
+    "no_addresses": "No saved addresses",
+    "no_previous_orders": "No previous orders",
+    "shop_now": "Shop Now",
+    "address_type": "Address Type",
+    "edit_profile_desc": "Edit your personal details",
+    "my_orders": "My Orders",
+    "my_orders_desc": "View your order history",
+    "my_addresses": "My Addresses",
+    "my_addresses_desc": "Manage delivery locations",
+    "favorites": "Favorites",
+    "favorites_desc": "Your favorite products",
+    "payment_methods_desc": "Cards and wallets",
+    "notifications_desc": "Notification settings",
+    "settings": "Settings",
+    "settings_desc": "Language, Appearance, and more",
+    "guest": "Guest",
+    "login_prompt": "Sign in to get more features",
+    "logout_confirm": "Are you sure you want to logout?"
   },
   "wishlist": {
     "title": "Wishlist",
@@ -111,7 +169,17 @@
   "payment": {
     "title": "Payment Method",
     "select_method": "Select Payment Method",
-    "confirm": "Confirm Order & Pay"
+    "confirm": "Confirm Order & Pay",
+    "card_holder_name": "Cardholder Name",
+    "card_holder_placeholder": "Ahmed Mohamed",
+    "card_number": "Card Number",
+    "expiry_date": "Expiry Date",
+    "cvv": "CVV",
+    "order_total": "Order Total",
+    "secure_payment": "100% Secure & Encrypted Payment",
+    "credit_card": "Credit Card",
+    "apple_pay": "Apple Pay",
+    "tazeeq_wallet": "Tazeeq Wallet"
   },
   "order": {
     "title": "My Orders",
@@ -140,6 +208,13 @@
     "welcome": "Welcome to Tazeeq",
     "delivery": "Fast Delivery",
     "organic": "100% Organic",
-    "start": "Start Shopping"
+    "start": "Start Shopping",
+    "slide1_title": "Welcome to {{appName}}",
+    "slide1_subtitle": "The best fresh products at your fingertips",
+    "slide2_title": "Fast Delivery",
+    "slide2_subtitle": "Delivered to your door in minutes",
+    "slide3_title": "100% Organic",
+    "slide3_subtitle": "Natural and healthy products for everyone",
+    "skip": "Skip"
   }
 }

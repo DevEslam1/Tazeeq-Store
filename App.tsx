@@ -7,22 +7,26 @@ import { Cairo_400Regular, Cairo_700Bold } from '@expo-google-fonts/cairo';
 import * as SplashScreen from 'expo-splash-screen';
 
 import { store } from './src/store';
-import { AppThemeProvider } from './src/theme';
+import { AppThemeProvider, useAppTheme } from './src/theme';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { GlobalBanner } from './src/components/common/GlobalBanner';
 import { useAuthBootstrap } from './src/hooks/useAuthBootstrap';
+import { ProductRepository } from './src/services/productService';
+import { CategoryRepository } from './src/services/categoryService';
 import './src/i18n';
 
 SplashScreen.preventAutoHideAsync();
 
 function AppContent() {
   useAuthBootstrap();
+  const { locale } = useAppTheme();
+  
   return (
-    <>
+    <View key={locale} style={{ flex: 1 }}>
       <AppNavigator />
       <GlobalBanner />
       <StatusBar />
-    </>
+    </View>
   );
 }
 
@@ -37,6 +41,19 @@ export default function App() {
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
+      
+      // One-time migration to add English fields to Firestore
+      const runMigration = async () => {
+        try {
+          await Promise.all([
+            ProductRepository.migrateToI18n(),
+            CategoryRepository.migrateToI18n()
+          ]);
+        } catch (e) {
+          console.error("Migration failed:", e);
+        }
+      };
+      runMigration();
     }
   }, [fontsLoaded]);
 

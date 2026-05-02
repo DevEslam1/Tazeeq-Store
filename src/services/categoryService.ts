@@ -9,10 +9,24 @@ export const CategoryRepository = {
       const q = query(categoriesRef, orderBy("name"));
       const querySnapshot = await getDocs(q);
       
-      return querySnapshot.docs.map(doc => ({
+      let categories = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Category[];
+
+      // Fallback if database is empty
+      if (categories.length === 0) {
+        categories = [
+          { id: 'cat1', name: 'أسماك ومأكولات بحرية', nameEn: 'Fish & Seafood', icon: 'fish' },
+          { id: 'cat2', name: 'ألبان وأجبان', nameEn: 'Dairy & Cheese', icon: 'cow' },
+          { id: 'cat3', name: 'خضروات وفواكه', nameEn: 'Fruits & Vegetables', icon: 'leaf' },
+          { id: 'cat4', name: 'مخبوزات', nameEn: 'Bakery', icon: 'bread' },
+          { id: 'cat5', name: 'لحوم وطبليات', nameEn: 'Meat & Poultry', icon: 'meat' },
+          { id: 'cat6', name: 'بقالة', nameEn: 'Grocery', icon: 'basket' },
+        ];
+      }
+
+      return categories;
     } catch (error) {
       console.error("Error fetching categories:", error);
       throw error;
@@ -31,6 +45,40 @@ export const CategoryRepository = {
     } catch (error) {
       console.error("Error fetching category by id:", error);
       throw error;
+    }
+  },
+
+  async migrateToI18n(): Promise<void> {
+    try {
+      const { updateDoc, doc: firestoreDoc } = await import('firebase/firestore');
+      const categoriesRef = collection(db, "categories");
+      const snapshot = await getDocs(categoriesRef);
+      
+      const batchPromises = snapshot.docs.map(async (d) => {
+        const data = d.data();
+        const name = data.name || '';
+        let nameEn = data.nameEn;
+
+        if (!nameEn) {
+          if (name.includes('سمك') || name.includes('أسماك')) nameEn = 'Fish & Seafood';
+          else if (name.includes('ألبان')) nameEn = 'Dairy & Cheese';
+          else if (name.includes('خضروات')) nameEn = 'Fruits & Vegetables';
+          else if (name.includes('مخبوزات')) nameEn = 'Bakery';
+          else if (name.includes('لحوم')) nameEn = 'Meat & Poultry';
+          else if (name.includes('بقالة')) nameEn = 'Grocery';
+          else nameEn = name; // Fallback to Arabic if no match, user can edit later
+        }
+
+        if (!data.nameEn) {
+          const docRef = firestoreDoc(db, "categories", d.id);
+          return updateDoc(docRef, { nameEn });
+        }
+      });
+
+      await Promise.all(batchPromises);
+      console.log("Category migration complete!");
+    } catch (error) {
+      console.error("Category migration error:", error);
     }
   }
 };

@@ -81,10 +81,12 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
           I18nManager.allowRTL(shouldBeRTL);
           I18nManager.forceRTL(shouldBeRTL);
           
-          // RTL changes require a full app restart in React Native
-          // For Expo, updates are sometimes immediate but often require a reload
+          // Force a full app reload to apply RTL changes across all native components
           if (Platform.OS !== 'web') {
-             // NativeModules.DevSettings.reload(); // Only for dev
+            // Using DevSettings for development environment
+            if (NativeModules.DevSettings) {
+              NativeModules.DevSettings.reload();
+            }
           }
         }
       },
