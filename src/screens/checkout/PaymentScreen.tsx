@@ -40,16 +40,19 @@ export function PaymentScreen({ navigation }: any) {
   const handleConfirm = async () => {
     if (!user?.id) return;
 
-    const orderData = {
+    const orderData: any = {
       status: 'Placed' as const,
       total: total,
       date: new Date().toISOString(),
       items: items.reduce((sum, item) => sum + item.quantity, 0),
       cartItems: items,
-      address: address || undefined,
       paymentMethod: selectedMethod,
       estimatedDelivery: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     };
+
+    if (address) {
+      orderData.address = address;
+    }
 
     try {
       await dispatch(createNewOrder({ userId: user.id, order: orderData })).unwrap();
