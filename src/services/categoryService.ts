@@ -60,16 +60,18 @@ export const CategoryRepository = {
         let nameEn = data.nameEn;
 
         if (!nameEn) {
-          if (name.includes('سمك') || name.includes('أسماك')) nameEn = 'Fish & Seafood';
-          else if (name.includes('ألبان')) nameEn = 'Dairy & Cheese';
-          else if (name.includes('خضروات')) nameEn = 'Fruits & Vegetables';
-          else if (name.includes('مخبوزات')) nameEn = 'Bakery';
-          else if (name.includes('لحوم')) nameEn = 'Meat & Poultry';
+          if (name.includes('سمك') || name.includes('أسماك')) nameEn = 'Seafood';
+          else if (name.includes('ألبان') || name.includes('جبن')) nameEn = 'Dairy';
+          else if (name.includes('خضروات') || name.includes('فواكه')) nameEn = 'Fruits & Veg';
+          else if (name.includes('مخبوزات') || name.includes('خبز')) nameEn = 'Bakery';
+          else if (name.includes('لحوم') || name.includes('دجاج')) nameEn = 'Meat';
           else if (name.includes('بقالة')) nameEn = 'Grocery';
-          else nameEn = name; // Fallback to Arabic if no match, user can edit later
+          else if (name.includes('مشروبات')) nameEn = 'Drinks';
+          else nameEn = name;
         }
 
-        if (!data.nameEn) {
+        // Force update if nameEn is missing or if it's the same as the Arabic name
+        if (!data.nameEn || data.nameEn === name) {
           const docRef = firestoreDoc(db, "categories", d.id);
           return updateDoc(docRef, { nameEn });
         }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image } from 'expo-image';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
@@ -28,22 +28,30 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const { addToCart } = useCart();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const { showSuccess } = useBanner();
 
+  const fetchProduct = async () => {
+    setLoading(true);
+    try {
+      const data = await ProductRepository.getById(productId);
+      setProduct(data);
+    } catch (error) {
+      console.error("Error fetching product detail:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        const data = await ProductRepository.getById(productId);
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching product detail:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchProduct();
+  }, [productId]);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
     fetchProduct();
   }, [productId]);
 
@@ -78,7 +86,17 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh} 
+            colors={[theme.colors.primary]} 
+            tintColor={theme.colors.primary}
+          />
+        }
+      >
         <View style={styles.imageContainer}>
           <Image 
             source={{ uri: product.image }} 
@@ -112,7 +130,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
                 {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
               </Text>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
-                {product.weight}
+                {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
               </Text>
             </View>
             <TouchableOpacity onPress={() => toggleWishlist(product.id)}>
@@ -149,7 +167,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
           {product.inStock && (
             <View style={styles.quantityRow}>
-              <Text style={[theme.typography.sectionTitle]}>{t('common.quantity')}</Text>
+              <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface }]}>{t('common.quantity')}</Text>
               <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
                 <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
                   <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />

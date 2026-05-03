@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -46,13 +46,14 @@ const SaleCountdown = React.memo(function SaleCountdown() {
 
 export function HomeScreen({ navigation }: any) {
   const { theme, isRTL } = useAppTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const { isTablet } = useDeviceType();
   const productWidth = isTablet ? '31%' : '46%';
   const [categories, setCategories] = useState<Category[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadHomeData = async () => {
     try {
@@ -66,8 +67,14 @@ export function HomeScreen({ navigation }: any) {
       console.error('Error fetching home data:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    loadHomeData();
+  }, []);
 
 
 
@@ -78,7 +85,18 @@ export function HomeScreen({ navigation }: any) {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 140 }]}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 140 }]}
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh} 
+            colors={[theme.colors.primary]} 
+            tintColor={theme.colors.primary}
+          />
+        }
+      >
 
 
         <View style={styles.section}>
@@ -103,7 +121,10 @@ export function HomeScreen({ navigation }: any) {
             renderItem={({ item }) => (
               <CategoryCard
                 category={item}
-                onPress={() => navigation.navigate('ProductList', { categoryId: item.id, categoryName: item.name })}
+                onPress={() => navigation.navigate('ProductList', { 
+                  categoryId: item.id, 
+                  categoryName: i18n.language === 'en' && item.nameEn ? item.nameEn : item.name 
+                })}
               />
             )}
             keyExtractor={(item) => item.id}

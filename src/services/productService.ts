@@ -124,6 +124,7 @@ export const ProductRepository = {
         
         let nameEn = data.nameEn;
         let descEn = data.descriptionEn;
+        let weightEn = data.weightEn;
 
         if (!nameEn) {
           if (name.includes('طماطم')) nameEn = 'Fresh Tomatoes';
@@ -133,16 +134,34 @@ export const ProductRepository = {
           else if (name.includes('خبز')) nameEn = 'White Bread';
           else if (name.includes('دجاج')) nameEn = 'Fresh Chicken';
           else if (name.includes('سمك')) nameEn = 'Fresh Fish';
+          else if (name.includes('موز')) nameEn = 'Yellow Bananas';
+          else if (name.includes('برتقال')) nameEn = 'Sweet Oranges';
+          else if (name.includes('فلفل')) nameEn = 'Bell Peppers';
+          else if (name.includes('بصل')) nameEn = 'Red Onions';
+          else if (name.includes('ثوم')) nameEn = 'Fresh Garlic';
           else nameEn = `Premium ${name || 'Product'}`;
+        }
+
+        if (!weightEn) {
+          const weight = data.weight || '';
+          if (weight.includes('كجم')) weightEn = weight.replace('كجم', 'kg');
+          else if (weight.includes('جم')) weightEn = weight.replace('جم', 'g');
+          else if (weight.includes('حبة')) weightEn = weight.replace('حبة', 'pc');
+          else weightEn = weight;
         }
 
         if (!descEn) {
           descEn = `High quality and fresh ${nameEn} sourced daily for the best taste and nutrition.`;
         }
 
-        if (!data.nameEn || !data.descriptionEn) {
+        let inStock = data.inStock ?? true;
+        if (nameEn === 'Fresh Tomatoes' || nameEn === 'Fresh Chicken') {
+          inStock = false;
+        }
+
+        if (!data.nameEn || !data.descriptionEn || !data.weightEn || (nameEn === 'Fresh Tomatoes' && data.inStock !== false)) {
           const docRef = firestoreDoc(db, "products", d.id);
-          return updateDoc(docRef, { nameEn, descriptionEn: descEn });
+          return updateDoc(docRef, { nameEn, descriptionEn: descEn, weightEn, inStock });
         }
       });
 

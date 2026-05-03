@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -19,6 +19,15 @@ export function OrderHistoryScreen({ navigation }: any) {
   const dispatch = useDispatch<AppDispatch>();
   const { addToCart } = useCart();
   const orders = useSelector(selectAllOrders);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    // Simulate orders refresh
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -105,6 +114,14 @@ export function OrderHistoryScreen({ navigation }: any) {
             <MaterialCommunityIcons name="receipt" size={64} color={theme.colors.outlineVariant} />
             <Text style={[theme.typography.bodyMain, { color: theme.colors.outlineVariant, marginTop: 16 }]}>لا توجد طلبات سابقة</Text>
           </View>
+        }
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh} 
+            colors={[theme.colors.primary]} 
+            tintColor={theme.colors.primary}
+          />
         }
       />
     </View>

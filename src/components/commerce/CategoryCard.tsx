@@ -91,6 +91,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     overflow: 'hidden',
+    height: 140, // Fixed height for uniformity
+    justifyContent: 'center',
   },
   iconContainer: {
     width: 64,

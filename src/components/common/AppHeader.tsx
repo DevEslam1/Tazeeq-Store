@@ -80,7 +80,7 @@ export function AppHeader() {
           >
             <MaterialCommunityIcons name="magnify" size={22} color={theme.colors.primary} />
             <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginHorizontal: 10 }]}>
-              {t('home.search_placeholder', { defaultValue: 'بحث عن خضروات، بقالة...' })}
+              {t('common.search')}
             </Text>
           </TouchableOpacity>
         </View>

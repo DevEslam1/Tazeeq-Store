@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,6 +17,15 @@ export function WishlistScreen({ navigation }: any) {
   const { getWishlistProducts } = useWishlist();
 
   const wishlistProducts = getWishlistProducts();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    // Simulate data refresh
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -56,6 +65,14 @@ export function WishlistScreen({ navigation }: any) {
           keyExtractor={(item) => item.id}
           numColumns={2}
           contentContainerStyle={styles.list}
+          refreshControl={
+            <RefreshControl 
+              refreshing={refreshing} 
+              onRefresh={onRefresh} 
+              colors={[theme.colors.primary]} 
+              tintColor={theme.colors.primary}
+            />
+          }
         />
       )}
     </View>

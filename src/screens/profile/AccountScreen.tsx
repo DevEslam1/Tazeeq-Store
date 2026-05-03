@@ -92,7 +92,7 @@ export function AccountScreen({ navigation }: any) {
                     <MaterialCommunityIcons name={item.icon as any} size={24} color={theme.colors.primary} />
                   </View>
                   <View style={[styles.menuText, { alignItems: 'flex-start' }]}>
-                    <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{item.title}</Text>
+                    <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left', color: theme.colors.onSurface }]}>{item.title}</Text>
                     <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{item.subtitle}</Text>
                   </View>
                   <MaterialCommunityIcons 
@@ -118,7 +118,7 @@ export function AccountScreen({ navigation }: any) {
           ) : (
             <>
               <MaterialCommunityIcons name="database-import" size={20} color={theme.colors.primary} />
-              <Text style={[theme.typography.itemName, { color: theme.colors.primary, marginStart: 8 }]}>Seed Firebase Data</Text>
+              <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, marginStart: 8 }]}>Seed Firebase Data</Text>
             </>
           )}
         </TouchableOpacity>

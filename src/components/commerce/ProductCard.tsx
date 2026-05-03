@@ -122,7 +122,7 @@ export const ProductCard = React.memo(function ProductCard({
             {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
           </Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2 }]}>
-            {product.weight}
+            {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
           </Text>
           
           {product.rating && (

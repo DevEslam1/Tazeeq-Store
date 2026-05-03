@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../../components/common/AppHeader';
@@ -15,22 +15,30 @@ import { useRTL } from '../../hooks/useRTL';
 export function CategoriesScreen({ navigation }: any) {
   const { theme } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchCategories = async () => {
+    try {
+      const data = await CategoryRepository.getAll();
+      setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await CategoryRepository.getAll();
-        setCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchCategories();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
     fetchCategories();
   }, []);
 
@@ -61,7 +69,10 @@ export function CategoriesScreen({ navigation }: any) {
             <View style={styles.itemContainer}>
               <CategoryCard 
                 category={item} 
-                onPress={() => navigation.navigate('ProductList', { categoryId: item.id, categoryName: item.name })} 
+                onPress={() => navigation.navigate('ProductList', { 
+                  categoryId: item.id, 
+                  categoryName: i18n.language === 'en' && item.nameEn ? item.nameEn : item.name 
+                })} 
               />
             </View>
           )}
@@ -69,6 +80,14 @@ export function CategoriesScreen({ navigation }: any) {
           numColumns={3}
           contentContainerStyle={styles.list}
           ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} /> : null}
+          refreshControl={
+            <RefreshControl 
+              refreshing={refreshing} 
+              onRefresh={onRefresh} 
+              colors={[theme.colors.primary]} 
+              tintColor={theme.colors.primary}
+            />
+          }
         />
       </View>
     </View>
