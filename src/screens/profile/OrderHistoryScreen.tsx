@@ -10,6 +10,7 @@ import { selectUser } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRTL } from '../../hooks/useRTL';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 export function OrderHistoryScreen({ navigation }: any) {
   const { theme } = useAppTheme();
@@ -71,6 +72,7 @@ export function OrderHistoryScreen({ navigation }: any) {
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('order.title')}</Text>
         <View style={{ width: 44 }} />
+        <HeaderProgressBar loading={loading} color={theme.colors.onPrimary} />
       </View>
 
       <FlatList
@@ -79,9 +81,7 @@ export function OrderHistoryScreen({ navigation }: any) {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          loading ? (
-            <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} />
-          ) : (
+          loading ? null : (
             <View style={styles.emptyContainer}>
               <MaterialCommunityIcons name="package-variant" size={64} color={theme.colors.outlineVariant} />
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 16 }]}>{t('profile.no_previous_orders')}</Text>

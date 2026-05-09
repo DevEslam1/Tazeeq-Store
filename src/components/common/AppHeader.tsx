@@ -8,8 +8,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../../hooks/useCart';
 import { useRTL } from '../../hooks/useRTL';
+import { HeaderProgressBar } from './HeaderProgressBar';
 
-export function AppHeader() {
+interface AppHeaderProps {
+  loading?: boolean;
+}
+
+export function AppHeader({ loading }: AppHeaderProps) {
   const { theme, mode, locale } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
   const { t } = useTranslation();
@@ -84,6 +89,7 @@ export function AppHeader() {
             </Text>
           </TouchableOpacity>
         </View>
+        <HeaderProgressBar loading={loading} />
       </BlurView>
     </View>
   );

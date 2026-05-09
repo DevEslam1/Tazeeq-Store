@@ -1,6 +1,7 @@
 import { collection, getDocs, doc, getDoc, query, where, limit, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 import { Product } from "../types/app";
+import { products as localProducts } from "../data/products";
 
 let searchPoolCache: Product[] | null = null;
 
@@ -21,7 +22,10 @@ export const ProductRepository = {
       })) as Product[];
     } catch (error) {
       console.error("Error fetching products:", error);
-      throw error;
+      if (categoryId) {
+        return localProducts.filter(p => p.category === categoryId).slice(0, maxResults);
+      }
+      return localProducts.slice(0, maxResults);
     }
   },
 
@@ -33,10 +37,11 @@ export const ProductRepository = {
       if (docSnap.exists()) {
         return { id: docSnap.id, ...docSnap.data() } as Product;
       }
-      return null;
+      // Fallback to local
+      return localProducts.find(p => p.id === productId) || null;
     } catch (error) {
       console.error("Error fetching product by id:", error);
-      throw error;
+      return localProducts.find(p => p.id === productId) || null;
     }
   },
 
@@ -85,7 +90,9 @@ export const ProductRepository = {
       return products;
     } catch (error) {
       console.error("Error fetching featured products:", error);
-      throw error;
+      // Fallback to local featured (those with 'tazeeq' badge or first 10)
+      const featured = localProducts.filter(p => p.badges?.includes('tazeeq'));
+      return featured.length > 0 ? featured.slice(0, 10) : localProducts.slice(0, 10);
     }
   },
 
@@ -105,8 +112,13 @@ export const ProductRepository = {
       );
     } catch (error) {
       console.error("Error searching products:", error);
-      searchPoolCache = null;
-      throw error;
+      searchPoolCache = localProducts;
+      const term = searchTerm.toLowerCase();
+      return searchPoolCache.filter(p => 
+        p.name.toLowerCase().includes(term) || 
+        (p.nameEn && p.nameEn.toLowerCase().includes(term)) || 
+        p.description.toLowerCase().includes(term)
+      );
     }
   },
 

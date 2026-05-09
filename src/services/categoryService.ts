@@ -1,6 +1,7 @@
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 import { Category } from "../types/app";
+import { categories as localCategories } from "../data/categories";
 
 export const CategoryRepository = {
   async getAll(): Promise<Category[]> {
@@ -9,27 +10,30 @@ export const CategoryRepository = {
       const q = query(categoriesRef, orderBy("name"));
       const querySnapshot = await getDocs(q);
       
-      let categories = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Category[];
+      const categories = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        let icon = data.icon || 'folder';
+        
+        // Sanitize legacy/invalid icon names from Firestore
+        if (icon === 'bread') icon = 'bread-slice';
+        if (icon === 'meat') icon = 'food-steak';
+        
+        return {
+          id: doc.id,
+          ...data,
+          icon
+        };
+      }) as Category[];
 
       // Fallback if database is empty
       if (categories.length === 0) {
-        categories = [
-          { id: 'cat1', name: 'أسماك ومأكولات بحرية', nameEn: 'Fish & Seafood', icon: 'fish' },
-          { id: 'cat2', name: 'ألبان وأجبان', nameEn: 'Dairy & Cheese', icon: 'cow' },
-          { id: 'cat3', name: 'خضروات وفواكه', nameEn: 'Fruits & Vegetables', icon: 'leaf' },
-          { id: 'cat4', name: 'مخبوزات', nameEn: 'Bakery', icon: 'bread-slice' },
-          { id: 'cat5', name: 'لحوم وطبليات', nameEn: 'Meat & Poultry', icon: 'food-steak' },
-          { id: 'cat6', name: 'بقالة', nameEn: 'Grocery', icon: 'basket' },
-        ];
+        return localCategories;
       }
 
       return categories;
     } catch (error) {
       console.error("Error fetching categories:", error);
-      throw error;
+      return localCategories;
     }
   },
 

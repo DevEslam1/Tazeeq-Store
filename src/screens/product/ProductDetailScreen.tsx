@@ -13,7 +13,7 @@ import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRTL } from '../../hooks/useRTL';
-import { ActivityIndicator } from 'react-native';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 import { useBanner } from '../../hooks/useBanner';
 import { useDeviceType } from '../../hooks/useDeviceType';
@@ -87,10 +87,10 @@ export function ProductDetailScreen({ route, navigation }: any) {
     }
   };
 
-  if (loading) {
+  if (loading && !product) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background, justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <HeaderProgressBar loading={true} />
       </View>
     );
   }
@@ -109,14 +109,16 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <HeaderProgressBar loading={loading || refreshing} />
       <ScrollView 
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh} 
-            colors={[theme.colors.primary]} 
-            tintColor={theme.colors.primary}
+            colors={['transparent']} 
+            tintColor={'transparent'}
+            progressBackgroundColor={'transparent'}
           />
         }
       >

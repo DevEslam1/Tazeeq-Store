@@ -8,9 +8,8 @@ import { CategoryRepository } from '../../services/categoryService';
 import { Category } from '../../types/app';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIndicator } from 'react-native';
-
 import { useRTL } from '../../hooks/useRTL';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 export function CategoriesScreen({ navigation }: any) {
   const { theme } = useAppTheme();
@@ -52,6 +51,7 @@ export function CategoriesScreen({ navigation }: any) {
           {t('categories.title')}
         </Text>
         <View style={{ width: 44 }} />
+        <HeaderProgressBar loading={loading || refreshing} />
       </View>
 
       <View style={styles.content}>
@@ -79,13 +79,14 @@ export function CategoriesScreen({ navigation }: any) {
           keyExtractor={(item) => item.id}
           numColumns={3}
           contentContainerStyle={styles.list}
-          ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} /> : null}
+          ListEmptyComponent={null}
           refreshControl={
             <RefreshControl 
               refreshing={refreshing} 
               onRefresh={onRefresh} 
-              colors={[theme.colors.primary]} 
-              tintColor={theme.colors.primary}
+              colors={['transparent']} 
+              tintColor={'transparent'}
+              progressBackgroundColor={'transparent'}
             />
           }
         />

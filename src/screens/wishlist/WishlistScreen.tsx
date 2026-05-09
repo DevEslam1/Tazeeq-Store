@@ -8,6 +8,7 @@ import { ProductCard } from '../../components/commerce/ProductCard';
 import { useRTL } from '../../hooks/useRTL';
 import { useWishlist } from '../../hooks/useWishlist';
 import { useAppTheme } from '../../theme';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 export function WishlistScreen({ navigation }: any) {
   const { theme } = useAppTheme();
@@ -35,6 +36,7 @@ export function WishlistScreen({ navigation }: any) {
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('wishlist.title')}</Text>
         <Text style={[theme.typography.bodyMain, { color: theme.colors.onPrimary, opacity: 0.8 }]}>({wishlistProducts.length})</Text>
+        <HeaderProgressBar loading={refreshing} color={theme.colors.onPrimary} />
       </View>
 
       {wishlistProducts.length === 0 ? (
@@ -69,8 +71,9 @@ export function WishlistScreen({ navigation }: any) {
             <RefreshControl 
               refreshing={refreshing} 
               onRefresh={onRefresh} 
-              colors={[theme.colors.primary]} 
-              tintColor={theme.colors.primary}
+              colors={['transparent']} 
+              tintColor={'transparent'}
+              progressBackgroundColor={'transparent'}
             />
           }
         />

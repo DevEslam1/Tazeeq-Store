@@ -10,6 +10,7 @@ import { useRTL } from '../../hooks/useRTL';
 import { ProductRepository } from '../../services/productService';
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 type FilterType = 'All' | 'Best Sellers' | 'Price: Low to High' | 'Price: High to Low';
 
@@ -76,6 +77,7 @@ export function ProductListScreen({ route, navigation }: any) {
         <TouchableOpacity style={styles.backButton}>
           <MaterialCommunityIcons name="tune-variant" size={24} color="white" />
         </TouchableOpacity>
+        <HeaderProgressBar loading={loading} color="white" />
       </View>
 
       <View style={{ zIndex: 10, backgroundColor: theme.colors.background }}>

@@ -98,7 +98,7 @@ export function HomeScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <AppHeader />
+      <AppHeader loading={refreshing} />
       <ScrollView 
         showsVerticalScrollIndicator={false} 
         contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top + 140 }]}
@@ -106,8 +106,9 @@ export function HomeScreen({ navigation }: any) {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh} 
-            colors={[theme.colors.primary]} 
-            tintColor={theme.colors.primary}
+            colors={['transparent']} 
+            tintColor={'transparent'}
+            progressBackgroundColor={'transparent'}
           />
         }
       >
@@ -137,7 +138,7 @@ export function HomeScreen({ navigation }: any) {
             renderItem={renderCategory}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.categoriesList}
-            ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginLeft: 20 }} /> : null}
+            ListEmptyComponent={null}
           />
         </View>
 

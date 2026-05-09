@@ -10,9 +10,8 @@ import { selectAllAddresses, selectAndSyncAddress, fetchAddresses, selectAddress
 import { selectUser } from '../../store/slices/authSlice';
 import { AppDispatch } from '../../store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIndicator } from 'react-native';
-
 import { useRTL } from '../../hooks/useRTL';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 export function AddressListScreen({ navigation }: any) {
   const { theme } = useAppTheme();
@@ -71,6 +70,7 @@ export function AddressListScreen({ navigation }: any) {
         </TouchableOpacity>
         <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('profile.my_addresses')}</Text>
         <View style={{ width: 44 }} />
+        <HeaderProgressBar loading={loading} color={theme.colors.onPrimary} />
       </View>
 
       <FlatList
@@ -79,9 +79,7 @@ export function AddressListScreen({ navigation }: any) {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          loading ? (
-            <ActivityIndicator color={theme.colors.primary} style={{ marginTop: 40 }} />
-          ) : (
+          loading ? null : (
             <View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
               <MaterialCommunityIcons name="map-marker-off-outline" size={64} color={theme.colors.outlineVariant} />
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 16 }]}>

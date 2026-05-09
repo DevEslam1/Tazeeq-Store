@@ -12,6 +12,7 @@ import { addRecentSearch, clearRecentSearches, clearSearch, selectRecentSearches
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
 import { useRTL } from '../../hooks/useRTL';
+import { HeaderProgressBar } from '../../components/common/HeaderProgressBar';
 
 export function SearchScreen({ navigation }: any) {
    const { theme } = useAppTheme();
@@ -99,14 +100,13 @@ export function SearchScreen({ navigation }: any) {
             onSubmitEditing={handleSubmitSearch}
             autoFocus
           />
-          {loading ? (
-            <ActivityIndicator size="small" color={theme.colors.primary} />
-          ) : inputValue.length > 0 ? (
+          {inputValue.length > 0 && !loading ? (
             <TouchableOpacity onPress={handleClear}>
               <MaterialCommunityIcons name="close-circle" size={20} color={theme.colors.outline} />
             </TouchableOpacity>
           ) : null}
         </View>
+        <HeaderProgressBar loading={loading} />
       </View>
 
       {inputValue.length === 0 && recentSearches.length > 0 && (
