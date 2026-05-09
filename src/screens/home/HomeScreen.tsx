@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, Touch
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import { useRTL } from '../../hooks/useRTL';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppHeader } from '../../components/common/AppHeader';
@@ -45,7 +46,8 @@ const SaleCountdown = React.memo(function SaleCountdown() {
 });
 
 export function HomeScreen({ navigation }: any) {
-  const { theme, isRTL } = useAppTheme();
+  const { theme } = useAppTheme();
+  const { isRTL } = useRTL();
   const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const { isTablet } = useDeviceType();
@@ -144,15 +146,15 @@ export function HomeScreen({ navigation }: any) {
             end={{ x: isRTL ? 0 : 1, y: 1 }}
             style={[styles.promoGradient, theme.elevation.panel]}
           >
-            <View style={styles.promoContent}>
-              <View style={{ flex: 1 }}>
-                <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: 'auto', writingDirection: isRTL ? 'rtl' : 'ltr', width: '100%' }]}>
+            <View style={[styles.promoContent, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+              <View style={{ flex: 1, width: '100%', alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+                <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: isRTL ? 'right' : 'left', width: '100%' }]}>
                   {t('home.promo_title')}
                 </Text>
                 <SaleCountdown />
               </View>
               <TouchableOpacity
-                style={[styles.ctaButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
+                style={[styles.ctaButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
                 onPress={() => navigation.navigate('ProductList', { categoryName: t('home.shop_now') })}
               >
                 <Text style={styles.ctaButtonText}>{t('home.shop_now')}</Text>

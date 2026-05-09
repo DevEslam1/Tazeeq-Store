@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,7 +22,8 @@ export function OrganicScreen({ navigation }: any) {
       setLoading(true);
       try {
         const products = await ProductRepository.getAll();
-        setOrganicProducts(products.filter((product) => product.badges?.includes('organic')));
+        const organic = products.filter((p) => p.badges && p.badges.includes('organic'));
+        setOrganicProducts(organic);
       } catch (error) {
         console.error('Error fetching organic products:', error);
       } finally {
@@ -37,16 +39,15 @@ export function OrganicScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <AppHeader />
 
-      <View style={[styles.banner, { marginTop: insets.top + 130, marginHorizontal: 20 }]}>
+      <View style={[styles.banner, { marginTop: insets.top + 140, marginHorizontal: 20 }]}>
         <Image
-          source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop' }}
+          source={{ uri: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=800&auto=format&fit=crop' }}
           style={styles.bannerImage}
+          contentFit="cover"
+          transition={300}
         />
         <View style={[styles.overlay, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
           <Text style={[theme.typography.h1, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>{t('common.organic')}</Text>
-          <Text style={[theme.typography.bodyMain, { color: 'white', opacity: 0.8, textAlign: isRTL ? 'right' : 'left' }]}>
-            Certified fresh products from the live catalog.
-          </Text>
         </View>
       </View>
 

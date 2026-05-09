@@ -39,7 +39,7 @@ export function AppHeader() {
           </TouchableOpacity>
 
           <View style={styles.logoContainer}>
-            <Text style={[styles.logo, { color: theme.colors.primary }]}>
+            <Text style={[styles.logo, { color: theme.colors.primary, textAlign: 'center' }]}>
               {appName}
             </Text>
           </View>

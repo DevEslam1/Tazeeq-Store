@@ -10,6 +10,12 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 124,
     image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1561131245-c8e48d481bb3?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1518977676601-b53f02bad675?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1486328228599-85db4443971f?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'طماطم طازجة محلية مقطوفة يدوياً من أفضل المزارع العضوية.',
     badges: ['organic', 'prime', 'tazeeq'],
@@ -23,6 +29,12 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 85,
     image: 'https://images.unsplash.com/photo-1556801712-76c82666360d?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1556801712-76c82666360d?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1622206141580-eb299161c518?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1546793665-c74683c3ef86?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1580052614034-c55d20bfee3b?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'خس روماني مقرمش طازج يومياً.',
     badges: ['prime', 'tazeeq'],
@@ -36,6 +48,12 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 210,
     image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1601039643914-bc106aa582ed?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1519162808019-7de1683fa2ad?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1559181567-c3190ca9959b?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'أفوكادو هاس ممتاز مستورد من المكسيك.',
     badges: ['premium', 'organic', 'tazeeq'],
@@ -49,6 +67,12 @@ export const products: Product[] = [
     rating: 4.6,
     reviewCount: 150,
     image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6bcd6?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1560806887-1e4cd0b6bcd6?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1576673471415-32204869d034?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1610398041406-693b88d92994?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'تفاح أحمر مقرمش حلو المذاق.',
     badges: ['organic', 'tazeeq'],
@@ -62,6 +86,12 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 180,
     image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1563636619-e9143da7973b?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1550583724-125581dc288b?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1528750955903-51842362763c?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1627485750519-dec9d81a541b?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'حليب طازج طبيعي 100% بدون إضافات.',
     badges: ['organic', 'tazeeq'],
@@ -114,6 +144,12 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 75,
     image: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1603048297172-c92544798d5a?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1551028150-64b9f398f678?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1607623814075-e51df1bdc822?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'لحم بقري طازج عالي الجودة.',
     badges: ['prime', 'tazeeq'],
@@ -127,6 +163,12 @@ export const products: Product[] = [
     rating: 4.6,
     reviewCount: 200,
     image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1587593810167-a84920ea0781?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1594969546059-d67b40778832?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1532550907401-a500c9a57435?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'دجاج طازج محلي.',
     badges: ['organic', 'tazeeq'],
@@ -140,6 +182,12 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 60,
     image: 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1498654077810-12c21d4d6dc3?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1551248429-4240a796b682?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'سمك هامور طازج مستخرج من البحر الأحمر.',
     badges: ['prime', 'tazeeq'],
@@ -153,6 +201,12 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 90,
     image: 'https://images.unsplash.com/photo-1565680018093-ebb6b9c8d7d4?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1565680018093-ebb6b9c8d7d4?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1559133965-f81d8d515a18?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1565680018093-ebb6b9c8d7d4?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1624462966581-bc6d768cbce5?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'روبيان طازج كبير الحجم.',
     badges: ['premium', 'tazeeq'],
@@ -166,6 +220,12 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 250,
     image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1506084868730-3423e9339e05?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1516746157575-bb1848324ee7?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'بيض طازج من مزارع الدواجن المحلية.',
     badges: ['organic', 'tazeeq'],
@@ -178,10 +238,16 @@ export const products: Product[] = [
     price: 15,
     rating: 4.5,
     reviewCount: 110,
-    image: 'https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?q=80&w=400&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1526462980173-10d6596825c9?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1619623880345-ef291f42289c?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1601611033230-00f8921a4253?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
-    description: 'زيتون أسود طازج بدون نسبة.',
-    badges: [],
+    description: 'زيتون أسود طازج ممتاز.',
+    badges: ['tazeeq'],
   },
   {
     id: '15',
@@ -191,10 +257,16 @@ export const products: Product[] = [
     price: 18,
     rating: 4.6,
     reviewCount: 140,
-    image: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=400&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600266177644-5ef66ba0123c?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1622597467820-f0109fbb3c1a?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
     description: 'عصير برتقال طبيعي 100%.',
-    badges: ['organic'],
+    badges: ['organic', 'tazeeq'],
   },
   {
     id: '16',
@@ -204,10 +276,16 @@ export const products: Product[] = [
     price: 5,
     rating: 4.8,
     reviewCount: 500,
-    image: 'https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=400&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=600&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1523362628744-0c14a37ef8d6?q=80&w=600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1560023907-5f339617ea30?q=80&w=600&auto=format&fit=crop'
+    ],
     inStock: true,
-    description: 'مياه معدنية طبيعية من ينابيع.',
-    badges: [],
+    description: 'مياه معدنية طبيعية نقية.',
+    badges: ['tazeeq'],
   },
 ];
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +23,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
   const { theme } = useAppTheme();
   const { isRTL, flexRow } = useRTL();
   const { isTablet } = useDeviceType();
+  const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const { t, i18n } = useTranslation();
   const [quantity, setQuantity] = useState(1);
@@ -57,9 +58,31 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
   const wishlisted = product ? isWishlisted(product.id) : false;
 
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const imageList = React.useMemo(() => {
+    if (!product) return [];
+    const list = [product.image];
+    if (product.images) {
+      product.images.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    }
+    return list;
+  }, [product]);
+
+  const currentImage = imageList[activeImageIndex] || (product?.image || '');
+
+  const handleImageError = useCallback(() => {
+    if (activeImageIndex < imageList.length - 1) {
+      setActiveImageIndex(prev => prev + 1);
+    }
+  }, [activeImageIndex, imageList.length]);
+
   const handleAddToCart = () => {
     if (product && product.inStock) {
-      addToCart(product, quantity);
+      // Use the currently viewed image for the cart snapshot
+      const productWithActualImage = { ...product, image: currentImage };
+      addToCart(productWithActualImage, quantity);
       showSuccess(t('cart.added_success', { name: product.name }));
     }
   };
@@ -98,12 +121,48 @@ export function ProductDetailScreen({ route, navigation }: any) {
         }
       >
         <View style={styles.imageContainer}>
-          <Image 
-            source={{ uri: product.image }} 
-            style={styles.image} 
-            contentFit="cover"
-            transition={300}
-          />
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={(e) => {
+              const x = e.nativeEvent.contentOffset.x;
+              const index = Math.round(x / windowWidth);
+              if (index !== activeImageIndex && index < imageList.length) {
+                setActiveImageIndex(index);
+              }
+            }}
+            scrollEventThrottle={16}
+          >
+            {imageList.map((img, idx) => (
+              <Image 
+                key={idx}
+                source={{ uri: img }} 
+                style={[styles.image, { width: windowWidth }]} 
+                contentFit="cover"
+                transition={300}
+                onError={handleImageError}
+              />
+            ))}
+          </ScrollView>
+
+          {imageList.length > 1 && (
+            <View style={styles.paginationDots}>
+              {imageList.map((_, idx) => (
+                <View 
+                  key={idx} 
+                  style={[
+                    styles.dot, 
+                    { 
+                      backgroundColor: activeImageIndex === idx ? theme.colors.primary : 'rgba(255,255,255,0.5)',
+                      width: activeImageIndex === idx ? 20 : 8
+                    }
+                  ]} 
+                />
+              ))}
+            </View>
+          )}
+
           <TouchableOpacity 
             onPress={() => navigation.goBack()} 
             style={[
@@ -124,12 +183,12 @@ export function ProductDetailScreen({ route, navigation }: any) {
         </View>
 
         <View style={[styles.content, { backgroundColor: theme.colors.surface }]}>
-          <View style={styles.headerRow}>
+          <View style={[styles.headerRow, { flexDirection: flexRow }]}>
             <View style={{ flex: 1 }}>
-              <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface }]}>
+              <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>
                 {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
               </Text>
-              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>
                 {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
               </Text>
             </View>
@@ -142,7 +201,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.ratingRow}>
+          <View style={[styles.ratingRow, { flexDirection: flexRow }]}>
             <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondaryContainer} />
             <Text style={[theme.typography.itemName, { marginHorizontal: 4 }]}>
               {product.rating}
@@ -152,23 +211,23 @@ export function ProductDetailScreen({ route, navigation }: any) {
             </Text>
           </View>
 
-          <View style={styles.badges}>
+          <View style={[styles.badges, { flexDirection: flexRow, justifyContent: isRTL ? 'flex-end' : 'flex-start' }]}>
             {product.badges?.map((badge, index) => (
               <Badge key={index} type={badge} />
             ))}
           </View>
 
-          <Text style={[theme.typography.sectionTitle, { marginTop: 24, marginBottom: 8 }]}>
+          <Text style={[theme.typography.sectionTitle, { marginTop: 24, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>
             {t('product.description')}
           </Text>
-          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, lineHeight: 24 }]}>
+          <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, lineHeight: 24, textAlign: isRTL ? 'right' : 'left' }]}>
             {i18n.language === 'en' && product.descriptionEn ? product.descriptionEn : product.description}
           </Text>
 
           {product.inStock && (
-            <View style={styles.quantityRow}>
+            <View style={[styles.quantityRow, { flexDirection: flexRow }]}>
               <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface }]}>{t('common.quantity')}</Text>
-              <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+              <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper, flexDirection: flexRow }]}>
                 <TouchableOpacity onPress={() => setQuantity(Math.max(1, quantity - 1))} style={[styles.stepperButton, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.sm }]}>
                   <MaterialCommunityIcons name="minus" size={24} color={theme.colors.primary} />
                 </TouchableOpacity>
@@ -187,10 +246,11 @@ export function ProductDetailScreen({ route, navigation }: any) {
         { 
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.outlineVariant,
-          paddingBottom: Math.max(insets.bottom, 20) + (isTablet ? 0 : 90) 
+          paddingBottom: Math.max(insets.bottom, 20) + (isTablet ? 0 : 90),
+          flexDirection: flexRow
         }
       ]}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}
           </Text>
@@ -284,6 +344,19 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 34,
     borderTopWidth: 1,
+  },
+  paginationDots: {
+    position: 'absolute',
+    bottom: 50,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 6,
+  },
+  dot: {
+    height: 8,
+    borderRadius: 4,
   },
 });
 

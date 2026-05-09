@@ -45,7 +45,8 @@ export default function App() {
       
       // One-time migration to refresh data and add English fields
       const runMigration = async () => {
-        const isMigrated = await AsyncStorage.getItem('tazeeq_migration_v2');
+        const MIGRATION_KEY = 'tazeeq_migration_v3';
+        const isMigrated = await AsyncStorage.getItem(MIGRATION_KEY);
         if (isMigrated === 'true') return;
 
         try {
@@ -55,7 +56,7 @@ export default function App() {
             ProductRepository.migrateToI18n(),
             CategoryRepository.migrateToI18n()
           ]);
-          await AsyncStorage.setItem('tazeeq_migration_v2', 'true');
+          await AsyncStorage.setItem(MIGRATION_KEY, 'true');
         } catch (e) {
           console.error("Migration failed:", e);
         }
@@ -68,7 +69,7 @@ export default function App() {
     return (
       <View style={{ flex: 1, backgroundColor: '#064E3B', justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontFamily: 'Cairo_700Bold', fontSize: 36, color: 'white' }}>Tazeeq</Text>
-        <Text style={{ fontFamily: 'BeVietnamPro_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>تزييق</Text>
+        <Text style={{ fontFamily: 'BeVietnamPro_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>طازج</Text>
       </View>
     );
   }

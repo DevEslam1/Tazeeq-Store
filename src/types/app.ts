@@ -10,6 +10,7 @@ export type Product = {
   rating: number;
   reviewCount: number;
   image: string;
+  images?: string[];
   inStock: boolean;
   description: string;
   descriptionEn?: string;

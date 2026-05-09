@@ -15,6 +15,7 @@ import { PriceTag } from '../common/PriceTag';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBanner } from '../../hooks/useBanner';
 import { useTranslation } from 'react-i18next';
+import { useRTL } from '../../hooks/useRTL';
 
 interface ProductCardProps {
   product: Product;
@@ -54,6 +55,7 @@ export const ProductCard = React.memo(function ProductCard({
     }
   }, [product.id, cartQuantity, removeFromCart, updateQty]);
   const { theme } = useAppTheme();
+  const { isRTL, flexRow } = useRTL();
   const { showSuccess } = useBanner();
   const { t, i18n } = useTranslation();
   const scale = useSharedValue(1);
@@ -70,8 +72,29 @@ export const ProductCard = React.memo(function ProductCard({
     scale.value = withSpring(1, { damping: 10, stiffness: 300 });
   };
 
+  const [imageIndex, setImageIndex] = React.useState(0);
+  const imageList = React.useMemo(() => {
+    const list = [product.image];
+    if (product.images) {
+      product.images.forEach(img => {
+        if (!list.includes(img)) list.push(img);
+      });
+    }
+    return list;
+  }, [product.image, product.images]);
+
+  const currentImage = imageList[imageIndex] || product.image;
+
+  const handleImageError = useCallback(() => {
+    if (imageIndex < imageList.length - 1) {
+      setImageIndex(prev => prev + 1);
+    }
+  }, [imageIndex, imageList.length]);
+
   const handleAddToCart = () => {
-    onAddToCart?.();
+    // Ensure the cart uses the same successful image the user sees
+    const productWithActualImage = { ...product, image: currentImage };
+    addToCart(productWithActualImage, 1);
     showSuccess(t('cart.added_success', { name: product.name }));
   };
 
@@ -86,10 +109,11 @@ export const ProductCard = React.memo(function ProductCard({
       <Animated.View style={[styles.card, theme.elevation.card, { backgroundColor: theme.colors.surfaceContainerLowest, borderColor: theme.colors.border, borderRadius: theme.radius.card }, animatedStyle]}>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.lg }]}>
           <Image 
-            source={{ uri: product.image }} 
+            source={{ uri: currentImage }} 
             style={[styles.image, { borderRadius: theme.radius.default, opacity: product.inStock ? 1 : 0.5 }]} 
             contentFit="cover"
             transition={200}
+            onError={handleImageError}
           />
           {!product.inStock && (
             <View style={[styles.outOfStockOverlay, { borderRadius: theme.radius.default }]}>
@@ -97,14 +121,14 @@ export const ProductCard = React.memo(function ProductCard({
             </View>
           )}
           {product.badges && product.badges.length > 0 && (
-            <View style={[styles.badgeContainer, { right: 12 }]}>
+            <View style={[styles.badgeContainer, { [isRTL ? 'left' : 'right']: 12 }]}>
               {product.badges.map((badge, index) => (
                 <Badge key={index} type={badge} />
               ))}
             </View>
           )}
           <TouchableOpacity
-            style={[styles.wishlistButton, { left: 8 }]}
+            style={[styles.wishlistButton, { [isRTL ? 'right' : 'left']: 8 }]}
             onPress={onToggleWishlist}
             disabled={!onToggleWishlist}
           >
@@ -116,38 +140,36 @@ export const ProductCard = React.memo(function ProductCard({
           </TouchableOpacity>
         </View>
         
-        <View style={styles.info}>
-          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]} numberOfLines={2}>
+        <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2}>
             {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
           </Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2 }]}>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2, textAlign: isRTL ? 'right' : 'left' }]}>
             {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
           </Text>
           
           {product.rating && (
-            <View style={styles.ratingRow}>
+            <View style={[styles.ratingRow, { flexDirection: flexRow }]}>
               <MaterialCommunityIcons name="star" size={14} color={theme.colors.secondaryContainer} />
-              <Text style={[theme.typography.meta, { color: theme.colors.onSurfaceVariant, marginStart: 4 }]}>
+              <Text style={[theme.typography.meta, { color: theme.colors.onSurfaceVariant, marginHorizontal: 4 }]}>
                 {product.rating} ({product.reviewCount || 0})
               </Text>
             </View>
           )}
           
-          <View style={styles.footer}>
+          <View style={[styles.footer, { flexDirection: flexRow }]}>
             {cartQuantity > 0 ? (
-              <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+              <View style={[styles.quantityControl, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper, flexDirection: flexRow }]}>
                 <TouchableOpacity 
                   style={styles.qtyButton}
                   onPress={onDecreaseQuantity}
-                  disabled={!onDecreaseQuantity}
                 >
                   <MaterialCommunityIcons name="minus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
-                <Text style={[theme.typography.itemName, { color: theme.colors.primary, minWidth: 20, textAlign: 'center' }]}>{cartQuantity}</Text>
+                <Text style={[theme.typography.meta, { color: theme.colors.primary, fontWeight: '700', minWidth: 20, textAlign: 'center' }]}>{cartQuantity}</Text>
                 <TouchableOpacity 
                   style={styles.qtyButton}
                   onPress={onIncreaseQuantity}
-                  disabled={!onIncreaseQuantity}
                 >
                   <MaterialCommunityIcons name="plus" size={16} color={theme.colors.primary} />
                 </TouchableOpacity>
@@ -161,7 +183,6 @@ export const ProductCard = React.memo(function ProductCard({
             ) : (
               <TouchableOpacity 
                 onPress={handleAddToCart}
-                disabled={!onAddToCart}
                 style={[styles.addButton, theme.elevation.button, { backgroundColor: theme.colors.primary, borderRadius: theme.radius.full }]}
               >
                 <MaterialCommunityIcons name="plus" size={20} color="white" />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Platform } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Image } from 'expo-image';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { products } from '../../data/products';
@@ -11,7 +12,7 @@ import { useRTL } from '../../hooks/useRTL';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Move CartItem outside to prevent hook violation and unnecessary re-renders
-const CartItem = ({ item, index, theme, t, updateQty, removeFromCart }: any) => {
+const CartItem = ({ item, index, theme, t, updateQty, removeFromCart, isRTL, flexRow }: any) => {
   return (
     <Animated.View 
       entering={FadeInUp.delay(index * 70).duration(300)}
@@ -24,15 +25,20 @@ const CartItem = ({ item, index, theme, t, updateQty, removeFromCart }: any) => 
         }
       ]}
     >
-      <View style={styles.itemContent}>
+      <View style={[styles.itemContent, { flexDirection: flexRow }]}>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.image }]}>
-          <Text style={styles.emojiFallback}>🥬</Text>
+          <Image 
+            source={{ uri: item.image }} 
+            style={{ width: '100%', height: '100%', borderRadius: theme.radius.image }} 
+            contentFit="cover"
+            transition={200}
+          />
         </View>
         <View style={styles.itemInfo}>
-          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface }]}>{item.name}</Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10 }]}>{item.weight || t('cart.one_unit')} • {t('cart.fresh_daily')}</Text>
-          <View style={styles.itemFooter}>
-            <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper }]}>
+          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>{item.name}</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }]}>{item.weight || t('cart.one_unit')} • {t('cart.fresh_daily')}</Text>
+          <View style={[styles.itemFooter, { flexDirection: flexRow }]}>
+            <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper, flexDirection: flexRow }]}>
               <TouchableOpacity 
                 style={styles.stepperButton}
                 onPress={() => updateQty(item.cartId, Math.max(1, item.quantity - 1))}
@@ -108,11 +114,11 @@ export function CartScreen({ navigation }: any) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.header, { paddingTop: insets.top + 16, backgroundColor: theme.colors.surface, borderBottomWidth: 1, borderBottomColor: theme.colors.border }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 16, backgroundColor: theme.colors.surface, borderBottomWidth: 1, borderBottomColor: theme.colors.border, flexDirection: flexRow }]}>
         <TouchableOpacity style={[styles.backButton, { borderColor: theme.colors.border, backgroundColor: theme.colors.surface }]} onPress={() => navigation.goBack()}>
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={18} color={theme.colors.primary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.pageTitle, { color: theme.colors.primary }]}>🛒 {t('cart.title')}</Text>
+        <Text style={[theme.typography.pageTitle, { color: theme.colors.primary, textAlign: isRTL ? 'right' : 'left' }]}>🛒 {t('cart.title')}</Text>
         <View style={[styles.badge, { backgroundColor: theme.colors.primaryContainer }]}>
           <Text style={[theme.typography.badge, { color: theme.colors.primary }]}>{items.length} {t('cart.items_unit')}</Text>
         </View>
@@ -130,6 +136,8 @@ export function CartScreen({ navigation }: any) {
             t={t} 
             updateQty={updateQty} 
             removeFromCart={removeFromCart} 
+            isRTL={isRTL}
+            flexRow={flexRow}
           />
         )}
         ListFooterComponent={

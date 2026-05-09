@@ -59,13 +59,16 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
 
   const value = useMemo<ThemeContextValue>(() => {
     const theme = mode === 'light' ? lightTheme : darkTheme;
+    const isRTL = locale === 'ar';
 
     return {
       theme,
       mode,
       isDark: mode === 'dark',
       locale,
-      isRTL: I18nManager.isRTL,
+      isRTL,
+      flexRow: (isRTL && !I18nManager.isRTL) ? 'row-reverse' : 'row',
+      textAlign: isRTL ? 'right' : 'left',
       toggleTheme: async () => {
         const newMode = mode === 'light' ? 'dark' : 'light';
         setMode(newMode);
