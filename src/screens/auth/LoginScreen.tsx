@@ -186,7 +186,7 @@ export function LoginScreen({ navigation }: any) {
                   <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <Text style={[theme.typography.itemName, { color: theme.colors.primary }]}>+966</Text>
                     <TextInput
-                      style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12, fontFamily: 'Cairo_400Regular' }]}
+                      style={[styles.input, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', marginHorizontal: 12, fontFamily: 'Cairo_400Regular' }]}
                       placeholder="5xxxxxxxx"
                       placeholderTextColor={theme.colors.onSurfaceVariant}
                       keyboardType="phone-pad"
@@ -233,7 +233,7 @@ export function LoginScreen({ navigation }: any) {
                   </Text>
                   <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
-                      style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
+                      style={[styles.input, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                       placeholder="example@email.com"
                       placeholderTextColor={theme.colors.outline}
                       keyboardType="email-address"
@@ -248,7 +248,7 @@ export function LoginScreen({ navigation }: any) {
                   </Text>
                   <View style={[styles.inputContainer, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row', borderRadius: theme.radius.card }]}>
                     <TextInput
-                      style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
+                      style={[styles.input, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                       placeholder="********"
                       placeholderTextColor={theme.colors.outline}
                       secureTextEntry={!showPassword}
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   switchTab: { flex: 1, borderRadius: 25, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
   switchText: { fontWeight: '700', fontSize: 13 },
   inputContainer: { alignItems: 'center', paddingHorizontal: 16, height: 60, borderRadius: 16, marginBottom: 16 },
-  input: { flex: 1, fontSize: 16, height: '100%' },
+  input: { flex: 1, fontSize: 16, height: '100%', fontFamily: 'Cairo_400Regular' },
   button: { width: '100%', marginTop: 12, height: 56 },
   otpContainer: { justifyContent: 'center', gap: 12, marginBottom: 32 },
   otpInput: { width: 64, height: 68, borderRadius: 16, fontSize: 32, textAlign: 'center', fontWeight: '800' },

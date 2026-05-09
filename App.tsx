@@ -5,6 +5,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { useFonts, BeVietnamPro_400Regular, BeVietnamPro_700Bold } from '@expo-google-fonts/be-vietnam-pro';
 import { Cairo_400Regular, Cairo_700Bold } from '@expo-google-fonts/cairo';
 import * as SplashScreen from 'expo-splash-screen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { store } from './src/store';
 import { AppThemeProvider, useAppTheme } from './src/theme';
@@ -44,11 +45,15 @@ export default function App() {
       
       // One-time migration to add English fields to Firestore
       const runMigration = async () => {
+        const isMigrated = await AsyncStorage.getItem('tazeeq_migration_v1');
+        if (isMigrated === 'true') return;
+
         try {
           await Promise.all([
             ProductRepository.migrateToI18n(),
             CategoryRepository.migrateToI18n()
           ]);
+          await AsyncStorage.setItem('tazeeq_migration_v1', 'true');
         } catch (e) {
           console.error("Migration failed:", e);
         }

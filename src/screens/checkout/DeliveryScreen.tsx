@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Platform } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export function DeliveryScreen({ navigation }: any) {
     longitudeDelta: 0.0421,
   });
   const [addressName, setAddressName] = useState('');
-  const GOOGLE_MAPS_API_KEY = 'AIzaSyDh2jY_1U8llzRSxBsJR3F6dEmbslvl6EY';
+  const GOOGLE_MAPS_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
   useEffect(() => {
     if (user?.id) {
@@ -70,9 +70,14 @@ export function DeliveryScreen({ navigation }: any) {
     }
   };
 
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const onRegionChangeComplete = (newRegion: any) => {
     setRegion(newRegion);
-    fetchAddress(newRegion.latitude, newRegion.longitude);
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(() => {
+      fetchAddress(newRegion.latitude, newRegion.longitude);
+    }, 600);
   };
 
   return (
@@ -263,6 +268,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     height: 100,
+    fontSize: 15,
+    fontFamily: 'Cairo_400Regular',
   },
   footer: {
     position: 'absolute',

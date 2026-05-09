@@ -50,8 +50,8 @@ export const selectCartItemCount = createSelector(
 export const selectCartTotal = createSelector(
   [selectCartItems],
   (items) => items.reduce((total, item) => {
-    const product = products.find(p => p.id === item.productId);
-    return total + (product?.price || 0) * item.quantity;
+    const price = item.productSnapshot?.price ?? products.find(p => p.id === item.productId)?.price ?? 0;
+    return total + price * item.quantity;
   }, 0)
 );
 

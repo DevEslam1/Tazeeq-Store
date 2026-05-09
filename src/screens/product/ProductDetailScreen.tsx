@@ -59,7 +59,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
   const handleAddToCart = () => {
     if (product && product.inStock) {
-      addToCart(product.id, quantity);
+      addToCart(product, quantity);
       showSuccess(t('cart.added_success', { name: product.name }));
     }
   };
@@ -137,13 +137,13 @@ export function ProductDetailScreen({ route, navigation }: any) {
               <MaterialCommunityIcons 
                 name={wishlisted ? 'heart' : 'heart-outline'} 
                 size={28} 
-                color={wishlisted ? '#ef4444' : theme.colors.primary} 
+                color={wishlisted ? theme.colors.error : theme.colors.primary} 
               />
             </TouchableOpacity>
           </View>
 
           <View style={styles.ratingRow}>
-            <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondary} />
+            <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondaryContainer} />
             <Text style={[theme.typography.itemName, { marginHorizontal: 4 }]}>
               {product.rating}
             </Text>
@@ -195,7 +195,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
             {t('common.total_price')}
           </Text>
           <Text style={[theme.typography.priceLarge, { color: theme.colors.primary }]}>
-            {product.price * quantity} {t('common.currency')}
+            {(product.price * quantity).toFixed(2)} {t('common.currency')}
           </Text>
         </View>
         <AppButton 

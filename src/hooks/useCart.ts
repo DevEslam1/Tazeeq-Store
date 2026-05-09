@@ -11,6 +11,7 @@ import {
   selectCartItemById 
 } from '../store/slices/cartSlice';
 import { RootState, AppDispatch } from '../store';
+import { Product } from '../types/app';
 
 export function useCart() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,8 +23,19 @@ export function useCart() {
     [items]
   );
 
-  const addToCart = (productId: string, quantity: number = 1) => {
-    dispatch(addItem({ productId, quantity }));
+  const addToCart = (product: Product, quantity: number = 1) => {
+    dispatch(addItem({ 
+      productId: product.id, 
+      quantity,
+      productSnapshot: {
+        name: product.name,
+        nameEn: product.nameEn,
+        price: product.price,
+        image: product.image,
+        weight: product.weight,
+        weightEn: product.weightEn,
+      }
+    }));
   };
 
   const removeFromCart = (productId: string) => {

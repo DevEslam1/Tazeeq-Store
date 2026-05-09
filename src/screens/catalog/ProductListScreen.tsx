@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,7 +11,7 @@ import { ProductRepository } from '../../services/productService';
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
 
-const filterOptions = ['All', 'Best Sellers', 'Price: Low to High', 'Price: High to Low'];
+type FilterType = 'All' | 'Best Sellers' | 'Price: Low to High' | 'Price: High to Low';
 
 export function ProductListScreen({ route, navigation }: any) {
   const { categoryId, categoryName } = route.params || {};
@@ -24,9 +23,16 @@ export function ProductListScreen({ route, navigation }: any) {
 
   const numColumns = isTablet ? 3 : 2;
   const productWidth = isTablet ? '31.3%' : '46%';
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('All');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const filterOptions: { id: FilterType; label: string }[] = [
+    { id: 'All', label: t('catalog.filter_all') },
+    { id: 'Best Sellers', label: t('catalog.filter_best_sellers') },
+    { id: 'Price: Low to High', label: t('catalog.filter_price_low') },
+    { id: 'Price: High to Low', label: t('catalog.filter_price_high') },
+  ];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -79,26 +85,26 @@ export function ProductListScreen({ route, navigation }: any) {
           style={styles.filterContainer}
           contentContainerStyle={styles.filterContent}
         >
-          {filterOptions.map((filter) => (
+          {filterOptions.map((option) => (
             <TouchableOpacity
-              key={filter}
+              key={option.id}
               style={[
                 styles.filterPill,
                 {
-                  backgroundColor: activeFilter === filter ? theme.colors.primary : theme.colors.surface,
-                  borderColor: activeFilter === filter ? theme.colors.primary : theme.colors.border,
+                  backgroundColor: activeFilter === option.id ? theme.colors.primary : theme.colors.surface,
+                  borderColor: activeFilter === option.id ? theme.colors.primary : theme.colors.border,
                   borderWidth: 1,
                 },
               ]}
-              onPress={() => setActiveFilter(filter)}
+              onPress={() => setActiveFilter(option.id)}
             >
               <Text
                 style={[
                   styles.filterText,
-                  { color: activeFilter === filter ? theme.colors.onPrimary : theme.colors.onSurface },
+                  { color: activeFilter === option.id ? theme.colors.onPrimary : theme.colors.onSurface },
                 ]}
               >
-                {filter}
+                {option.label}
               </Text>
             </TouchableOpacity>
           ))}

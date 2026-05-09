@@ -28,6 +28,14 @@ export type Category = {
 export type CartItem = {
   productId: string;
   quantity: number;
+  productSnapshot?: {
+    name: string;
+    nameEn?: string;
+    price: number;
+    image: string;
+    weight?: string;
+    weightEn?: string;
+  };
 };
 
 export type Address = {

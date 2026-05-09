@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Animated, Platform } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Platform } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { products } from '../../data/products';
@@ -11,28 +12,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Move CartItem outside to prevent hook violation and unnecessary re-renders
 const CartItem = ({ item, index, theme, t, updateQty, removeFromCart }: any) => {
-  const slideAnim = React.useRef(new Animated.Value(0)).current;
-  
-  React.useEffect(() => {
-    Animated.timing(slideAnim, {
-      toValue: 1,
-      duration: 300,
-      delay: index * 0.07,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
   return (
-    <Animated.View style={[
-      styles.itemCard,
-      theme.elevation.card,
-      { 
-        backgroundColor: theme.colors.surfaceContainerLowest, 
-        borderColor: theme.colors.border,
-        opacity: slideAnim,
-        transform: [{ translateY: slideAnim.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }]
-      }
-    ]}>
+    <Animated.View 
+      entering={FadeInUp.delay(index * 70).duration(300)}
+      style={[
+        styles.itemCard,
+        theme.elevation.card,
+        { 
+          backgroundColor: theme.colors.surfaceContainerLowest, 
+          borderColor: theme.colors.border,
+        }
+      ]}
+    >
       <View style={styles.itemContent}>
         <View style={[styles.imageContainer, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.image }]}>
           <Text style={styles.emojiFallback}>🥬</Text>
@@ -78,9 +69,10 @@ export function CartScreen({ navigation }: any) {
   const { items, total, removeFromCart, updateQty } = useCart();
 
   const cartProducts = items.map(item => {
-    const product = products.find(p => p.id === item.productId);
+    const product = item.productSnapshot || products.find(p => p.id === item.productId);
     return {
       ...product,
+      id: item.productId,
       quantity: item.quantity,
       cartId: item.productId,
     };
@@ -105,7 +97,7 @@ export function CartScreen({ navigation }: any) {
           <MaterialCommunityIcons name="cart-off" size={80} color={theme.colors.outlineVariant} />
           <Text style={[theme.typography.h2, { marginTop: 20, color: theme.colors.onSurface }]}>{t('cart.empty')}</Text>
           <AppButton 
-            title="تصفح المنتجات"
+            title={t('common.browse_products')}
             onPress={() => navigation.navigate('Main')}
             style={{ marginTop: 20, width: 200 }}
           />

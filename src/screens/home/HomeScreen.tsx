@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -55,32 +55,44 @@ export function HomeScreen({ navigation }: any) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const loadHomeData = async () => {
+  const loadHomeData = useCallback(async () => {
     try {
-      const [cats, products] = await Promise.all([
+      const [categoriesData, featuredData] = await Promise.all([
         CategoryRepository.getAll(),
-        ProductRepository.getFeatured(),
+        ProductRepository.getFeatured()
       ]);
-      setCategories(cats);
-      setFeaturedProducts(products);
+      setCategories(categoriesData);
+      setFeaturedProducts(featuredData);
     } catch (error) {
-      console.error('Error fetching home data:', error);
+      console.error("Error loading home data:", error);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  };
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    loadHomeData();
   }, []);
-
-
 
   useEffect(() => {
     loadHomeData();
-  }, []);
+  }, [loadHomeData]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadHomeData();
+  }, [loadHomeData]);
+
+  const renderCategory = useCallback(({ item }: { item: any }) => (
+    <CategoryCard
+      category={item}
+      onPress={() => navigation.navigate('ProductList', { 
+        categoryId: item.id, 
+        categoryName: i18n.language === 'en' && item.nameEn ? item.nameEn : item.name 
+      })}
+    />
+  ), [navigation, i18n.language]);
+
+  const navigateToProduct = useCallback((productId: string) => {
+    navigation.navigate('ProductDetail', { productId });
+  }, [navigation]);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -118,15 +130,7 @@ export function HomeScreen({ navigation }: any) {
             maxToRenderPerBatch={5}
             windowSize={5}
             removeClippedSubviews={true}
-            renderItem={({ item }) => (
-              <CategoryCard
-                category={item}
-                onPress={() => navigation.navigate('ProductList', { 
-                  categoryId: item.id, 
-                  categoryName: i18n.language === 'en' && item.nameEn ? item.nameEn : item.name 
-                })}
-              />
-            )}
+            renderItem={renderCategory}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.categoriesList}
             ListEmptyComponent={loading ? <ActivityIndicator color={theme.colors.primary} style={{ marginLeft: 20 }} /> : null}
@@ -186,7 +190,7 @@ export function HomeScreen({ navigation }: any) {
                   key={product.id}
                   product={product}
                   width={productWidth}
-                  onPress={() => navigation.navigate('ProductDetail', { productId: product.id })}
+                  onPress={() => navigateToProduct(product.id)}
                 />
               ))
             ) : (

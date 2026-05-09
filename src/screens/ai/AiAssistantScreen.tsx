@@ -65,9 +65,11 @@ export function AiAssistantScreen() {
   };
 
   const suggestions = [
-    t('ai.suggest_1') || "ما هي أفضل عروض اليوم؟",
-    t('ai.suggest_2') || "اقترح لي وصفة صحية بالدجاج",
-    t('ai.suggest_3') || "هل لديكم خضروات عضوية؟",
+    t('ai.suggest_1') || (isRTL ? "ما هي أفضل عروض اليوم؟" : "What are today's best offers?"),
+    t('ai.suggest_2') || (isRTL ? "اقترح لي وصفة صحية بالدجاج" : "Suggest a healthy chicken recipe"),
+    t('ai.suggest_3') || (isRTL ? "هل لديكم خضروات عضوية؟" : "Do you have organic vegetables?"),
+    t('ai.suggest_4') || (isRTL ? "أريد مقاضي لعمل كبسة" : "I need ingredients for Kabsa"),
+    t('ai.suggest_5') || (isRTL ? "متى مواعيد التوصيل المتاحة؟" : "What are the available delivery times?"),
   ];
 
   return (
@@ -113,8 +115,9 @@ export function AiAssistantScreen() {
                 <TouchableOpacity 
                   key={i} 
                   onPress={() => {
-                    setInputText(s);
-                    // Optionally send immediately
+                    if (isLoading) return;
+                    dispatch(addUserMessage(s));
+                    dispatch(sendMessage(s));
                   }}
                   style={[styles.suggestionItem, { backgroundColor: theme.colors.surfaceContainerHigh }]}
                 >
@@ -299,6 +302,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
     fontSize: 16,
+    fontFamily: 'Cairo_400Regular',
   },
   sendButton: {
     width: 50,

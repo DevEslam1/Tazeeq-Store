@@ -125,7 +125,7 @@ export function RegisterScreen({ navigation }: any) {
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>البريد الإلكتروني</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', color: theme.colors.onSurface, textAlign: 'left' }]}
+              style={[styles.input, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               placeholder="example@email.com"
               placeholderTextColor={theme.colors.outline}
               keyboardType="email-address"
@@ -140,7 +140,7 @@ export function RegisterScreen({ navigation }: any) {
             <View style={[styles.phoneInput, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, fontWeight: '700' }]}>+966</Text>
               <TextInput
-                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: 'left', marginHorizontal: 12 }]}
+                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', marginHorizontal: 12 }]}
                 placeholder="5xxxxxxxx"
                 placeholderTextColor={theme.colors.outline}
                 keyboardType="phone-pad"
@@ -155,7 +155,7 @@ export function RegisterScreen({ navigation }: any) {
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>كلمة المرور</Text>
             <View style={[styles.inputWrapper, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
               <TextInput
-                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: 'left' }]}
+                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder="********"
                 placeholderTextColor={theme.colors.outline}
                 secureTextEntry={!showPassword}
@@ -172,7 +172,7 @@ export function RegisterScreen({ navigation }: any) {
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>تأكيد كلمة المرور</Text>
             <View style={[styles.inputWrapper, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
               <TextInput
-                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: 'left' }]}
+                style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder="********"
                 placeholderTextColor={theme.colors.outline}
                 secureTextEntry={!showConfirmPassword}
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   card: { padding: 28, borderRadius: 24 },
   inputGroup: { marginBottom: 20 },
   inputWrapper: { borderRadius: 16, height: 56, paddingHorizontal: 16, alignItems: 'center' },
-  input: { height: 56, borderRadius: 16, paddingHorizontal: 16, fontSize: 16 },
+  input: { height: 56, borderRadius: 16, paddingHorizontal: 16, fontSize: 16, fontFamily: 'Cairo_400Regular' },
   eyeIcon: { padding: 8 },
   phoneInput: { alignItems: 'center', paddingHorizontal: 16, borderRadius: 16, height: 56 },
   termsRow: { alignItems: 'center', marginVertical: 16 },

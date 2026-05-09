@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -11,20 +11,20 @@ import { products } from '../../data/products';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function ConfirmationScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
+  const { theme, locale } = useAppTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const activeOrder = useSelector(selectActiveOrder);
 
   const orderItems = activeOrder?.cartItems?.map(item => {
-    const product = products.find(p => p.id === item.productId);
+    const product = item.productSnapshot || products.find(p => p.id === item.productId);
     return product;
   }).filter(Boolean) || [];
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'اليوم';
+    if (!dateStr) return locale === 'ar' ? 'اليوم' : 'Today';
     const date = new Date(dateStr);
-    return date.toLocaleDateString('ar-SA', { hour: 'numeric', minute: '2-digit' });
+    return date.toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US', { hour: 'numeric', minute: '2-digit' });
   };
 
   return (
@@ -37,11 +37,11 @@ export function ConfirmationScreen({ navigation }: any) {
           <View style={[styles.iconBadge, { backgroundColor: theme.colors.primary }]}>
             <MaterialCommunityIcons name="check" size={48} color={theme.colors.onPrimary} />
           </View>
-          <Text style={[theme.typography.h1, { color: theme.colors.primary, marginTop: 24 }]}>
-            تم طلبك بنجاح!
+          <Text style={[theme.typography.h1, { color: theme.colors.primary, marginTop: 24, textAlign: 'center' }]}>
+            {t('checkout_success.title')}
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 8 }]}>
-            رقم الطلب: {activeOrder?.id || '#TZ-00000'}
+            {t('checkout_success.order_number')}: {activeOrder?.id || '#TZ-00000'}
           </Text>
         </View>
 
@@ -49,7 +49,7 @@ export function ConfirmationScreen({ navigation }: any) {
           <View style={[styles.infoRow, { flexDirection: 'row' }]}>
             <MaterialCommunityIcons name="clock-outline" size={24} color={theme.colors.primary} />
             <View style={[styles.infoText, { alignItems: 'flex-start' }]}>
-              <Text style={theme.typography.bodySecondary}>وقت التوصيل المتوقع</Text>
+              <Text style={theme.typography.bodySecondary}>{t('checkout_success.estimated_delivery')}</Text>
               <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{formatDate(activeOrder?.estimatedDelivery)}</Text>
             </View>
           </View>
@@ -57,15 +57,17 @@ export function ConfirmationScreen({ navigation }: any) {
           <View style={[styles.infoRow, { flexDirection: 'row' }]}>
             <MaterialCommunityIcons name="map-marker-outline" size={24} color={theme.colors.primary} />
             <View style={[styles.infoText, { alignItems: 'flex-start' }]}>
-              <Text style={theme.typography.bodySecondary}>عنوان التوصيل</Text>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{activeOrder?.address?.details || 'العنوان غير محدد'}</Text>
+              <Text style={theme.typography.bodySecondary}>{t('checkout_success.delivery_address')}</Text>
+              <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]} numberOfLines={2}>
+                {activeOrder?.address?.details || (locale === 'ar' ? 'العنوان غير محدد' : 'Address not set')}
+              </Text>
             </View>
           </View>
         </GlassCard>
 
-        <Text style={[theme.typography.h2, { marginVertical: 16 }]}>ملخص المنتجات</Text>
+        <Text style={[theme.typography.h2, { marginVertical: 16 }]}>{t('checkout_success.items_summary')}</Text>
         <View style={styles.itemsPreview}>
-          {orderItems.slice(0, 3).map((product, index) => (
+          {orderItems.slice(0, 4).map((product, index) => (
             product && (
               <Image 
                 key={index}
@@ -74,26 +76,28 @@ export function ConfirmationScreen({ navigation }: any) {
               />
             )
           ))}
-          {orderItems.length > 3 && (
+          {orderItems.length > 4 && (
             <View style={[styles.moreThumb, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
-              <Text style={[theme.typography.bodySecondary, { fontWeight: '700' }]}>+{orderItems.length - 3}</Text>
+              <Text style={[theme.typography.bodySecondary, { fontWeight: '700' }]}>+{orderItems.length - 4}</Text>
             </View>
           )}
         </View>
 
         <View style={[styles.totalRow, { borderTopColor: theme.colors.outlineVariant }]}>
-          <Text style={theme.typography.bodyMain}>الإجمالي</Text>
-          <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{activeOrder?.total?.toFixed(2) || '0'} ر.س</Text>
+          <Text style={theme.typography.bodyMain}>{t('checkout_success.total')}</Text>
+          <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>
+            {activeOrder?.total?.toFixed(2) || '0'} {t('common.sar')}
+          </Text>
         </View>
 
         <View style={styles.actions}>
           <AppButton 
-            title="تتبع الطلب" 
+            title={t('checkout_success.track_order')} 
             onPress={() => navigation.navigate('Order', { screen: 'Tracking', params: { orderId: activeOrder?.id } })} 
             style={styles.actionBtn}
           />
           <AppButton 
-            title="العودة للرئيسية" 
+            title={t('checkout_success.back_home')} 
             onPress={() => navigation.navigate('Main')} 
             variant="glass"
             style={styles.actionBtn}
@@ -176,4 +180,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-

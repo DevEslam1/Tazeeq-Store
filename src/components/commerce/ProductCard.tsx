@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, DimensionValue } from 'react-
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { selectCartItemById } from '../../store/slices/cartSlice';
-import { selectWishlistItems } from '../../store/slices/wishlistSlice';
+import { selectWishlistItems, selectIsWishlisted } from '../../store/slices/wishlistSlice';
 import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
 import { Image } from 'expo-image';
@@ -29,8 +29,7 @@ export const ProductCard = React.memo(function ProductCard({
 }: ProductCardProps) {
   const cartItem = useSelector((state: RootState) => selectCartItemById(state, product.id));
   const cartQuantity = cartItem?.quantity || 0;
-  const wishlistItems = useSelector(selectWishlistItems);
-  const wishlisted = wishlistItems.includes(product.id);
+  const wishlisted = useSelector((state: RootState) => selectIsWishlisted(state, product.id));
 
   const { addToCart, updateQty, removeFromCart } = useCart();
   const { toggle } = useWishlist();
@@ -40,12 +39,12 @@ export const ProductCard = React.memo(function ProductCard({
   }, [product.id, toggle]);
 
   const onAddToCart = useCallback(() => {
-    addToCart(product.id, 1);
-  }, [product.id, addToCart]);
+    addToCart(product, 1);
+  }, [product, addToCart]);
 
   const onIncreaseQuantity = useCallback(() => {
-    addToCart(product.id, 1);
-  }, [product.id, addToCart]);
+    addToCart(product, 1);
+  }, [product, addToCart]);
 
   const onDecreaseQuantity = useCallback(() => {
     if (cartQuantity <= 1) {
@@ -112,7 +111,7 @@ export const ProductCard = React.memo(function ProductCard({
             <MaterialCommunityIcons 
               name={wishlisted ? 'heart' : 'heart-outline'} 
               size={20} 
-              color={wishlisted ? '#ef4444' : theme.colors.onSurfaceVariant} 
+              color={wishlisted ? theme.colors.error : theme.colors.onSurfaceVariant} 
             />
           </TouchableOpacity>
         </View>
@@ -127,7 +126,7 @@ export const ProductCard = React.memo(function ProductCard({
           
           {product.rating && (
             <View style={styles.ratingRow}>
-              <MaterialCommunityIcons name="star" size={14} color="#f59e0b" />
+              <MaterialCommunityIcons name="star" size={14} color={theme.colors.secondaryContainer} />
               <Text style={[theme.typography.meta, { color: theme.colors.onSurfaceVariant, marginStart: 4 }]}>
                 {product.rating} ({product.reviewCount || 0})
               </Text>

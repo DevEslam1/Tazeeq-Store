@@ -156,7 +156,8 @@
     "placeholder": "Search for products...",
     "recent": "Recent Searches",
     "no_results": "No results found",
-    "clear_recent": "Clear All"
+    "clear_recent": "Clear All",
+    "back_hint": "Try a more specific keyword."
   },
   "delivery": {
     "title": "Delivery Information",
@@ -165,6 +166,22 @@
     "map_preview": "Map Preview",
     "details": "Additional Details",
     "notes": "Notes for delivery"
+  },
+  "checkout_success": {
+    "title": "Order Placed Successfully!",
+    "order_number": "Order Number",
+    "estimated_delivery": "Estimated Delivery Time",
+    "delivery_address": "Delivery Address",
+    "items_summary": "Products Summary",
+    "track_order": "Track Order",
+    "back_home": "Back to Home",
+    "total": "Total"
+  },
+  "catalog": {
+    "filter_all": "All",
+    "filter_best_sellers": "Best Sellers",
+    "filter_price_low": "Price: Low to High",
+    "filter_price_high": "Price: High to Low"
   },
   "payment": {
     "title": "Payment Method",

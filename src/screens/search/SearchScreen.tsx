@@ -11,12 +11,14 @@ import { AppDispatch } from '../../store';
 import { addRecentSearch, clearRecentSearches, clearSearch, selectRecentSearches, selectSearchQuery, selectSearchResults, setQuery, setSearchResults } from '../../store/slices/searchSlice';
 import { useAppTheme } from '../../theme';
 import { Product } from '../../types/app';
+import { useRTL } from '../../hooks/useRTL';
 
 export function SearchScreen({ navigation }: any) {
-  const { theme } = useAppTheme();
-  const { t } = useTranslation();
-  const insets = useSafeAreaInsets();
-  const dispatch = useDispatch<AppDispatch>();
+   const { theme } = useAppTheme();
+   const { t } = useTranslation();
+   const { isRTL, flexRow } = useRTL();
+   const insets = useSafeAreaInsets();
+   const dispatch = useDispatch<AppDispatch>();
 
   const query = useSelector(selectSearchQuery);
   const recentSearches = useSelector(selectRecentSearches);
@@ -85,11 +87,11 @@ export function SearchScreen({ navigation }: any) {
             },
           ]}
         >
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <MaterialCommunityIcons name="arrow-left" size={24} color={theme.colors.outline} />
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={24} color={theme.colors.primary} />
           </TouchableOpacity>
           <TextInput
-            style={[styles.input, { color: theme.colors.onSurface, textAlign: 'left' }]}
+            style={[styles.input, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
             placeholder={t('search.placeholder')}
             placeholderTextColor={theme.colors.outline}
             value={inputValue}
@@ -122,6 +124,9 @@ export function SearchScreen({ navigation }: any) {
               </TouchableOpacity>
             ))}
           </View>
+          <Text style={[theme.typography.bodySecondary, { textAlign: 'center', marginTop: 8, color: theme.colors.onSurfaceVariant }]}>
+            {t('search.back_hint')}
+          </Text>
         </View>
       )}
 
@@ -159,11 +164,17 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   searchBarContainer: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 },
   searchBar: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, height: 56, borderRadius: 28 },
-  input: { flex: 1, fontSize: 16, marginHorizontal: 12 },
+  input: { flex: 1, fontSize: 16, marginHorizontal: 12, fontFamily: 'Cairo_400Regular' },
   recentSection: { paddingHorizontal: 20 },
   recentHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   chipsContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 24 },
   list: { paddingHorizontal: 12, paddingBottom: 100 },
+  backButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

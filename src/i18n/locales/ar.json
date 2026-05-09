@@ -156,7 +156,8 @@
     "placeholder": "ابحث عن منتجات...",
     "recent": "عمليات البحث الأخيرة",
     "no_results": "لا توجد نتائج",
-    "clear_recent": "مسح الكل"
+    "clear_recent": "مسح الكل",
+    "back_hint": "حاول استخدام كلمة بحث أكثر دقة."
   },
   "delivery": {
     "title": "معلومات التوصيل",
@@ -165,6 +166,22 @@
     "map_preview": "معاينة الموقع على الخريطة",
     "details": "تفاصيل إضافية",
     "notes": "ملاحظات للمندوب"
+  },
+  "checkout_success": {
+    "title": "تم طلبك بنجاح!",
+    "order_number": "رقم الطلب",
+    "estimated_delivery": "وقت التوصيل المتوقع",
+    "delivery_address": "عنوان التوصيل",
+    "items_summary": "ملخص المنتجات",
+    "track_order": "تتبع الطلب",
+    "back_home": "العودة للرئيسية",
+    "total": "الإجمالي"
+  },
+  "catalog": {
+    "filter_all": "الكل",
+    "filter_best_sellers": "الأكثر مبيعاً",
+    "filter_price_low": "السعر: من الأقل للأعلى",
+    "filter_price_high": "السعر: من الأعلى للأقل"
   },
   "payment": {
     "title": "طريقة الدفع",

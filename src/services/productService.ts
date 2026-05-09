@@ -2,6 +2,8 @@ import { collection, getDocs, doc, getDoc, query, where, limit, orderBy } from "
 import { db } from "./firebase";
 import { Product } from "../types/app";
 
+let searchPoolCache: Product[] | null = null;
+
 export const ProductRepository = {
   async getAll(categoryId?: string, maxResults: number = 50): Promise<Product[]> {
     try {
@@ -23,9 +25,9 @@ export const ProductRepository = {
     }
   },
 
-  async getById(id: string): Promise<Product | null> {
+  async getById(productId: string): Promise<Product | null> {
     try {
-      const docRef = doc(db, "products", id);
+      const docRef = doc(db, "products", productId);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
@@ -57,21 +59,16 @@ export const ProductRepository = {
           const data = doc.data();
           const name = data.name || '';
           
-          // Simple translation mapping for common items
-          let nameEn = data.nameEn;
-          let descEn = data.descriptionEn;
+          let nameEn = '';
+          if (name === 'طماطم بلدي') nameEn = 'Local Tomatoes';
+          else if (name === 'خيار طازج') nameEn = 'Fresh Cucumber';
+          else if (name === 'موز مستورد') nameEn = 'Imported Banana';
+          else if (name === 'تفاح أحمر') nameEn = 'Red Apple';
+          else if (name === 'بطاطس للطبخ') nameEn = 'Cooking Potatoes';
+          else if (name === 'بصل أحمر') nameEn = 'Red Onion';
+          else nameEn = name;
 
-          if (!nameEn) {
-            if (name.includes('طماطم')) nameEn = 'Fresh Tomatoes';
-            else if (name.includes('خيار')) nameEn = 'Green Cucumber';
-            else if (name.includes('تفاح')) nameEn = 'Red Apples';
-            else if (name.includes('حليب')) nameEn = 'Fresh Milk';
-            else if (name.includes('خبز')) nameEn = 'White Bread';
-            else if (name.includes('دجاج')) nameEn = 'Fresh Chicken';
-            else if (name.includes('سمك')) nameEn = 'Fresh Fish';
-            else nameEn = `Premium ${name || 'Product'}`;
-          }
-
+          let descEn = data.descriptionEn || '';
           if (!descEn) {
             descEn = `High quality and fresh ${nameEn} sourced daily for the best taste and nutrition.`;
           }
@@ -81,8 +78,6 @@ export const ProductRepository = {
             ...data,
             nameEn,
             descriptionEn: descEn,
-            // ALL products out of stock as requested for testing logic
-            inStock: false
           };
         }) as Product[];
       }
@@ -95,19 +90,22 @@ export const ProductRepository = {
   },
 
   async search(searchTerm: string): Promise<Product[]> {
-    // Basic search - in a real app, use Algolia or a proper search backend
-    // For now, we'll fetch all and filter client-side, or use a simple query
     try {
-      const productsRef = collection(db, "products");
-      // Prevent fetching entire DB on search, limit pool to 100 for client filtering
-      const querySnapshot = await getDocs(query(productsRef, limit(100)));
-      const term = searchTerm.toLowerCase();
+      if (!searchPoolCache) {
+        const productsRef = collection(db, "products");
+        const querySnapshot = await getDocs(query(productsRef, limit(100)));
+        searchPoolCache = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+      }
       
-      return querySnapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() } as Product))
-        .filter(p => p.name.toLowerCase().includes(term) || (p.nameEn && p.nameEn.toLowerCase().includes(term)) || p.description.toLowerCase().includes(term));
+      const term = searchTerm.toLowerCase();
+      return searchPoolCache.filter(p => 
+        p.name.toLowerCase().includes(term) || 
+        (p.nameEn && p.nameEn.toLowerCase().includes(term)) || 
+        p.description.toLowerCase().includes(term)
+      );
     } catch (error) {
       console.error("Error searching products:", error);
+      searchPoolCache = null;
       throw error;
     }
   },
@@ -116,59 +114,22 @@ export const ProductRepository = {
     try {
       const { updateDoc, doc: firestoreDoc } = await import('firebase/firestore');
       const productsRef = collection(db, "products");
-      const snapshot = await getDocs(productsRef);
+      const querySnapshot = await getDocs(productsRef);
       
-      const batchPromises = snapshot.docs.map(async (d) => {
-        const data = d.data();
-        const name = data.name || '';
-        
-        let nameEn = data.nameEn;
-        let descEn = data.descriptionEn;
-        let weightEn = data.weightEn;
-
-        if (!nameEn) {
-          if (name.includes('طماطم')) nameEn = 'Fresh Tomatoes';
-          else if (name.includes('خيار')) nameEn = 'Green Cucumber';
-          else if (name.includes('تفاح')) nameEn = 'Red Apples';
-          else if (name.includes('حليب')) nameEn = 'Fresh Milk';
-          else if (name.includes('خبز')) nameEn = 'White Bread';
-          else if (name.includes('دجاج')) nameEn = 'Fresh Chicken';
-          else if (name.includes('سمك')) nameEn = 'Fresh Fish';
-          else if (name.includes('موز')) nameEn = 'Yellow Bananas';
-          else if (name.includes('برتقال')) nameEn = 'Sweet Oranges';
-          else if (name.includes('فلفل')) nameEn = 'Bell Peppers';
-          else if (name.includes('بصل')) nameEn = 'Red Onions';
-          else if (name.includes('ثوم')) nameEn = 'Fresh Garlic';
-          else nameEn = `Premium ${name || 'Product'}`;
-        }
-
-        if (!weightEn) {
-          const weight = data.weight || '';
-          if (weight.includes('كجم')) weightEn = weight.replace('كجم', 'kg');
-          else if (weight.includes('جم')) weightEn = weight.replace('جم', 'g');
-          else if (weight.includes('حبة')) weightEn = weight.replace('حبة', 'pc');
-          else weightEn = weight;
-        }
-
-        if (!descEn) {
-          descEn = `High quality and fresh ${nameEn} sourced daily for the best taste and nutrition.`;
-        }
-
-        let inStock = data.inStock ?? true;
-        if (nameEn === 'Fresh Tomatoes' || nameEn === 'Fresh Chicken') {
-          inStock = false;
-        }
-
-        if (!data.nameEn || !data.descriptionEn || !data.weightEn || (nameEn === 'Fresh Tomatoes' && data.inStock !== false)) {
-          const docRef = firestoreDoc(db, "products", d.id);
-          return updateDoc(docRef, { nameEn, descriptionEn: descEn, weightEn, inStock });
+      const updates = querySnapshot.docs.map(async (doc) => {
+        const data = doc.data();
+        if (!data.nameEn) {
+          return updateDoc(firestoreDoc(db, "products", doc.id), {
+            nameEn: data.name || '',
+            weightEn: data.weight || '',
+            descriptionEn: data.description || ''
+          });
         }
       });
-
-      await Promise.all(batchPromises);
-      console.log("Product migration complete!");
+      
+      await Promise.all(updates);
     } catch (error) {
-      console.error("Migration error:", error);
+      console.error("Error migrating products:", error);
     }
   }
 };

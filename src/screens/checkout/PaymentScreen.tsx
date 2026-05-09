@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,10 +12,7 @@ import { createNewOrder, selectOrderLoading } from '../../store/slices/orderSlic
 import { selectUser } from '../../store/slices/authSlice';
 import { clearCart } from '../../store/slices/cartSlice';
 import { AppDispatch } from '../../store';
-import { products } from '../../data/products';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIndicator } from 'react-native';
-
 import { useRTL } from '../../hooks/useRTL';
 
 export function PaymentScreen({ navigation }: any) {
@@ -27,15 +24,14 @@ export function PaymentScreen({ navigation }: any) {
   const [selectedMethod, setSelectedMethod] = useState('card');
   const { items, total } = useCart();
   const address = useSelector(selectSelectedAddress);
-
-  const paymentMethods = [
-    { id: 'card', title: 'بطاقة ائتمان', icon: 'credit-card-outline' },
-    { id: 'apple', title: 'Apple Pay', icon: 'apple' },
-    { id: 'wallet', title: 'محفظة طازج', icon: 'wallet-outline' },
-  ];
-
   const user = useSelector(selectUser);
   const isOrdering = useSelector(selectOrderLoading);
+
+  const paymentMethods = [
+    { id: 'card', title: t('payment.credit_card'), icon: 'credit-card-outline' },
+    { id: 'apple', title: t('payment.apple_pay'), icon: 'apple' },
+    { id: 'wallet', title: t('payment.tazeeq_wallet'), icon: 'wallet-outline' },
+  ];
 
   const handleConfirm = async () => {
     if (!user?.id) return;
@@ -60,7 +56,7 @@ export function PaymentScreen({ navigation }: any) {
       navigation.replace('Confirmation');
     } catch (error) {
       console.error("Order placement failed:", error);
-      Alert.alert("Error", "Failed to place order. Please try again.");
+      Alert.alert(t('common.error'), t('common.error_msg'));
     }
   };
 
@@ -71,13 +67,13 @@ export function PaymentScreen({ navigation }: any) {
           <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.primary} />
         </TouchableOpacity>
         <Text style={[theme.typography.h1, { color: theme.colors.primary, flex: 1, textAlign: 'center' }]}>
-          {t('payment.title') || 'طريقة الدفع'}
+          {t('payment.title')}
         </Text>
         <View style={{ width: 44 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('payment.select_method') || 'اختر وسيلة الدفع'}</Text>
+        <Text style={[theme.typography.h2, { marginBottom: 16, textAlign: 'left' }]}>{t('payment.select_method')}</Text>
         
         <View style={styles.methodsGrid}>
           {paymentMethods.map((method) => (
@@ -89,7 +85,7 @@ export function PaymentScreen({ navigation }: any) {
               <GlassCard 
                 style={[
                   styles.methodCard,
-                  selectedMethod === method.id && { borderColor: theme.colors.secondaryContainer, borderWidth: 2 }
+                  selectedMethod === method.id && { borderColor: theme.colors.primary, borderWidth: 2 }
                 ]}
                 intensity={selectedMethod === method.id ? 30 : 15}
               >
@@ -98,7 +94,7 @@ export function PaymentScreen({ navigation }: any) {
                   size={32} 
                   color={selectedMethod === method.id ? theme.colors.primary : theme.colors.onSurfaceVariant} 
                 />
-                <Text style={[theme.typography.bodySecondary, { fontWeight: '700', marginTop: 8, color: theme.colors.onSurface }]}>
+                <Text style={[theme.typography.bodySecondary, { fontWeight: '700', marginTop: 8, color: theme.colors.onSurface, textAlign: 'center' }]}>
                   {method.title}
                 </Text>
               </GlassCard>
@@ -110,41 +106,54 @@ export function PaymentScreen({ navigation }: any) {
           <View style={styles.cardForm}>
             <GlassCard style={styles.formCard}>
               <View style={styles.inputGroup}>
-                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>اسم صاحب البطاقة</Text>
+                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>
+                  {t('payment.card_holder_name')}
+                </Text>
                 <TextInput 
-                  placeholder="أحمد محمد"
-                  style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
-                  placeholderTextColor={theme.colors.onSurfaceVariant}
+                  placeholder={t('payment.card_holder_placeholder')}
+                  style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant, fontSize: 15, fontFamily: 'Cairo_400Regular' }]}
+                  placeholderTextColor={theme.colors.outline}
                 />
               </View>
               <View style={styles.inputGroup}>
-                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>رقم البطاقة</Text>
+                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>
+                  {t('payment.card_number')}
+                </Text>
                 <View style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row', alignItems: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}>
                   <TextInput 
                     placeholder="**** **** **** 1234"
-                    style={{ flex: 1, textAlign: 'left', color: theme.colors.onSurface }}
-                    placeholderTextColor={theme.colors.onSurfaceVariant}
+                    style={{ flex: 1, textAlign: 'left', color: theme.colors.onSurface, fontSize: 15, fontFamily: 'Cairo_400Regular', letterSpacing: 2 }}
+                    placeholderTextColor={theme.colors.outline}
+                    keyboardType="numeric"
+                    maxLength={19}
                   />
-                  <MaterialCommunityIcons name="credit-card" size={32} color="#1A1F71" />
+                  <MaterialCommunityIcons name="credit-card" size={24} color={theme.colors.primary} />
                 </View>
               </View>
-              <View style={styles.row}>
-                <View style={[styles.inputGroup, { flex: 1 }]}>
-                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>تاريخ الانتهاء</Text>
+              <View style={[styles.row, { flexDirection: 'row' }]}>
+                <View style={[styles.inputGroup, { flex: 1, marginEnd: 8 }]}>
+                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>
+                    {t('payment.expiry_date')}
+                  </Text>
                   <TextInput 
                     placeholder="MM/YY"
-                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
-                    placeholderTextColor={theme.colors.onSurfaceVariant}
+                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant, fontSize: 15, fontFamily: 'Cairo_400Regular', letterSpacing: 1 }]}
+                    placeholderTextColor={theme.colors.outline}
+                    keyboardType="numeric"
+                    maxLength={5}
                   />
                 </View>
-                <View style={{ width: 16 }} />
-                <View style={[styles.inputGroup, { flex: 1 }]}>
-                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>CVV</Text>
+                <View style={[styles.inputGroup, { flex: 1, marginStart: 8 }]}>
+                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8 }]}>
+                    {t('payment.cvv')}
+                  </Text>
                   <TextInput 
                     placeholder="***"
-                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
-                    placeholderTextColor={theme.colors.onSurfaceVariant}
+                    style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: 'center', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant, fontSize: 15, fontFamily: 'Cairo_400Regular', letterSpacing: 4 }]}
+                    placeholderTextColor={theme.colors.outline}
                     secureTextEntry
+                    keyboardType="numeric"
+                    maxLength={4}
                   />
                 </View>
               </View>
@@ -155,23 +164,25 @@ export function PaymentScreen({ navigation }: any) {
         <View style={styles.summary}>
           <GlassCard style={styles.summaryCard}>
             <View style={[styles.summaryRow, { flexDirection: flexRow }]}>
-              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface }]}>إجمالي الطلب</Text>
-              <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>{total.toFixed(2)} ر.س</Text>
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface }]}>{t('payment.order_total')}</Text>
+              <Text style={[theme.typography.h2, { color: theme.colors.primary }]}>
+                {total.toFixed(2)} {t('common.sar')}
+              </Text>
             </View>
           </GlassCard>
         </View>
 
-        <View style={styles.security}>
+        <View style={[styles.security, { flexDirection: flexRow }]}>
           <MaterialCommunityIcons name="shield-check" size={24} color={theme.colors.primary} />
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginHorizontal: 8 }]}>
-            دفع آمن ومشفر ١٠٠٪
+            {t('payment.secure_payment')}
           </Text>
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: theme.colors.surfaceContainerLowest, borderTopColor: theme.colors.outlineVariant }]}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surfaceContainerLowest, borderTopColor: theme.colors.outlineVariant, paddingBottom: insets.bottom + 20 }]}>
         <AppButton 
-          title={t('payment.confirm') || 'تأكيد الطلب والدفع'} 
+          title={t('payment.confirm')} 
           onPress={handleConfirm} 
           disabled={isOrdering}
           loading={isOrdering}
@@ -202,15 +213,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 32,
+    gap: 8,
   },
   methodWrapper: {
     flex: 1,
-    marginHorizontal: 4,
   },
   methodCard: {
     alignItems: 'center',
-    padding: 16,
-    height: 100,
+    justifyContent: 'center',
+    padding: 12,
+    height: 110,
   },
   cardForm: {
     marginBottom: 32,
@@ -227,28 +239,22 @@ const styles = StyleSheet.create({
     height: 50,
   },
   row: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   summary: {
     marginBottom: 24,
   },
   summaryCard: {
-    padding: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)',
+    padding: 16,
   },
   summaryRow: {
-    paddingHorizontal: 8,
     justifyContent: 'space-between',
     alignItems: 'center',
-    minHeight: 48,
   },
   security: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 100,
+    marginBottom: 120,
   },
   footer: {
     position: 'absolute',
@@ -256,8 +262,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 20,
-    paddingBottom: 34,
     borderTopWidth: 1,
   },
 });
-

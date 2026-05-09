@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   typeRow: { flexDirection: 'row', gap: 8, marginBottom: 20 },
   typeButton: { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20 },
   inputGroup: { marginBottom: 16 },
-  input: { height: 56, borderRadius: 12, paddingHorizontal: 16, fontSize: 16 },
+  input: { height: 56, borderRadius: 12, paddingHorizontal: 16, fontSize: 16, fontFamily: 'Cairo_400Regular' },
   phoneInput: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, borderRadius: 12 },
   picker: { flexDirection: 'row', flexWrap: 'wrap', padding: 12, borderRadius: 12, gap: 8 },
   cityOption: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
