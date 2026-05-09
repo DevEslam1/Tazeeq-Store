@@ -20,8 +20,8 @@ export const CategoryRepository = {
           { id: 'cat1', name: 'أسماك ومأكولات بحرية', nameEn: 'Fish & Seafood', icon: 'fish' },
           { id: 'cat2', name: 'ألبان وأجبان', nameEn: 'Dairy & Cheese', icon: 'cow' },
           { id: 'cat3', name: 'خضروات وفواكه', nameEn: 'Fruits & Vegetables', icon: 'leaf' },
-          { id: 'cat4', name: 'مخبوزات', nameEn: 'Bakery', icon: 'bread' },
-          { id: 'cat5', name: 'لحوم وطبليات', nameEn: 'Meat & Poultry', icon: 'meat' },
+          { id: 'cat4', name: 'مخبوزات', nameEn: 'Bakery', icon: 'bread-slice' },
+          { id: 'cat5', name: 'لحوم وطبليات', nameEn: 'Meat & Poultry', icon: 'food-steak' },
           { id: 'cat6', name: 'بقالة', nameEn: 'Grocery', icon: 'basket' },
         ];
       }

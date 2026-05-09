@@ -30,9 +30,9 @@ export function EditProfileScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.sectionTitle, { color: 'white' }]}>{t('profile.edit_profile')}</Text>
+        <Text style={[theme.typography.sectionTitle, { color: theme.colors.onPrimary }]}>{t('profile.edit_profile')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -48,7 +48,7 @@ export function EditProfileScreen({ navigation }: any) {
 
         <GlassCard style={styles.form}>
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={name}
@@ -57,7 +57,7 @@ export function EditProfileScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.email')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.email')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={email}
@@ -67,7 +67,7 @@ export function EditProfileScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={phone}

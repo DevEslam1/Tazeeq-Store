@@ -52,7 +52,7 @@ export function AppHeader() {
             >
               <View>
                 <MaterialCommunityIcons name="bell-outline" size={24} color={theme.colors.primary} />
-                <View style={[styles.notifDot, { backgroundColor: theme.colors.tertiary }]} />
+                <View style={[styles.notifDot, { backgroundColor: theme.colors.tertiary, borderColor: theme.colors.surface }]} />
               </View>
             </TouchableOpacity>
             <TouchableOpacity
@@ -64,7 +64,7 @@ export function AppHeader() {
                 <MaterialCommunityIcons name="cart-outline" size={24} color={theme.colors.primary} />
                 {itemCount > 0 && (
                   <View style={[styles.cartBadge, { backgroundColor: theme.colors.primary }]}>
-                    <Text style={styles.cartBadgeText}>{itemCount}</Text>
+                    <Text style={[styles.cartBadgeText, { color: theme.colors.onPrimary }]}>{itemCount}</Text>
                   </View>
                 )}
               </View>
@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: 'rgba(244, 249, 246, 0.9)',
   },
   cartBadge: {
     position: 'absolute',

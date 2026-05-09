@@ -54,8 +54,8 @@ export function AddressListScreen({ navigation }: any) {
             <MaterialCommunityIcons name="check-circle" size={20} color={theme.colors.primary} style={styles.checkIcon} />
           )}
         </View>
-        <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 4 }]}>{item.details}</Text>
-        <Text style={[theme.typography.label, { color: theme.colors.outline, marginTop: 4 }]}>{item.phone}</Text>
+        <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }]}>{item.details}</Text>
+        <Text style={[theme.typography.label, { color: theme.colors.onSurfaceVariant, marginTop: 4, textAlign: isRTL ? 'right' : 'left' }]}>{item.phone}</Text>
       </View>
       <TouchableOpacity onPress={() => handleSelect(item.id)}>
         <MaterialCommunityIcons name={item.selected ? 'radiobox-marked' : 'radiobox-blank'} size={24} color={theme.colors.primary} />
@@ -107,8 +107,8 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { padding: 8 },
   list: { padding: 16, paddingBottom: 100 },
-  addressCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, padding: 16 },
-  iconContainer: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
+  addressCard: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, padding: 16, gap: 12 },
+  iconContainer: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   content: { flex: 1 },
   row: { flexDirection: 'row', alignItems: 'center' },
   checkIcon: { marginStart: 8 },

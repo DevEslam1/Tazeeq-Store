@@ -48,7 +48,7 @@ export function OnboardingScreen({ navigation }: any) {
       <Text style={[theme.typography.h1, { color: theme.colors.onSurface, marginTop: 32, textAlign: 'center' }]}>
         {item.title}
       </Text>
-      <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, marginTop: 12, textAlign: 'center' }]}>
+      <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, marginTop: 12, textAlign: 'center' }]}>
         {item.subtitle}
       </Text>
     </View>
@@ -112,7 +112,7 @@ export function OnboardingScreen({ navigation }: any) {
         
         {currentIndex < slides.length - 1 && (
           <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.skipButton}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline }]}>{t('onboarding.skip')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{t('onboarding.skip')}</Text>
           </TouchableOpacity>
         )}
       </View>

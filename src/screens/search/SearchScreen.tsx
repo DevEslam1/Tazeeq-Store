@@ -132,9 +132,9 @@ export function SearchScreen({ navigation }: any) {
 
       {!loading && inputValue.trim().length >= 2 && results.length === 0 && (
         <View style={styles.emptyState}>
-          <MaterialCommunityIcons name="magnify" size={64} color={theme.colors.outline} />
+          <MaterialCommunityIcons name="magnify" size={64} color={theme.colors.onSurfaceVariant} />
           <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>{t('search.no_results')}</Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 8 }]}>Try a more specific keyword.</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 8 }]}>Try a more specific keyword.</Text>
         </View>
       )}
 

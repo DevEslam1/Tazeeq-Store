@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   content: {
-    backgroundColor: theme.colors.surface,
     padding: 24,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,

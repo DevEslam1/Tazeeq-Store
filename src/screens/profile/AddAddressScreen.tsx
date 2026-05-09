@@ -80,7 +80,7 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.name')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={name}
@@ -91,9 +91,9 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('auth.phone')}</Text>
             <View style={[styles.phoneInput, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row' }]}>
-              <Text style={[theme.typography.bodyMain, { color: theme.colors.outline }]}>+966</Text>
+              <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant }]}>+966</Text>
               <TextInput
                 style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={phone}
@@ -106,7 +106,7 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.city')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.city')}</Text>
             <View style={[styles.picker, { backgroundColor: theme.colors.surfaceContainerLow, flexDirection: 'row' }]}>
               {cities.map((c) => (
                 <TouchableOpacity
@@ -121,7 +121,7 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.street')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.street')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={street}
@@ -133,7 +133,7 @@ export function AddAddressScreen({ navigation }: any) {
 
           <View style={[styles.row, { flexDirection: 'row' }]}>
             <View style={[styles.inputGroup, { flex: 1, marginEnd: 8 }]}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.building')}</Text>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.building')}</Text>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={building}
@@ -143,7 +143,7 @@ export function AddAddressScreen({ navigation }: any) {
               />
             </View>
             <View style={[styles.inputGroup, { flex: 1 }]}>
-              <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.floor')}</Text>
+              <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.floor')}</Text>
               <TextInput
                 style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 value={floor}
@@ -155,7 +155,7 @@ export function AddAddressScreen({ navigation }: any) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.apartment')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>{t('address.apartment')}</Text>
             <TextInput
               style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               value={apartment}

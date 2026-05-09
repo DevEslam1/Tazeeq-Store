@@ -34,7 +34,7 @@ export function OrderHistoryScreen({ navigation }: any) {
       case 'Delivered': return theme.colors.primary;
       case 'On the way': return theme.colors.secondary;
       case 'Processing': return theme.colors.tertiary;
-      case 'Placed': return theme.colors.primaryContainer;
+      case 'Placed': return theme.colors.secondary;
       case 'Cancelled': return theme.colors.error;
       default: return theme.colors.onSurfaceVariant;
     }
@@ -91,7 +91,7 @@ export function OrderHistoryScreen({ navigation }: any) {
 
               <View style={styles.cardBody}>
                 <View style={styles.info}>
-                  <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>طلب #{item.id}</Text>
+                  <Text style={[theme.typography.bodyMain, { fontWeight: '700', color: theme.colors.onSurface }]}>طلب #{item.id}</Text>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{item.items} منتجات</Text>
                 </View>
                 <PriceTag price={item.total} size="md" />

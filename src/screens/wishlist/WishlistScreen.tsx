@@ -31,22 +31,22 @@ export function WishlistScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>{t('wishlist.title')}</Text>
-        <Text style={[theme.typography.bodyMain, { color: 'white', opacity: 0.8 }]}>({wishlistProducts.length})</Text>
+        <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('wishlist.title')}</Text>
+        <Text style={[theme.typography.bodyMain, { color: theme.colors.onPrimary, opacity: 0.8 }]}>({wishlistProducts.length})</Text>
       </View>
 
       {wishlistProducts.length === 0 ? (
         <View style={styles.emptyState}>
-          <MaterialCommunityIcons name="heart-outline" size={80} color={theme.colors.outline} />
+          <MaterialCommunityIcons name="heart-outline" size={80} color={theme.colors.onSurfaceVariant} />
           <Text style={[theme.typography.sectionTitle, { color: theme.colors.onSurface, marginTop: 16 }]}>{t('wishlist.empty')}</Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginTop: 8 }]}>Add products to compare and revisit them later.</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 8 }]}>Add products to compare and revisit them later.</Text>
           <TouchableOpacity
             style={[styles.ctaButton, { backgroundColor: theme.colors.primary }]}
             onPress={() => navigation.goBack()}
           >
-            <Text style={[theme.typography.bodyMain, { color: 'white' }]}>{t('common.browse_products')}</Text>
+            <Text style={[theme.typography.bodyMain, { color: theme.colors.onPrimary }]}>{t('common.browse_products')}</Text>
           </TouchableOpacity>
         </View>
       ) : (

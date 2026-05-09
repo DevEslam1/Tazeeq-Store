@@ -47,7 +47,7 @@ export function OrderHistoryScreen({ navigation }: any) {
           </View>
         </View>
         
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: theme.colors.outlineVariant }]} />
         
         <View style={[styles.cardBody, { flexDirection: flexRow }]}>
           <View style={styles.infoGroup}>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   orderCard: { padding: 16, marginBottom: 16 },
   cardHeader: { justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  divider: { height: 1, backgroundColor: theme.colors.outlineVariant, marginVertical: 8 },
+  divider: { height: 1, marginVertical: 8 },
   cardBody: { justifyContent: 'space-between', marginTop: 8 },
   infoGroup: { flex: 1 },
   emptyContainer: { alignItems: 'center', marginTop: 100 },

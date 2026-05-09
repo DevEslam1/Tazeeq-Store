@@ -42,7 +42,7 @@ export function RatingScreen({ navigation }: any) {
           <Text style={[theme.typography.h2, { marginBottom: 12, color: theme.colors.onSurface }]}>أضف تعليقك</Text>
           <TextInput 
             placeholder="اكتب هنا..."
-            style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
+            style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant, backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface }]}
             multiline
             numberOfLines={4}
           />
@@ -61,7 +61,7 @@ export function RatingScreen({ navigation }: any) {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border }]}>
         <AppButton 
           title="إرسال التقييم" 
           onPress={() => navigation.navigate('Home')} 
@@ -97,8 +97,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     height: 120,
-    backgroundColor: theme.colors.surfaceContainerLow,
-    color: theme.colors.onSurface,
   },
   bonusCard: {
     marginBottom: 100,
@@ -117,9 +115,7 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: theme.colors.surface,
     borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
   },
 });
 
