@@ -41,7 +41,7 @@ export function OrderHistoryScreen({ navigation }: any) {
     <TouchableOpacity onPress={() => navigation.navigate('OrderDetail', { orderId: item.id })}>
       <GlassCard style={styles.orderCard}>
         <View style={[styles.cardHeader, { flexDirection: flexRow }]}>
-          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{t('common.order')} #{item.id.slice(-6).toUpperCase()}</Text>
+          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left', color: theme.colors.onSurface }]}>{t('common.order')} #{item.id.slice(-6).toUpperCase()}</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) + '20' }]}>
             <Text style={[theme.typography.label, { color: getStatusColor(item.status) }]}>{item.status}</Text>
           </View>
@@ -51,11 +51,11 @@ export function OrderHistoryScreen({ navigation }: any) {
         
         <View style={[styles.cardBody, { flexDirection: flexRow }]}>
           <View style={styles.infoGroup}>
-            <Text style={theme.typography.label}>{t('common.date')}</Text>
-            <Text style={theme.typography.bodySecondary}>{item.date}</Text>
+            <Text style={[theme.typography.label, { color: theme.colors.onSurfaceVariant }]}>{t('common.date')}</Text>
+            <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurface }]}>{item.date}</Text>
           </View>
           <View style={styles.infoGroup}>
-            <Text style={theme.typography.label}>{t('common.total')}</Text>
+            <Text style={[theme.typography.label, { color: theme.colors.onSurfaceVariant }]}>{t('common.total')}</Text>
             <Text style={[theme.typography.bodyMain, { fontWeight: '700', color: theme.colors.primary, textAlign: isRTL ? 'right' : 'left' }]}>{item.total.toFixed(2)} {t('common.sar')}</Text>
           </View>
         </View>
@@ -67,9 +67,9 @@ export function OrderHistoryScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={[styles.header, { flexDirection: flexRow, backgroundColor: theme.colors.primary, paddingTop: insets.top + 10 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color="white" />
+          <MaterialCommunityIcons name={isRTL ? 'arrow-right' : 'arrow-left'} size={28} color={theme.colors.onPrimary} />
         </TouchableOpacity>
-        <Text style={[theme.typography.h2, { color: 'white' }]}>{t('order.title')}</Text>
+        <Text style={[theme.typography.h2, { color: theme.colors.onPrimary }]}>{t('order.title')}</Text>
         <View style={{ width: 44 }} />
       </View>
 
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   orderCard: { padding: 16, marginBottom: 16 },
   cardHeader: { justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  divider: { height: 1, backgroundColor: 'rgba(0,0,0,0.05)', marginVertical: 8 },
+  divider: { height: 1, backgroundColor: theme.colors.outlineVariant, marginVertical: 8 },
   cardBody: { justifyContent: 'space-between', marginTop: 8 },
   infoGroup: { flex: 1 },
   emptyContainer: { alignItems: 'center', marginTop: 100 },

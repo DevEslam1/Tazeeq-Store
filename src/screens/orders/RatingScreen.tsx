@@ -17,7 +17,7 @@ export function RatingScreen({ navigation }: any) {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={[theme.typography.h1, { textAlign: 'center' }]}>كيف كانت تجربتك؟</Text>
+          <Text style={[theme.typography.h1, { textAlign: 'center', color: theme.colors.onSurface }]}>كيف كانت تجربتك؟</Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, textAlign: 'center', marginTop: 8 }]}>
             رأيك يهمنا لتحسين خدماتنا
           </Text>
@@ -39,7 +39,7 @@ export function RatingScreen({ navigation }: any) {
         </GlassCard>
 
         <View style={styles.commentSection}>
-          <Text style={[theme.typography.h2, { marginBottom: 12 }]}>أضف تعليقك</Text>
+          <Text style={[theme.typography.h2, { marginBottom: 12, color: theme.colors.onSurface }]}>أضف تعليقك</Text>
           <TextInput 
             placeholder="اكتب هنا..."
             style={[styles.input, { textAlign: 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}
@@ -51,10 +51,10 @@ export function RatingScreen({ navigation }: any) {
         <View style={styles.bonusCard}>
           <GlassCard style={{ backgroundColor: theme.colors.primaryContainer }}>
             <View style={[styles.bonusContent, { flexDirection: 'row' }]}>
-              <MaterialCommunityIcons name="gift-outline" size={32} color="white" />
+              <MaterialCommunityIcons name="gift-outline" size={32} color={theme.colors.onPrimaryContainer} />
               <View style={[styles.bonusText, { alignItems: 'flex-start' }]}>
-                <Text style={[theme.typography.bodyMain, { color: 'white', fontWeight: '700' }]}>حصلت على ٥٠ نقطة!</Text>
-                <Text style={[theme.typography.bodySecondary, { color: 'white' }]}>شكراً لتقييمك، تمت إضافة النقاط لحسابك</Text>
+                <Text style={[theme.typography.bodyMain, { color: theme.colors.onPrimaryContainer, fontWeight: '700' }]}>حصلت على ٥٠ نقطة!</Text>
+                <Text style={[theme.typography.bodySecondary, { color: theme.colors.onPrimaryContainer }]}>شكراً لتقييمك، تمت إضافة النقاط لحسابك</Text>
               </View>
             </View>
           </GlassCard>
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     height: 120,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surfaceContainerLow,
+    color: theme.colors.onSurface,
   },
   bonusCard: {
     marginBottom: 100,
@@ -116,9 +117,9 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
+    borderTopColor: theme.colors.border,
   },
 });
 

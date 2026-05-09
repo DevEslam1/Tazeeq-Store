@@ -95,7 +95,7 @@ export function TrackingScreen({ navigation }: any) {
           <View style={[styles.driverInfo, { flexDirection: 'row' }]}>
             <Image source={{ uri: 'https://i.pravatar.cc/150?u=driver' }} style={styles.driverAvatar} />
             <View style={[styles.driverText, { alignItems: 'flex-start' }]}>
-              <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>محمد مبروك</Text>
+              <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left', color: theme.colors.onSurface }]}>محمد مبروك</Text>
               <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{t('order.delivery_driver')} • ٤.٩ ★</Text>
             </View>
             <View style={styles.driverActions}>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   content: {
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.surface,
     padding: 24,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,

@@ -40,10 +40,10 @@ export function AppButton({
 
   const getButtonContent = () => {
     if (loading) {
-      return <ActivityIndicator color="#ffffff" />;
+      return <ActivityIndicator color={variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer} />;
     }
     return (
-      <Text style={[styles.text, theme.typography.button, { color: '#ffffff' }, textStyle]}>
+      <Text style={[styles.text, theme.typography.button, { color: variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer }, textStyle]}>
         {title}
       </Text>
     );
@@ -102,13 +102,13 @@ export function AppButton({
         ]}
       >
         {loading ? (
-          <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : '#ffffff'} />
+          <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : (variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer)} />
         ) : (
           <Text style={[
             styles.text, 
             theme.typography.button, 
             { 
-              color: variant === 'glass' ? theme.colors.primary : '#ffffff',
+              color: variant === 'glass' ? theme.colors.primary : (variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer),
             }, 
             textStyle
           ]}>
