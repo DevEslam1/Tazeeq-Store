@@ -65,19 +65,16 @@ export function AiAssistantScreen() {
   };
 
   const suggestions = [
-    t('ai.suggest_1') || (isRTL ? "ما هي أفضل عروض اليوم؟" : "What are today's best offers?"),
-    t('ai.suggest_2') || (isRTL ? "اقترح لي وصفة صحية بالدجاج" : "Suggest a healthy chicken recipe"),
-    t('ai.suggest_3') || (isRTL ? "هل لديكم خضروات عضوية؟" : "Do you have organic vegetables?"),
-    t('ai.suggest_4') || (isRTL ? "أريد مقاضي لعمل كبسة" : "I need ingredients for Kabsa"),
-    t('ai.suggest_5') || (isRTL ? "متى مواعيد التوصيل المتاحة؟" : "What are the available delivery times?"),
+    t('ai.suggest_1'),
+    t('ai.suggest_2'),
+    t('ai.suggest_3'),
+    t('ai.suggest_4'),
+    t('ai.suggest_5'),
   ];
 
   return (
-    <KeyboardAvoidingView 
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      {/* Header */}
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      {/* Header - Fixed at the top */}
       <BlurView intensity={80} tint={mode} style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <View style={[styles.headerContent, { flexDirection: flexRow }]}>
           <View style={[styles.aiBadge, { backgroundColor: theme.colors.primary }]}>
@@ -94,130 +91,142 @@ export function AiAssistantScreen() {
         </View>
       </BlurView>
 
-      <ScrollView 
-        ref={scrollViewRef}
-        contentContainerStyle={[styles.scrollContent, { paddingBottom: 20 }]}
-        onContentSizeChange={scrollToBottom}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-        {messages.length === 0 && (
-          <View style={styles.welcomeContainer}>
-            <MaterialCommunityIcons name="chat-processing-outline" size={64} color={theme.colors.primary} style={{ opacity: 0.5 }} />
-            <Text style={[theme.typography.h1, { textAlign: 'center', marginTop: 16 }]}>
-              {t('ai.welcome_title') || 'كيف يمكنني مساعدتك اليوم؟'}
-            </Text>
-            <Text style={[theme.typography.bodyMain, { textAlign: 'center', color: theme.colors.onSurfaceVariant, marginTop: 8, paddingHorizontal: 40 }]}>
-              {t('ai.welcome_subtitle') || 'أنا هنا لمساعدتك في العثور على المنتجات واقتراح الوصفات الصحية.'}
-            </Text>
-            
-            <View style={styles.suggestions}>
-              {suggestions.map((s, i) => (
-                <TouchableOpacity 
-                  key={i} 
-                  onPress={() => {
-                    if (isLoading) return;
-                    dispatch(addUserMessage(s));
-                    dispatch(sendMessage(s));
-                  }}
-                  style={[styles.suggestionItem, { backgroundColor: theme.colors.surfaceContainerHigh }]}
-                >
-                  <Text style={[theme.typography.bodySecondary, { color: theme.colors.primary }]}>{s}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        )}
-
-        {messages.map((msg, index) => (
-          <View 
-            key={index} 
-            style={[
-              styles.messageWrapper, 
-              { alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start' }
-            ]}
-          >
-            <GlassCard 
-              style={[
-                styles.messageCard,
-                msg.role === 'user' 
-                  ? { backgroundColor: theme.colors.primary, borderBottomRightRadius: 4 } 
-                  : { backgroundColor: theme.colors.surfaceContainerLow, borderBottomLeftRadius: 4 }
-              ]}
-              intensity={mode === 'dark' ? 20 : 10}
-            >
-              <Text 
-                style={[
-                  theme.typography.bodyMain, 
-                  { color: msg.role === 'user' ? 'white' : theme.colors.onSurface }
-                ]}
-              >
-                {msg.content}
+        <ScrollView 
+          ref={scrollViewRef}
+          contentContainerStyle={[
+            styles.scrollContent, 
+            { 
+              paddingTop: 20,
+              paddingBottom: 40 // Extra space so last message isn't tight against input
+            }
+          ]}
+          onContentSizeChange={scrollToBottom}
+          showsVerticalScrollIndicator={false}
+        >
+          {messages.length === 0 && (
+            <View style={styles.welcomeContainer}>
+              <MaterialCommunityIcons name="chat-processing-outline" size={64} color={theme.colors.primary} style={{ opacity: 0.5 }} />
+              <Text style={[theme.typography.h1, { textAlign: 'center', marginTop: 16 }]}>
+                {t('ai.welcome_title') || 'كيف يمكنني مساعدتك اليوم؟'}
               </Text>
-            </GlassCard>
-            <Text style={[theme.typography.label, { marginTop: 4, color: theme.colors.onSurfaceVariant, fontSize: 10, alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start' }]}>
-              {msg.role === 'user' ? 'أنت' : 'مساعد طازج'}
+              <Text style={[theme.typography.bodyMain, { textAlign: 'center', color: theme.colors.onSurfaceVariant, marginTop: 8, paddingHorizontal: 40 }]}>
+                {t('ai.welcome_subtitle') || 'أنا هنا لمساعدتك في العثور على المنتجات واقتراح الوصفات الصحية.'}
+              </Text>
+              
+              <View style={styles.suggestions}>
+                {suggestions.map((s, i) => (
+                  <TouchableOpacity 
+                    key={i} 
+                    onPress={() => {
+                      if (isLoading) return;
+                      dispatch(addUserMessage(s));
+                      dispatch(sendMessage(s));
+                    }}
+                    style={[styles.suggestionItem, { backgroundColor: theme.colors.surfaceContainerHigh }]}
+                  >
+                    <Text style={[theme.typography.bodySecondary, { color: theme.colors.primary }]}>{s}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
+
+          {messages.map((msg, index) => (
+            <View 
+              key={index} 
+              style={[
+                styles.messageWrapper, 
+                { alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start' }
+              ]}
+            >
+              <GlassCard 
+                style={[
+                  styles.messageCard,
+                  msg.role === 'user' 
+                    ? { backgroundColor: theme.colors.primary, borderBottomRightRadius: 4 } 
+                    : { backgroundColor: theme.colors.surfaceContainerLow, borderBottomLeftRadius: 4 }
+                ]}
+                intensity={mode === 'dark' ? 20 : 10}
+              >
+                <Text 
+                  style={[
+                    theme.typography.bodyMain, 
+                    { color: msg.role === 'user' ? 'white' : theme.colors.onSurface }
+                  ]}
+                >
+                  {msg.content}
+                </Text>
+              </GlassCard>
+              <Text style={[theme.typography.label, { marginTop: 4, color: theme.colors.onSurfaceVariant, fontSize: 10, alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start' }]}>
+                {msg.role === 'user' ? 'أنت' : 'مساعد طازج'}
+              </Text>
+            </View>
+          ))}
+
+          {isLoading && (
+            <View style={[styles.messageWrapper, { alignSelf: 'flex-start' }]}>
+              <GlassCard style={styles.loadingCard} intensity={10}>
+                <ActivityIndicator size="small" color={theme.colors.primary} />
+              </GlassCard>
+            </View>
+          )}
+
+          {error && (
+            <Text style={[theme.typography.label, { color: theme.colors.error, textAlign: 'center', marginVertical: 10 }]}>
+              {error}
             </Text>
+          )}
+        </ScrollView>
+
+        {/* Input Area - Adjusted for Floating Tab Bar */}
+        <BlurView intensity={100} tint={mode} style={[styles.inputArea, { paddingBottom: insets.bottom + 110 }]}>
+          <View style={[styles.inputRow, { flexDirection: flexRow }]}>
+            <TextInput
+              value={inputText}
+              onChangeText={setInputText}
+              placeholder={t('ai.placeholder') || 'اكتب سؤالك هنا...'}
+              placeholderTextColor={theme.colors.onSurfaceVariant}
+              style={[
+                styles.input, 
+                { 
+                  backgroundColor: theme.colors.surfaceContainerHighest,
+                  color: theme.colors.onSurface,
+                  textAlign: isRTL ? 'right' : 'left'
+                }
+              ]}
+              multiline
+            />
+            <TouchableOpacity 
+              onPress={handleSend}
+              disabled={inputText.trim() === '' || isLoading}
+              style={[
+                styles.sendButton, 
+                { 
+                  backgroundColor: inputText.trim() === '' ? theme.colors.surfaceContainerHigh : theme.colors.primary,
+                  opacity: isLoading ? 0.6 : 1
+                }
+              ]}
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <MaterialCommunityIcons 
+                  name={isRTL ? "send" : "send"} 
+                  size={24} 
+                  color="white" 
+                  style={{ transform: [{ scaleX: isRTL ? -1 : 1 }] }}
+                />
+              )}
+            </TouchableOpacity>
           </View>
-        ))}
-
-        {isLoading && (
-          <View style={[styles.messageWrapper, { alignSelf: 'flex-start' }]}>
-            <GlassCard style={styles.loadingCard} intensity={10}>
-              <ActivityIndicator size="small" color={theme.colors.primary} />
-            </GlassCard>
-          </View>
-        )}
-
-        {error && (
-          <Text style={[theme.typography.label, { color: theme.colors.error, textAlign: 'center', marginVertical: 10 }]}>
-            {error}
-          </Text>
-        )}
-      </ScrollView>
-
-      {/* Input Area */}
-      <BlurView intensity={100} tint={mode} style={[styles.inputArea, { paddingBottom: insets.bottom + 10 }]}>
-        <View style={[styles.inputRow, { flexDirection: flexRow }]}>
-          <TextInput
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder={t('ai.placeholder') || 'اكتب سؤالك هنا...'}
-            placeholderTextColor={theme.colors.onSurfaceVariant}
-            style={[
-              styles.input, 
-              { 
-                backgroundColor: theme.colors.surfaceContainerHighest,
-                color: theme.colors.onSurface,
-                textAlign: isRTL ? 'right' : 'left'
-              }
-            ]}
-            multiline
-          />
-          <TouchableOpacity 
-            onPress={handleSend}
-            disabled={inputText.trim() === '' || isLoading}
-            style={[
-              styles.sendButton, 
-              { 
-                backgroundColor: inputText.trim() === '' ? theme.colors.surfaceContainerHigh : theme.colors.primary,
-                opacity: isLoading ? 0.6 : 1
-              }
-            ]}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" color="white" />
-            ) : (
-              <MaterialCommunityIcons 
-                name={isRTL ? "send" : "send"} 
-                size={24} 
-                color="white" 
-                style={{ transform: [{ scaleX: isRTL ? -1 : 1 }] }}
-              />
-            )}
-          </TouchableOpacity>
-        </View>
-      </BlurView>
-    </KeyboardAvoidingView>
+        </BlurView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -230,7 +239,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.05)',
-    zIndex: 10,
+    zIndex: 100,
   },
   headerContent: {
     alignItems: 'center',
@@ -286,8 +295,7 @@ const styles = StyleSheet.create({
   },
   inputArea: {
     padding: 15,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
+    borderTopWidth: 0, // Removed border for a cleaner glass look
   },
   inputRow: {
     alignItems: 'flex-end',

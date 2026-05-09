@@ -233,5 +233,18 @@
     "slide3_title": "100% Organic",
     "slide3_subtitle": "Natural and healthy products for everyone",
     "skip": "Skip"
+  },
+  "ai": {
+    "assistant_name": "Smart Tazaj Assistant",
+    "online": "Online",
+    "typing": "Typing...",
+    "welcome_title": "How can I help you today?",
+    "welcome_subtitle": "I'm here to help you find products and suggest healthy recipes.",
+    "placeholder": "Type your question here...",
+    "suggest_1": "What fresh fruits are available today?",
+    "suggest_2": "Suggest a healthy lunch recipe",
+    "suggest_3": "Do you have organic vegetables?",
+    "suggest_4": "I need ingredients for Kabsa",
+    "suggest_5": "What are the available delivery times?"
   }
 }

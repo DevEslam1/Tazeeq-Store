@@ -108,7 +108,7 @@ export function SettingsScreen({ navigation }: any) {
 
         <View style={styles.footer}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant }]}>{t('settings.app_version', { version: '2.2.0' })}</Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant, marginTop: 4 }]}>Tazaj Shop © 2026</Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.outlineVariant, marginTop: 4 }]}>Tazeeq © 2026</Text>
         </View>
       </ScrollView>
     </View>

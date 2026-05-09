@@ -125,7 +125,7 @@ export function RegisterScreen({ navigation }: any) {
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>البريد الإلكتروني</Text>
             <TextInput
-              style={[styles.input, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
+              style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
               placeholder="example@email.com"
               placeholderTextColor={theme.colors.outline}
               keyboardType="email-address"
@@ -137,7 +137,7 @@ export function RegisterScreen({ navigation }: any) {
 
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>رقم الهاتف</Text>
-            <View style={[styles.phoneInput, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+            <View style={[styles.phoneInput, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row' }]}>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.outline, fontWeight: '700' }]}>+966</Text>
               <TextInput
                 style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', marginHorizontal: 12 }]}
@@ -153,7 +153,7 @@ export function RegisterScreen({ navigation }: any) {
 
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>كلمة المرور</Text>
-            <View style={[styles.inputWrapper, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+            <View style={[styles.inputWrapper, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row' }]}>
               <TextInput
                 style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder="********"
@@ -170,7 +170,7 @@ export function RegisterScreen({ navigation }: any) {
 
           <View style={styles.inputGroup}>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.outline, marginBottom: 8, textAlign }]}>تأكيد كلمة المرور</Text>
-            <View style={[styles.inputWrapper, { backgroundColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)', borderWidth: 1, borderColor: theme.mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.1)', flexDirection: 'row' }]}>
+            <View style={[styles.inputWrapper, { backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.border, flexDirection: 'row' }]}>
               <TextInput
                 style={[styles.input, { flex: 1, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder="********"

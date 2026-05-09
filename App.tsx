@@ -43,17 +43,19 @@ export default function App() {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
       
-      // One-time migration to add English fields to Firestore
+      // One-time migration to refresh data and add English fields
       const runMigration = async () => {
-        const isMigrated = await AsyncStorage.getItem('tazeeq_migration_v1');
+        const isMigrated = await AsyncStorage.getItem('tazeeq_migration_v2');
         if (isMigrated === 'true') return;
 
         try {
           await Promise.all([
+            ProductRepository.refreshData(),
+            CategoryRepository.refreshData(),
             ProductRepository.migrateToI18n(),
             CategoryRepository.migrateToI18n()
           ]);
-          await AsyncStorage.setItem('tazeeq_migration_v1', 'true');
+          await AsyncStorage.setItem('tazeeq_migration_v2', 'true');
         } catch (e) {
           console.error("Migration failed:", e);
         }
@@ -65,8 +67,8 @@ export default function App() {
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, backgroundColor: '#064E3B', justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontFamily: 'Cairo_700Bold', fontSize: 36, color: 'white' }}>طازج</Text>
-        <Text style={{ fontFamily: 'BeVietnamPro_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>Tazeeq</Text>
+        <Text style={{ fontFamily: 'Cairo_700Bold', fontSize: 36, color: 'white' }}>Tazeeq</Text>
+        <Text style={{ fontFamily: 'BeVietnamPro_400Regular', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>تزييق</Text>
       </View>
     );
   }

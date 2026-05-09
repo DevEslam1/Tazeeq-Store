@@ -131,5 +131,23 @@ export const ProductRepository = {
     } catch (error) {
       console.error("Error migrating products:", error);
     }
+  },
+
+  async refreshData(): Promise<void> {
+    try {
+      const { writeBatch, doc: firestoreDoc } = await import('firebase/firestore');
+      const { products: localProducts } = await import('../data/products');
+      const batch = writeBatch(db);
+      
+      localProducts.forEach((product) => {
+        const productRef = firestoreDoc(db, "products", product.id);
+        batch.set(productRef, product, { merge: true });
+      });
+      
+      await batch.commit();
+      console.log("Successfully refreshed product data in Firestore");
+    } catch (error) {
+      console.error("Error refreshing product data:", error);
+    }
   }
 };

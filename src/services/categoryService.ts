@@ -82,5 +82,23 @@ export const CategoryRepository = {
     } catch (error) {
       console.error("Category migration error:", error);
     }
+  },
+
+  async refreshData(): Promise<void> {
+    try {
+      const { writeBatch, doc: firestoreDoc } = await import('firebase/firestore');
+      const { categories: localCategories } = await import('../data/categories');
+      const batch = writeBatch(db);
+      
+      localCategories.forEach((category) => {
+        const categoryRef = firestoreDoc(db, "categories", category.id);
+        batch.set(categoryRef, category, { merge: true });
+      });
+      
+      await batch.commit();
+      console.log("Successfully refreshed category data in Firestore");
+    } catch (error) {
+      console.error("Error refreshing category data:", error);
+    }
   }
 };
