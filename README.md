@@ -1,6 +1,6 @@
 # Tazeeq Premium Shopping App 🌿✨
 
-Tazeeq is a high-fidelity, premium grocery shopping application built with React Native and Expo. It features a sophisticated "Ethical Opulence" design language, catering to both mobile and tablet users with full support for Arabic (RTL) and English (LTR) languages, as well as automatic Dark Mode.
+Tazeeq is a high-fidelity, premium grocery shopping application built with React Native and Expo. It features a sophisticated "Liquid Glass" design language—a modern evolution from its "Midnight Tech" roots—catering to both mobile and tablet users with full support for Arabic (RTL) and English (LTR) languages, as well as automatic Dark Mode.
 
 ## ✨ Key Features
 
@@ -10,10 +10,10 @@ Tazeeq is a high-fidelity, premium grocery shopping application built with React
 - **Immersive Product Details:** Detailed descriptions, feature lists, star ratings, and quantity selectors.
 - **Smart Cart:** Manage items easily with a glassmorphic cart interface and detailed price breakdown.
 
-### 🎨 Ethical Opulence Design System
-- **Dynamic Theming:** Seamless automatic switching between Light and Dark modes based on system preferences.
-- **Glassmorphism:** Elegant use of semi-transparent layers (`expo-blur`) for a modern, airy feel.
-- **Global Premium Banners:** Animated, multi-color toast notifications using Reanimated spring physics for success, error, and info alerts.
+### 🎨 Liquid Glass Design System
+- **Dynamic Theming:** Seamless automatic switching between Light and Dark modes based on system preferences with high-parity design.
+- **Glassmorphism:** Elegant use of semi-transparent layers (`expo-blur`) and glass cards for a modern, airy feel.
+- **Premium Loading Experience:** Replaced generic spinners with a unified, animated `HeaderProgressBar` for non-intrusive, premium visual feedback.
 - **MD3 Color Palette:** A carefully curated Material Design 3 palette featuring Emerald Green, Artisanal Gold, and tailored Dark Mode desaturations.
 
 ### 🤖 Gemini AI Shopping Assistant
@@ -34,7 +34,8 @@ Tazeeq is a high-fidelity, premium grocery shopping application built with React
 
 ### ⚡ Performance & Polish
 - **High-Performance Imagery:** Utilizes `expo-image` for automatic disk caching, blurhash support, and smooth transition animations.
-- **Skeleton UI Loading:** Premium shimmering placeholders display during data fetching, preventing layout shift and improving perceived performance.
+- **Unified Progress Feedback:** A custom Reanimated-powered progress bar docked to headers provides consistent loading states across all screens.
+- **Offline-Ready Fallback:** Robust service layer that automatically switches to local JSON data if Firestore or Auth services are unreachable (ideal for emulator/unstable network environments).
 - **Optimized Interactions:** Features input debouncing for search and Reanimated 3 for fluid, native-feeling gestures and transitions.
 
 ### 🌍 Localization & RTL
