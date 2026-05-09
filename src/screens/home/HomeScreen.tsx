@@ -47,7 +47,7 @@ const SaleCountdown = React.memo(function SaleCountdown() {
 
 export function HomeScreen({ navigation }: any) {
   const { theme } = useAppTheme();
-  const { isRTL } = useRTL();
+  const { isRTL, flexRow, shouldInvert } = useRTL();
   const { t, i18n } = useTranslation();
   const insets = useSafeAreaInsets();
   const { isTablet } = useDeviceType();
@@ -125,7 +125,9 @@ export function HomeScreen({ navigation }: any) {
             </TouchableOpacity>
           </View>
           <FlatList
+            key={isRTL ? 'rtl' : 'ltr'}
             horizontal
+            inverted={shouldInvert}
             showsHorizontalScrollIndicator={false}
             data={categories}
             initialNumToRender={5}
@@ -196,7 +198,7 @@ export function HomeScreen({ navigation }: any) {
                 />
               ))
             ) : (
-              <Text style={[theme.typography.bodySecondary, { textAlign: 'center', width: '100%', marginVertical: 40 }]}>
+              <Text style={[theme.typography.bodySecondary, { textAlign: 'center', width: '100%', marginVertical: 40, color: theme.colors.onSurfaceVariant }]}>
                 {t('common.no_products')}
               </Text>
             )}

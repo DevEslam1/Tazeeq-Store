@@ -142,10 +142,10 @@ export const ProductCard = React.memo(function ProductCard({
         
         <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
           <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2}>
-            {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
+            {i18n.language.startsWith('en') ? (product.nameEn || product.name) : product.name}
           </Text>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginTop: 2, textAlign: isRTL ? 'right' : 'left' }]}>
-            {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
+            {i18n.language.startsWith('en') ? (product.weightEn || product.weight) : product.weight}
           </Text>
           
           {product.rating && (

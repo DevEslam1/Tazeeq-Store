@@ -10,6 +10,7 @@ import { AppButton } from '../../components/common/AppButton';
 import { useCart } from '../../hooks/useCart';
 import { useRTL } from '../../hooks/useRTL';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import i18n from '../../i18n';
 
 // Move CartItem outside to prevent hook violation and unnecessary re-renders
 const CartItem = ({ item, index, theme, t, updateQty, removeFromCart, isRTL, flexRow }: any) => {
@@ -35,8 +36,12 @@ const CartItem = ({ item, index, theme, t, updateQty, removeFromCart, isRTL, fle
           />
         </View>
         <View style={styles.itemInfo}>
-          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>{item.name}</Text>
-          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }]}>{item.weight || t('cart.one_unit')} • {t('cart.fresh_daily')}</Text>
+          <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>
+            {i18n.language.startsWith('en') ? (item.nameEn || item.name) : item.name}
+          </Text>
+          <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, marginBottom: 10, textAlign: isRTL ? 'right' : 'left' }]}>
+            {(i18n.language.startsWith('en') ? (item.weightEn || item.weight) : item.weight) || t('cart.one_unit')} • {t('cart.fresh_daily')}
+          </Text>
           <View style={[styles.itemFooter, { flexDirection: flexRow }]}>
             <View style={[styles.stepper, { backgroundColor: theme.colors.primaryContainer, borderRadius: theme.radius.stepper, flexDirection: flexRow }]}>
               <TouchableOpacity 

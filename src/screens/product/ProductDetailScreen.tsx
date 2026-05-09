@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, RefreshControl, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, TouchableOpacity, RefreshControl, useWindowDimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { useAppTheme } from '../../theme';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,7 @@ import { useDeviceType } from '../../hooks/useDeviceType';
 export function ProductDetailScreen({ route, navigation }: any) {
   const { productId } = route.params;
   const { theme } = useAppTheme();
-  const { isRTL, flexRow } = useRTL();
+  const { isRTL, flexRow, shouldInvert } = useRTL();
   const { isTablet } = useDeviceType();
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -121,8 +121,11 @@ export function ProductDetailScreen({ route, navigation }: any) {
         }
       >
         <View style={styles.imageContainer}>
-          <ScrollView
+          <FlatList
+            key={isRTL ? 'rtl' : 'ltr'}
             horizontal
+            data={imageList}
+            inverted={shouldInvert}
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             onScroll={(e) => {
@@ -133,18 +136,17 @@ export function ProductDetailScreen({ route, navigation }: any) {
               }
             }}
             scrollEventThrottle={16}
-          >
-            {imageList.map((img, idx) => (
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => (
               <Image 
-                key={idx}
-                source={{ uri: img }} 
+                source={{ uri: item }} 
                 style={[styles.image, { width: windowWidth }]} 
                 contentFit="cover"
                 transition={300}
                 onError={handleImageError}
               />
-            ))}
-          </ScrollView>
+            )}
+          />
 
           {imageList.length > 1 && (
             <View style={styles.paginationDots}>
@@ -186,10 +188,10 @@ export function ProductDetailScreen({ route, navigation }: any) {
           <View style={[styles.headerRow, { flexDirection: flexRow }]}>
             <View style={{ flex: 1 }}>
               <Text style={[theme.typography.pageTitle, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]}>
-                {i18n.language === 'en' && product.nameEn ? product.nameEn : product.name}
+                {i18n.language.startsWith('en') ? (product.nameEn || product.name) : product.name}
               </Text>
               <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>
-                {i18n.language === 'en' && product.weightEn ? product.weightEn : product.weight}
+                {i18n.language.startsWith('en') ? (product.weightEn || product.weight) : product.weight}
               </Text>
             </View>
             <TouchableOpacity onPress={() => toggleWishlist(product.id)}>
@@ -203,7 +205,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
 
           <View style={[styles.ratingRow, { flexDirection: flexRow }]}>
             <MaterialCommunityIcons name="star" size={20} color={theme.colors.secondaryContainer} />
-            <Text style={[theme.typography.itemName, { marginHorizontal: 4 }]}>
+            <Text style={[theme.typography.itemName, { marginHorizontal: 4, color: theme.colors.onSurface }]}>
               {product.rating}
             </Text>
             <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
@@ -217,7 +219,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
             ))}
           </View>
 
-          <Text style={[theme.typography.sectionTitle, { marginTop: 24, marginBottom: 8, textAlign: isRTL ? 'right' : 'left' }]}>
+          <Text style={[theme.typography.sectionTitle, { marginTop: 24, marginBottom: 8, textAlign: isRTL ? 'right' : 'left', color: theme.colors.onSurface }]}>
             {t('product.description')}
           </Text>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurfaceVariant, lineHeight: 24, textAlign: isRTL ? 'right' : 'left' }]}>

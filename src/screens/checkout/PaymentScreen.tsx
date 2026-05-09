@@ -73,7 +73,7 @@ export function PaymentScreen({ navigation }: any) {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[theme.typography.h2, { marginBottom: 16, textAlign: 'left' }]}>{t('payment.select_method')}</Text>
+        <Text style={[theme.typography.h2, { marginBottom: 16, textAlign: 'left', color: theme.colors.onSurface }]}>{t('payment.select_method')}</Text>
         
         <View style={styles.methodsGrid}>
           {paymentMethods.map((method) => (

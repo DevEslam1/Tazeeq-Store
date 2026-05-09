@@ -93,7 +93,7 @@ export function DeliveryScreen({ navigation }: any) {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.saved_addresses')}</Text>
+        <Text style={[theme.typography.h2, { marginBottom: 16, color: theme.colors.onSurface }]}>{t('delivery.saved_addresses')}</Text>
         
         {addresses.map((address) => (
           <TouchableOpacity 
@@ -113,7 +113,7 @@ export function DeliveryScreen({ navigation }: any) {
                   <MaterialCommunityIcons name={address.title === 'المنزل' ? 'home' : 'office-building' as any} size={24} color={theme.colors.primary} />
                 </View>
                 <View style={[styles.addressInfo, { alignItems: 'flex-start', flex: 1 }]}>
-                  <Text style={[theme.typography.bodyMain, { fontWeight: '700' }]}>{address.title}</Text>
+                  <Text style={[theme.typography.bodyMain, { fontWeight: '700', color: theme.colors.onSurface }]}>{address.title}</Text>
                   <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>{address.details}</Text>
                 </View>
                 {selectedAddressId === address.id && (
@@ -160,7 +160,7 @@ export function DeliveryScreen({ navigation }: any) {
         </View>
 
         <View style={styles.form}>
-          <Text style={[theme.typography.h2, { marginBottom: 16 }]}>{t('delivery.details') || 'تفاصيل إضافية'}</Text>
+          <Text style={[theme.typography.h2, { marginBottom: 16, color: theme.colors.onSurface }]}>{t('delivery.details') || 'تفاصيل إضافية'}</Text>
           <TextInput 
             placeholder={t('delivery.notes') || 'ملاحظات للمندوب (رقم الشقة، علامة مميزة...)'}
             style={[styles.input, { backgroundColor: theme.colors.surfaceContainerLow, color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left', borderRadius: theme.radius.md, borderColor: theme.colors.outlineVariant }]}

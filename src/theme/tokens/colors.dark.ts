@@ -13,11 +13,11 @@ export const darkColors = {
   inverseOnSurface: '#121714',
   outline: '#818f86',
   outlineVariant: '#2d3832',
-  surfaceTint: '#76C7A4',
-  primary: '#76C7A4',
+  surfaceTint: '#00DC7F',
+  primary: '#00DC7F', // More vibrant "Electric Mint" for better dark mode visibility
   onPrimary: '#003822',
   primaryContainer: '#005234',
-  onPrimaryContainer: '#92f8c0',
+  onPrimaryContainer: '#9DFFCF',
   inversePrimary: '#006d47',
   secondary: '#FFC107', // Desaturated Gold for Dark Mode
   onSecondary: '#3e2c00',

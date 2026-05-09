@@ -83,14 +83,6 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
         if (I18nManager.isRTL !== shouldBeRTL) {
           I18nManager.allowRTL(shouldBeRTL);
           I18nManager.forceRTL(shouldBeRTL);
-          
-          // Force a full app reload to apply RTL changes across all native components
-          if (Platform.OS !== 'web') {
-            // Using DevSettings for development environment
-            if (NativeModules.DevSettings) {
-              NativeModules.DevSettings.reload();
-            }
-          }
         }
       },
     };

@@ -24,7 +24,7 @@ export function SettingsScreen({ navigation }: any) {
           <MaterialCommunityIcons name={icon} size={22} color={theme.colors.primary} />
         </View>
         <View style={[styles.textContainer, { alignItems: 'flex-start' }]}>
-          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left' }]}>{title}</Text>
+          <Text style={[theme.typography.bodyMain, { fontWeight: '700', textAlign: isRTL ? 'right' : 'left', color: theme.colors.onSurface }]}>{title}</Text>
           {subtitle && <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant, textAlign: isRTL ? 'right' : 'left' }]}>{subtitle}</Text>}
         </View>
         {type === 'switch' ? (

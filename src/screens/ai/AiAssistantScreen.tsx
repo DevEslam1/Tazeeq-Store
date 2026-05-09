@@ -101,7 +101,7 @@ export function AiAssistantScreen() {
           contentContainerStyle={[
             styles.scrollContent, 
             { 
-              paddingTop: 20,
+              paddingTop: insets.top + 80,
               paddingBottom: 40 // Extra space so last message isn't tight against input
             }
           ]}
@@ -111,7 +111,7 @@ export function AiAssistantScreen() {
           {messages.length === 0 && (
             <View style={styles.welcomeContainer}>
               <MaterialCommunityIcons name="chat-processing-outline" size={64} color={theme.colors.primary} style={{ opacity: 0.5 }} />
-              <Text style={[theme.typography.h1, { textAlign: 'center', marginTop: 16 }]}>
+              <Text style={[theme.typography.h1, { textAlign: 'center', marginTop: 16, color: theme.colors.onSurface }]}>
                 {t('ai.welcome_title') || 'كيف يمكنني مساعدتك اليوم؟'}
               </Text>
               <Text style={[theme.typography.bodyMain, { textAlign: 'center', color: theme.colors.onSurfaceVariant, marginTop: 8, paddingHorizontal: 40 }]}>

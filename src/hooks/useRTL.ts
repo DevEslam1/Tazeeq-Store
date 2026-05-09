@@ -10,5 +10,6 @@ export function useRTL() {
     // we force row-reverse to fix the layout immediately.
     flexRow: (isRTL && !I18nManager.isRTL) ? 'row-reverse' : 'row' as 'row' | 'row-reverse',
     textAlign: (isRTL ? 'right' : 'left') as 'left' | 'right',
+    shouldInvert: I18nManager.isRTL !== isRTL,
   };
 }
