@@ -1,5 +1,7 @@
 # Tazeeq Premium Shopping App 🌿✨
 
+![Tazeeq Banner](assets/panner.png)
+
 Tazeeq is a high-fidelity, premium grocery shopping application built with React Native and Expo. It features a sophisticated "Liquid Glass" design language—a modern evolution from its "Midnight Tech" roots—catering to both mobile and tablet users with full support for Arabic (RTL) and English (LTR) languages, as well as automatic Dark Mode.
 
 ## ✨ Key Features
