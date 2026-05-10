@@ -38,7 +38,7 @@ const SaleCountdown = React.memo(function SaleCountdown() {
   }, []);
 
   return (
-    <View style={[styles.timerBadge, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: 'row' }]}>
+    <View style={[styles.timerBadge, { alignSelf: 'flex-start', flexDirection: 'row' }]}>
       <MaterialCommunityIcons name="clock-outline" size={16} color="white" />
       <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
     </View>
@@ -149,15 +149,15 @@ export function HomeScreen({ navigation }: any) {
             end={{ x: isRTL ? 0 : 1, y: 1 }}
             style={[styles.promoGradient, theme.elevation.panel]}
           >
-            <View style={[styles.promoContent, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-              <View style={{ flex: 1, width: '100%', alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+            <View style={[styles.promoContent, { alignItems: 'flex-start' }]}>
+              <View style={{ flex: 1, width: '100%', alignItems: 'flex-start' }}>
                 <Text style={[theme.typography.pageTitle, { color: 'white', textAlign: isRTL ? 'right' : 'left', width: '100%' }]}>
                   {t('home.promo_title')}
                 </Text>
                 <SaleCountdown />
               </View>
               <TouchableOpacity
-                style={[styles.ctaButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
+                style={[styles.ctaButton, { alignSelf: 'flex-start', flexDirection: isRTL ? 'row-reverse' : 'row', backgroundColor: 'rgba(255,255,255,0.25)' }]}
                 onPress={() => navigation.navigate('ProductList', { categoryName: t('home.shop_now') })}
               >
                 <Text style={styles.ctaButtonText}>{t('home.shop_now')}</Text>

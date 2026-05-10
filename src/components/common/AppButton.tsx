@@ -102,13 +102,13 @@ export function AppButton({
         ]}
       >
         {loading ? (
-          <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : (variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer)} />
+          <ActivityIndicator color={variant === 'glass' ? theme.colors.primary : theme.colors.onSecondaryContainer} />
         ) : (
           <Text style={[
             styles.text, 
             theme.typography.button, 
             { 
-              color: variant === 'glass' ? theme.colors.primary : (variant === 'primary' ? theme.colors.onPrimary : theme.colors.onSecondaryContainer),
+              color: variant === 'glass' ? theme.colors.primary : theme.colors.onSecondaryContainer,
             }, 
             textStyle
           ]}>

@@ -140,7 +140,7 @@ export const ProductCard = React.memo(function ProductCard({
           </TouchableOpacity>
         </View>
         
-        <View style={[styles.info, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+        <View style={[styles.info, { alignItems: 'flex-start' }]}>
           <Text style={[theme.typography.itemName, { color: theme.colors.onSurface, textAlign: isRTL ? 'right' : 'left' }]} numberOfLines={2}>
             {i18n.language.startsWith('en') ? (product.nameEn || product.name) : product.name}
           </Text>

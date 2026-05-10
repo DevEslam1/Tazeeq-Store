@@ -161,7 +161,7 @@ export function GlobalBanner() {
         <View style={styles.iconContainer}>
           <MaterialCommunityIcons name={styleConfig.icon as any} size={28} color={styleConfig.color} />
         </View>
-        <View style={[styles.textContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+        <View style={[styles.textContainer, { alignItems: 'flex-start' }]}>
           <Text style={[theme.typography.bodyMain, { color: theme.colors.onSurface, fontWeight: '600' }]}>
             {banner.message}
           </Text>

@@ -215,7 +215,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
             </Text>
           </View>
 
-          <View style={[styles.badges, { flexDirection: flexRow, justifyContent: isRTL ? 'flex-end' : 'flex-start' }]}>
+          <View style={[styles.badges, { flexDirection: flexRow, justifyContent: 'flex-start' }]}>
             {product.badges?.map((badge, index) => (
               <Badge key={index} type={badge} />
             ))}
@@ -254,7 +254,7 @@ export function ProductDetailScreen({ route, navigation }: any) {
           flexDirection: flexRow
         }
       ]}>
-        <View style={{ flex: 1, alignItems: isRTL ? 'flex-end' : 'flex-start' }}>
+        <View style={{ flex: 1, alignItems: 'flex-start' }}>
           <Text style={[theme.typography.bodySecondary, { color: theme.colors.onSurfaceVariant }]}>
             {t('common.total_price')}
           </Text>

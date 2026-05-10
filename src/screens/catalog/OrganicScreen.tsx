@@ -46,7 +46,7 @@ export function OrganicScreen({ navigation }: any) {
           contentFit="cover"
           transition={300}
         />
-        <View style={[styles.overlay, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+        <View style={[styles.overlay, { alignItems: 'flex-start' }]}>
           <Text style={[theme.typography.h1, { color: 'white', textAlign: isRTL ? 'right' : 'left' }]}>{t('common.organic')}</Text>
         </View>
       </View>

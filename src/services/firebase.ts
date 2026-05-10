@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 // @ts-ignore - Some versions of the Firebase SDK have resolution issues with RN types
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeAuth, getReactNativePersistence, getAuth, Auth } from "firebase/auth";
+import { initializeFirestore, getFirestore, Firestore } from "firebase/firestore";
 import { getFunctions } from "firebase/functions";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,15 +17,36 @@ const firebaseConfig = {
   measurementId: "G-PNDZKGKHXY"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase safely for hot-reloading
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth with AsyncStorage persistence
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage)
-});
+// Initialize Auth safely
+let auth: Auth;
+try {
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+  });
+} catch (error: any) {
+  // If already initialized during hot reload, get the existing instance
+  if (error.code === 'auth/already-initialized') {
+    auth = getAuth(app);
+  } else {
+    throw error;
+  }
+}
 
-export const db = getFirestore(app);
+// Initialize Firestore safely
+let db: Firestore;
+try {
+  db = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+  });
+} catch (error: any) {
+  // If already initialized during hot reload
+  db = getFirestore(app);
+}
+
+export { auth, db };
 export const functions = getFunctions(app);
 
 export default app;
